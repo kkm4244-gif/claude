@@ -605,6 +605,44 @@ $('custom-form').addEventListener('submit', e => {
   toast(`'${en}' 태그를 추가했어요`);
 });
 
+// 여러 줄 붙여넣기로 내 태그 한꺼번에 추가
+function parseBulk(text) {
+  const out = [];
+  for (const line of text.split('\n')) {
+    const l = line.trim();
+    if (!l || l.startsWith('#')) continue;
+    if (l.includes('|')) {
+      const [en, ko = '', alias = ''] = l.split('|').map(x => x.trim());
+      if (en) out.push({ en, ko, alias });
+    } else {
+      for (const it of PW.splitItems(l)) out.push({ en: it.raw, ko: '', alias: '' });
+    }
+  }
+  return out;
+}
+
+$('bulk-cat').replaceChildren(...DEFAULT_CATEGORIES.map(c => {
+  const o = document.createElement('option');
+  o.value = c.id; o.textContent = `분류: ${c.name}`;
+  return o;
+}));
+
+$('bulk-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const tags = parseBulk($('bulk-text').value);
+  if (!tags.length) return toast('추가할 태그가 없어요');
+  const cat = $('bulk-cat').value;
+  let added = 0, updated = 0;
+  for (const t of tags) {
+    const i = state.custom.findIndex(c => c.en.toLowerCase() === t.en.toLowerCase());
+    if (i >= 0) { state.custom[i] = { ...state.custom[i], ...t, cat }; updated++; }
+    else { state.custom.push({ ...t, cat }); added++; }
+  }
+  save('custom'); renderList();
+  $('bulk-text').value = '';
+  toast(`내 태그 ${added}개 추가${updated ? `, ${updated}개 수정` : ''}했어요`);
+});
+
 $('export').addEventListener('click', () => {
   const data = { version: 1, custom: state.custom, favs: state.favs, uses: state.uses, presets: state.presets, ignored: state.ignored };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));

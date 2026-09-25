@@ -2,7 +2,7 @@
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '자연', '색감', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '섹시·분위기', '배경', '자연', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -205,4 +205,26 @@ const DEFAULT_PRESETS = [
     text: 'underwater, water, bubble, fish, light rays, sunlight filtering down from the surface' },
   { g: '자연', name: '폭풍 치는 절벽', desc: '먹구름 + 거센 파도',
     text: 'outdoors, cliff, ocean, waves, storm, overcast, wind, dramatic sky, waves crashing against the rocks' },
+
+  // 섹시·분위기 (노골적이지 않은 선)
+  { g: '섹시·분위기', name: '풀어헤친 셔츠', desc: '단추 풀고 넥타이 느슨하게',
+    text: 'open shirt, partially unbuttoned, collarbone, loose necktie, sweat, messy hair, half-closed eyes, disheveled look after a long night' },
+  { g: '섹시·분위기', name: '넥타이 푸는 순간', desc: '한 손으로 넥타이 당기며 씩',
+    text: 'adjusting necktie, smirk, half-closed eyes, looking at viewer, loosening his necktie with one hand' },
+  { g: '섹시·분위기', name: '젖은 셔츠', desc: '비에 젖어 달라붙은 셔츠',
+    text: 'wet shirt, see-through shirt, wet hair, water drop, rain, dripping wet, fabric clinging to his body' },
+  { g: '섹시·분위기', name: '샤워 후', desc: '젖은 머리 + 목에 건 수건',
+    text: 'after bathing, wet hair, towel around neck, shirtless, steam, water drop, relaxed expression' },
+  { g: '섹시·분위기', name: '운동 후', desc: '땀 + 핏줄 + 거친 숨',
+    text: 'sweat, tank top, toned male, veins, heavy breathing, towel around neck, flushed after a workout' },
+  { g: '섹시·분위기', name: '요염한 눈빛', desc: '나른한 눈 + 살짝 벌린 입',
+    text: 'bedroom eyes, half-closed eyes, seductive smile, parted lips, light blush, looking at viewer, smoldering gaze' },
+  { g: '섹시·분위기', name: '도발하는 손짓', desc: '오라는 손짓 + 씩 웃음',
+    text: 'come hither, smirk, head tilt, looking at viewer, beckoning with one finger, teasing invitation' },
+  { g: '섹시·분위기', name: '침대 위 나른한 아침', desc: '헝클어진 머리 + 햇살',
+    text: 'on bed, lying, bed sheet, shirtless, messy hair, half-closed eyes, sunlight through window, lazy morning' },
+  { g: '섹시·분위기', name: '벽쿵 도발', desc: '가까이 몰아붙이며 씩',
+    text: 'kabedon, smirk, face-to-face, looking at another, leaning in close, intense gaze' },
+  { g: '섹시·분위기', name: '귓속말', desc: '귀에 대고 속삭임',
+    text: 'whispering, light smile, half-closed eyes, blush, leaning in close to his ear' },
 ];

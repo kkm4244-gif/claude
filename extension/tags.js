@@ -491,6 +491,42 @@ rose|장미|꽃
 bouquet|꽃다발|꽃
 ` },
   {
+    id: 'allure', name: '섹시·분위기', order: 3.3, tags: `
+wet shirt|젖은 셔츠|섹시 비침
+wet clothes|젖은 옷|섹시
+see-through shirt|비치는 셔츠|섹시 시스루
+unbuttoned|단추 풀림|섹시 셔츠
+undressing|옷 벗는 중|섹시 탈의
+shirt lift|셔츠 들어올림|섹시 복근
+bare shoulders|어깨 드러남|섹시
+bare arms|팔 드러남|섹시
+navel|배꼽|섹시 복근
+toned|탄탄한 몸|섹시 근육
+wet|젖음|섹시 물
+water drop|물방울|섹시 젖은
+steam|김 (열기)|섹시 목욕
+towel|수건
+towel around neck|목에 건 수건|운동 샤워
+bathrobe|목욕 가운|샤워
+after bathing|목욕 후|샤워 젖은
+on bed|침대 위|섹시
+bed sheet|침대 시트|이불
+seductive smile|요염한 미소|섹시 유혹
+bedroom eyes|유혹하는 나른한 눈빛|섹시 눈매
+naughty face|장난스럽게 유혹하는 표정|섹시
+licking lips|입술 핥기|섹시
+heavy breathing|거친 숨|섹시 헐떡
+come hither|오라는 손짓|섹시 유혹
+finger to mouth|손가락을 입에|섹시 쉿
+smoldering gaze|그윽한 눈빛|섹시 눈빛
+flirting|추파 던지기|섹시 유혹
+lap pillow|무릎베개|2인
+sitting on lap|무릎 위에 앉음|2인
+hand on another's waist|허리에 손|2인 섹시
+whispering|귓속말|2인
+collar grab|깃·멱살 잡기|2인 넥타이
+` },
+  {
     id: 'face', name: '표정', order: 4.0, tags: `
 smile|미소|웃음
 light smile|옅은 미소|웃음
