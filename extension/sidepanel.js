@@ -13,18 +13,33 @@ const state = {
   sorted: null, // 정렬 미리보기 결과
 };
 
-const $ = id => document.getElementById(id);
+// 실행 환경: 크롬 사이드 패널이 기본. 탬퍼몽키 버전은 PTD_HOST로 저장소·페이지 통신·패널 루트를 넘겨준다
+const HOST = globalThis.PTD_HOST || {
+  root: document,
+  storage: {
+    get: keys => chrome.storage.local.get(keys),
+    set: obj => chrome.storage.local.set(obj),
+  },
+  async send(msg) {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return chrome.tabs.sendMessage(tab.id, msg);
+  },
+  copy: text => navigator.clipboard.writeText(text),
+  autofocus: true,
+};
+const ROOT = HOST.root;
+const $ = id => ROOT.getElementById(id);
 
 // ---------- 저장소 ----------
 async function load() {
-  const d = await chrome.storage.local.get(['custom', 'favs', 'uses', 'presets']);
+  const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets']);
   state.custom = d.custom || [];
   state.favs = d.favs || {};
   state.uses = d.uses || {};
   state.presets = d.presets || [];
 }
 const save = (...keys) =>
-  chrome.storage.local.set(Object.fromEntries(keys.map(k => [k, state[k]])));
+  HOST.storage.set(Object.fromEntries(keys.map(k => [k, state[k]])));
 
 function allTags() {
   const map = new Map();
@@ -84,8 +99,7 @@ function search(tags, query) {
 // ---------- PixAI 탭과 통신 ----------
 async function sendToPage(msg) {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    return await chrome.tabs.sendMessage(tab.id, msg);
+    return await HOST.send(msg);
   } catch (_) {
     return null; // PixAI 탭이 아니거나 새로고침 전
   }
@@ -98,7 +112,7 @@ async function insert(text, usageKeys = []) {
   for (const k of usageKeys) state.uses[k] = (state.uses[k] || 0) + 1;
   if (usageKeys.length) save('uses');
   if (ok) return toast(`'${res.label}' 칸에 넣었어요: ${text}`);
-  await navigator.clipboard.writeText(text);
+  await HOST.copy(text);
   toast(res?.reason === 'unchanged'
     ? '입력칸에 글자가 안 들어가서 클립보드에 복사했어요 (Ctrl+V로 붙여넣기)'
     : 'PixAI 입력칸을 못 찾아서 클립보드에 복사했어요');
@@ -199,7 +213,7 @@ $('search').addEventListener('input', e => { state.query = e.target.value; rende
 const weightClass = w => (w > 1.5 ? 'w-high' : w > 1 ? 'w-up' : 'w-down');
 
 let wheelAcc = 0;
-document.addEventListener('wheel', e => {
+ROOT.addEventListener('wheel', e => {
   if (!e.ctrlKey) return;
   const row = e.target.closest('[data-weight-key], [data-item]');
   if (!row) return;
@@ -516,10 +530,10 @@ $('import-file').addEventListener('change', async e => {
 });
 
 // ---------- 탭 전환 ----------
-document.querySelectorAll('.tabs button').forEach(b => {
+ROOT.querySelectorAll('.tabs button').forEach(b => {
   b.onclick = () => {
-    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
-    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
+    ROOT.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
+    ROOT.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
     if (b.dataset.tab === 'prompt') loadPrompt(true);
   };
 });
@@ -529,5 +543,5 @@ load().then(() => {
   renderList();
   renderPresetGroups();
   renderPresets();
-  $('search').focus();
+  if (HOST.autofocus) $('search').focus();
 });

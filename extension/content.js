@@ -230,6 +230,12 @@
   }, true);
 
   // ---------- 사이드 패널 메시지 ----------
+  // 탬퍼몽키 버전은 같은 페이지 안의 패널에서 바로 호출한다
+  globalThis.PTD_PAGE = msg => new Promise(resolve => {
+    try { handle(msg, resolve); } catch (e) { resolve({ ok: false, reason: String(e.message || e) }); }
+  });
+  if (!globalThis.chrome?.runtime?.onMessage) return;
+
   chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
     try {
       handle(msg, reply);
