@@ -9,7 +9,7 @@ const state = {
   ignored: {},  // 무시한 충돌 경고 {key: true}
   cat: 'all',
   query: '',
-  rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
+  rowW: {},     // 태그 목록에서 Shift+휠·길게 누르기로 정해 둔 가중치 {en: w} (넣으면 초기화)
   prompt: '',   // PixAI 입력칸에서 읽어 온 프롬프트
   sorted: null, // 정렬 미리보기 결과
 };
@@ -174,6 +174,7 @@ function renderList() {
     const ko = document.createElement('span'); ko.className = 'ko'; ko.textContent = t.ko;
     main.append(en, ko);
     main.onclick = () => {
+      if (barTarget?.key === t.en) { barTarget = null; renderWeightBar(); }
       insert(PW.formatWeight(t.en, state.rowW[t.en] ?? 1), [t.en]);
       if (t.en in state.rowW) { delete state.rowW[t.en]; renderList(); }
     };
@@ -211,31 +212,103 @@ function renderList() {
 
 $('search').addEventListener('input', e => { state.query = e.target.value; renderList(); });
 
-// ---------- 가중치 (Ctrl + 휠) ----------
+// ---------- 가중치 (Shift + 휠, 길게 누르기) ----------
 const weightClass = w => (w > 1.5 ? 'w-high' : w > 1 ? 'w-up' : 'w-down');
 
+// 대상: {key} = 태그 목록의 한 줄, {item} = 프롬프트 칩 번호
+const targetOf = el => (el.dataset.weightKey ? { key: el.dataset.weightKey } : { item: +el.dataset.item });
+
+function weightOf(t) {
+  if (t.key) return state.rowW[t.key] ?? 1;
+  const it = PW.splitItems(state.prompt)[t.item];
+  return it ? PW.parseWeight(it.raw).w : 1;
+}
+
+async function setWeight(t, fn) {
+  if (t.key) {
+    state.rowW[t.key] = fn(state.rowW[t.key] ?? 1);
+    if (state.rowW[t.key] === 1) delete state.rowW[t.key];
+    renderList();
+  } else {
+    await changeItem(t.item, raw => {
+      const { core, w } = PW.parseWeight(raw);
+      return PW.formatWeight(core, fn(w));
+    });
+  }
+  renderWeightBar();
+}
+
 let wheelAcc = 0;
-ROOT.addEventListener('wheel', e => {
-  if (!e.ctrlKey) return;
-  const row = e.target.closest('[data-weight-key], [data-item]');
+// Shift + 휠: Ctrl + 휠(화면 확대)은 브라우저에 그대로 둔다.
+// 크롬은 Shift + 휠을 가로 스크롤(deltaX)로 바꿔 보내서 deltaX도 같이 본다.
+window.addEventListener('wheel', e => {
+  if (!e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
+  const path = e.composedPath();
+  if (!path.includes(ROOT)) return;
+  const row = path.find(el => el.dataset && ('weightKey' in el.dataset || 'item' in el.dataset));
   if (!row) return;
-  e.preventDefault(); // 사이드 패널 확대/축소 대신 가중치 조절
-  wheelAcc += e.deltaY;
+  e.preventDefault();
+  wheelAcc += e.deltaY || e.deltaX;
   if (Math.abs(wheelAcc) < 40) return; // 트랙패드처럼 잘게 오는 휠은 모아서 한 칸
   const delta = wheelAcc < 0 ? 0.1 : -0.1;
   wheelAcc = 0;
-  if (row.dataset.weightKey) {
-    const k = row.dataset.weightKey;
-    state.rowW[k] = PW.stepWeight(state.rowW[k] ?? 1, delta);
-    if (state.rowW[k] === 1) delete state.rowW[k];
-    renderList();
-  } else {
-    changeItem(+row.dataset.item, raw => {
-      const { core, w } = PW.parseWeight(raw);
-      return PW.formatWeight(core, PW.stepWeight(w, delta));
-    });
-  }
+  setWeight(targetOf(row), w => PW.stepWeight(w, delta));
 }, { passive: false });
+
+// 터치: 길게 누르면 아래에 가중치 바가 뜬다 (마우스로 꾹 눌러도 동작)
+let barTarget = null;
+let pressTimer = null, pressStart = null, longPressed = false;
+
+function labelOf(t) {
+  if (t.key) return t.key;
+  const it = PW.splitItems(state.prompt)[t.item];
+  return it ? PW.parseWeight(it.raw).core : '';
+}
+
+function renderWeightBar() {
+  const bar = $('wbar');
+  if (!barTarget) { bar.hidden = true; return; }
+  const w = weightOf(barTarget);
+  $('wbar-label').textContent = labelOf(barTarget);
+  $('wbar-val').textContent = w.toFixed(1);
+  $('wbar-val').className = w === 1 ? '' : weightClass(w);
+  bar.hidden = false;
+}
+
+function openWeightBar(el) {
+  barTarget = targetOf(el);
+  renderWeightBar();
+  navigator.vibrate?.(15);
+}
+
+ROOT.addEventListener('pointerdown', e => {
+  const row = e.target.closest('[data-weight-key], [data-item]');
+  if (!row || e.target.closest('.icon, .x')) return;
+  pressStart = [e.clientX, e.clientY];
+  clearTimeout(pressTimer);
+  pressTimer = setTimeout(() => { longPressed = true; openWeightBar(row); }, 450);
+});
+ROOT.addEventListener('pointermove', e => {
+  if (pressStart && Math.hypot(e.clientX - pressStart[0], e.clientY - pressStart[1]) > 10) clearTimeout(pressTimer);
+});
+for (const type of ['pointerup', 'pointercancel']) {
+  ROOT.addEventListener(type, () => { clearTimeout(pressTimer); pressStart = null; });
+}
+// 길게 누른 뒤 손을 떼도 태그가 들어가지 않게
+ROOT.addEventListener('click', e => {
+  if (!longPressed) return;
+  longPressed = false;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+ROOT.addEventListener('contextmenu', e => {
+  if (e.target.closest('[data-weight-key], [data-item]')) e.preventDefault();
+});
+
+$('wbar-minus').onclick = () => barTarget && setWeight(barTarget, w => PW.stepWeight(w, -0.1));
+$('wbar-plus').onclick = () => barTarget && setWeight(barTarget, w => PW.stepWeight(w, 0.1));
+$('wbar-reset').onclick = () => barTarget && setWeight(barTarget, () => 1);
+$('wbar-close').onclick = () => { barTarget = null; renderWeightBar(); };
 
 // ---------- 프롬프트 탭 ----------
 const catOrder = new Map(DEFAULT_CATEGORIES.map(c => [c.id, c.order]));
@@ -567,6 +640,7 @@ ROOT.querySelectorAll('.tabs button').forEach(b => {
   b.onclick = () => {
     ROOT.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
     ROOT.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
+    barTarget = null; renderWeightBar();
     if (b.dataset.tab === 'prompt') loadPrompt(true);
   };
 });

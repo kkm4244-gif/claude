@@ -42,6 +42,11 @@ const shellCss = `
 .ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }
 .tabs { padding-right: 32px; }
 .tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }
+/* 폰처럼 좁은 화면: 패널을 전체 폭으로 */
+@media (max-width: 600px) {
+  .ptd-wrap { width: 100vw; border-left: 0; }
+  .ptd-wrap:not(.closed) ~ .ptd-toggle { display: none; }
+}
 `;
 
 const body = `

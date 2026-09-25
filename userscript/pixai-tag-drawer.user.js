@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.6.0
+// @version      0.7.0
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -1863,9 +1863,9 @@ const CONFLICT = (() => {
 })();
 
 
-const PANEL_HTML = "<nav class=\"tabs\">\n    <button data-tab=\"tags\" class=\"active\">태그</button>\n    <button data-tab=\"prompt\">프롬프트</button>\n    <button data-tab=\"presets\">프리셋</button>\n    <button data-tab=\"settings\">내 태그·백업</button>\n  </nav>\n\n  <section id=\"tab-tags\" class=\"panel active\">\n    <input id=\"search\" type=\"search\" placeholder=\"검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (Ctrl+휠: 가중치)\" autocomplete=\"off\">\n    <div id=\"cats\" class=\"chips\"></div>\n    <div id=\"count\" class=\"muted\"></div>\n    <ul id=\"list\" class=\"list\"></ul>\n  </section>\n\n  <section id=\"tab-prompt\" class=\"panel\">\n    <div class=\"row between\">\n      <span class=\"muted\">PixAI에서 마지막으로 클릭한 입력칸</span>\n      <button id=\"p-refresh\">새로고침</button>\n    </div>\n    <div id=\"p-conflicts\"></div>\n    <div id=\"p-chips\" class=\"pchips\"></div>\n    <p class=\"muted\">태그 위에서 <b>Ctrl + 휠</b>로 가중치 조절 · 색은 정렬 그룹</p>\n    <button id=\"p-sort\" class=\"primary wide\">정렬 미리보기</button>\n    <div id=\"p-preview\" class=\"card\" hidden>\n      <h3>정렬 결과</h3>\n      <div id=\"p-preview-text\" class=\"preview\"></div>\n      <ul id=\"p-notes\" class=\"notes\"></ul>\n      <div class=\"row\">\n        <button id=\"p-cancel\">취소</button>\n        <button id=\"p-apply\" class=\"primary\">적용</button>\n      </div>\n    </div>\n  </section>\n\n  <section id=\"tab-presets\" class=\"panel\">\n    <input id=\"preset-search\" type=\"search\" placeholder=\"검색: 웃음, 분노, 부끄, smirk…\" autocomplete=\"off\">\n    <div id=\"preset-groups\" class=\"chips\"></div>\n    <ul id=\"preset-list\" class=\"list\"></ul>\n    <form id=\"preset-form\" class=\"card\">\n      <h3>내 프리셋 만들기 · 수정</h3>\n      <input id=\"preset-name\" placeholder=\"프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)\" required>\n      <select id=\"preset-group\"></select>\n      <input id=\"preset-desc\" placeholder=\"한 줄 설명 (선택)\">\n      <textarea id=\"preset-text\" rows=\"4\" placeholder=\"1boy, black hair, black eyes, white shirt, sleeve rolled up\" required></textarea>\n      <div class=\"row\">\n        <button type=\"button\" id=\"preset-grab\">PixAI 입력칸에서 가져오기</button>\n        <button type=\"submit\" class=\"primary\">저장</button>\n      </div>\n    </form>\n  </section>\n\n  <section id=\"tab-settings\" class=\"panel\">\n    <form id=\"custom-form\" class=\"card\">\n      <h3>내 태그 추가</h3>\n      <input id=\"c-en\" placeholder=\"영어 태그 (예: sleeve rolled up)\" required>\n      <input id=\"c-ko\" placeholder=\"한글 설명 (예: 소매 걷어올림)\">\n      <input id=\"c-alias\" placeholder=\"추가 검색어 (공백 구분, 선택)\">\n      <select id=\"c-cat\"></select>\n      <button type=\"submit\" class=\"primary\">추가</button>\n    </form>\n    <div class=\"card\">\n      <h3>백업</h3>\n      <p class=\"muted\">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>\n      <div class=\"row\">\n        <button id=\"export\">내보내기</button>\n        <button id=\"import\">가져오기</button>\n        <input id=\"import-file\" type=\"file\" accept=\"application/json\" hidden>\n      </div>\n    </div>\n  </section>\n\n  <div id=\"toast\" class=\"toast\"></div>";
-const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n\n/* 충돌 경고 */\n#p-conflicts:empty { display: none; }\n#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }\n.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }\n.cf {\n  display: flex; gap: 6px; align-items: flex-start;\n  padding: 7px 8px; border-radius: 8px; font-size: 12px;\n  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));\n}\n.cf.soft {\n  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));\n}\n.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }\n.cf-main b { overflow-wrap: anywhere; }\n.cf-tip { color: var(--muted); }\n.cf button { padding: 2px 8px; font-size: 12px; flex: none; }\n.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }\n.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }\n";
-const SHELL_CSS = "\n:host { all: initial; }\n.ptd-wrap {\n  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw;\n  transform: translateZ(0); /* 안쪽 position:fixed(토스트)가 패널 기준으로 붙도록 */\n  overflow-y: auto; border-left: 1px solid var(--line);\n  box-shadow: -6px 0 24px rgba(0, 0, 0, .18);\n}\n.ptd-wrap.closed { display: none; }\n.ptd-close {\n  position: absolute; top: 6px; right: 6px; z-index: 3;\n  border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer;\n}\n.ptd-toggle {\n  position: fixed; right: 0; top: 45%; z-index: 1;\n  writing-mode: vertical-rl; padding: 10px 5px; border-radius: 8px 0 0 8px;\n  border: 0; background: #7c4dff; color: #fff; cursor: pointer;\n  font: 600 12px/1 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n  box-shadow: -2px 2px 8px rgba(0, 0, 0, .2);\n}\n.ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }\n.tabs { padding-right: 32px; }\n.tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }\n";
+const PANEL_HTML = "<nav class=\"tabs\">\n    <button data-tab=\"tags\" class=\"active\">태그</button>\n    <button data-tab=\"prompt\">프롬프트</button>\n    <button data-tab=\"presets\">프리셋</button>\n    <button data-tab=\"settings\">내 태그·백업</button>\n  </nav>\n\n  <section id=\"tab-tags\" class=\"panel active\">\n    <input id=\"search\" type=\"search\" placeholder=\"검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (가중치: Shift+휠 / 길게 누르기)\" autocomplete=\"off\">\n    <div id=\"cats\" class=\"chips\"></div>\n    <div id=\"count\" class=\"muted\"></div>\n    <ul id=\"list\" class=\"list\"></ul>\n  </section>\n\n  <section id=\"tab-prompt\" class=\"panel\">\n    <div class=\"row between\">\n      <span class=\"muted\">PixAI에서 마지막으로 클릭한 입력칸</span>\n      <button id=\"p-refresh\">새로고침</button>\n    </div>\n    <div id=\"p-conflicts\"></div>\n    <div id=\"p-chips\" class=\"pchips\"></div>\n    <p class=\"muted\">태그 위에서 <b>Shift + 휠</b> 또는 <b>길게 누르기</b>로 가중치 조절 · 색은 정렬 그룹</p>\n    <button id=\"p-sort\" class=\"primary wide\">정렬 미리보기</button>\n    <div id=\"p-preview\" class=\"card\" hidden>\n      <h3>정렬 결과</h3>\n      <div id=\"p-preview-text\" class=\"preview\"></div>\n      <ul id=\"p-notes\" class=\"notes\"></ul>\n      <div class=\"row\">\n        <button id=\"p-cancel\">취소</button>\n        <button id=\"p-apply\" class=\"primary\">적용</button>\n      </div>\n    </div>\n  </section>\n\n  <section id=\"tab-presets\" class=\"panel\">\n    <input id=\"preset-search\" type=\"search\" placeholder=\"검색: 웃음, 분노, 부끄, smirk…\" autocomplete=\"off\">\n    <div id=\"preset-groups\" class=\"chips\"></div>\n    <ul id=\"preset-list\" class=\"list\"></ul>\n    <form id=\"preset-form\" class=\"card\">\n      <h3>내 프리셋 만들기 · 수정</h3>\n      <input id=\"preset-name\" placeholder=\"프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)\" required>\n      <select id=\"preset-group\"></select>\n      <input id=\"preset-desc\" placeholder=\"한 줄 설명 (선택)\">\n      <textarea id=\"preset-text\" rows=\"4\" placeholder=\"1boy, black hair, black eyes, white shirt, sleeve rolled up\" required></textarea>\n      <div class=\"row\">\n        <button type=\"button\" id=\"preset-grab\">PixAI 입력칸에서 가져오기</button>\n        <button type=\"submit\" class=\"primary\">저장</button>\n      </div>\n    </form>\n  </section>\n\n  <section id=\"tab-settings\" class=\"panel\">\n    <form id=\"custom-form\" class=\"card\">\n      <h3>내 태그 추가</h3>\n      <input id=\"c-en\" placeholder=\"영어 태그 (예: sleeve rolled up)\" required>\n      <input id=\"c-ko\" placeholder=\"한글 설명 (예: 소매 걷어올림)\">\n      <input id=\"c-alias\" placeholder=\"추가 검색어 (공백 구분, 선택)\">\n      <select id=\"c-cat\"></select>\n      <button type=\"submit\" class=\"primary\">추가</button>\n    </form>\n    <div class=\"card\">\n      <h3>백업</h3>\n      <p class=\"muted\">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>\n      <div class=\"row\">\n        <button id=\"export\">내보내기</button>\n        <button id=\"import\">가져오기</button>\n        <input id=\"import-file\" type=\"file\" accept=\"application/json\" hidden>\n      </div>\n    </div>\n  </section>\n\n  <div id=\"wbar\" class=\"wbar\" hidden>\n    <span id=\"wbar-label\" class=\"wbar-label\"></span>\n    <button id=\"wbar-minus\" title=\"약하게\">−</button>\n    <b id=\"wbar-val\">1.0</b>\n    <button id=\"wbar-plus\" title=\"강하게\">+</button>\n    <button id=\"wbar-reset\" title=\"1.0으로\">초기화</button>\n    <button id=\"wbar-close\" title=\"닫기\">✕</button>\n  </div>\n  <div id=\"toast\" class=\"toast\"></div>";
+const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n\n/* 충돌 경고 */\n#p-conflicts:empty { display: none; }\n#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }\n.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }\n.cf {\n  display: flex; gap: 6px; align-items: flex-start;\n  padding: 7px 8px; border-radius: 8px; font-size: 12px;\n  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));\n}\n.cf.soft {\n  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));\n}\n.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }\n.cf-main b { overflow-wrap: anywhere; }\n.cf-tip { color: var(--muted); }\n.cf button { padding: 2px 8px; font-size: 12px; flex: none; }\n.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }\n.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }\n\n/* 가중치 바 (길게 누르기) */\n.wbar {\n  position: fixed; left: 10px; right: 10px; bottom: 58px; z-index: 5;\n  display: flex; align-items: center; gap: 6px;\n  padding: 8px 10px; border-radius: 10px;\n  background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(0, 0, 0, .18);\n}\n.wbar-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }\n.wbar b { min-width: 2.2em; text-align: center; }\n.wbar button { min-width: 36px; }\n.list li, .pchip { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }\n\n/* 터치 기기: 누르기 쉽게 크게 */\n@media (pointer: coarse) {\n  body, .ptd-body { font-size: 15px; }\n  button, input, select, textarea { min-height: 40px; }\n  .list .main { padding: 10px 8px; }\n  .list .icon { padding: 8px 12px; min-height: 44px; }\n  .chips button { padding: 7px 12px; font-size: 13px; min-height: 34px; }\n  .pchips { gap: 8px; }\n  .pchip { padding: 7px 6px 7px 10px; font-size: 14px; }\n  .pchip .x { padding: 4px 8px; min-height: 0; }\n  .tabs button { min-height: 44px; }\n  .wbar button { min-width: 48px; min-height: 44px; font-size: 18px; }\n  .wbar #wbar-reset { font-size: 13px; }\n}\n";
+const SHELL_CSS = "\n:host { all: initial; }\n.ptd-wrap {\n  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw;\n  transform: translateZ(0); /* 안쪽 position:fixed(토스트)가 패널 기준으로 붙도록 */\n  overflow-y: auto; border-left: 1px solid var(--line);\n  box-shadow: -6px 0 24px rgba(0, 0, 0, .18);\n}\n.ptd-wrap.closed { display: none; }\n.ptd-close {\n  position: absolute; top: 6px; right: 6px; z-index: 3;\n  border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer;\n}\n.ptd-toggle {\n  position: fixed; right: 0; top: 45%; z-index: 1;\n  writing-mode: vertical-rl; padding: 10px 5px; border-radius: 8px 0 0 8px;\n  border: 0; background: #7c4dff; color: #fff; cursor: pointer;\n  font: 600 12px/1 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n  box-shadow: -2px 2px 8px rgba(0, 0, 0, .2);\n}\n.ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }\n.tabs { padding-right: 32px; }\n.tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }\n/* 폰처럼 좁은 화면: 패널을 전체 폭으로 */\n@media (max-width: 600px) {\n  .ptd-wrap { width: 100vw; border-left: 0; }\n  .ptd-wrap:not(.closed) ~ .ptd-toggle { display: none; }\n}\n";
 
 // 저장소: 탬퍼몽키 저장 공간 (크롬 확장과는 따로 저장돼요. 옮길 때는 백업 JSON 사용)
 const gmStorage = {
@@ -1922,7 +1922,7 @@ const state = {
   ignored: {},  // 무시한 충돌 경고 {key: true}
   cat: 'all',
   query: '',
-  rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
+  rowW: {},     // 태그 목록에서 Shift+휠·길게 누르기로 정해 둔 가중치 {en: w} (넣으면 초기화)
   prompt: '',   // PixAI 입력칸에서 읽어 온 프롬프트
   sorted: null, // 정렬 미리보기 결과
 };
@@ -2087,6 +2087,7 @@ function renderList() {
     const ko = document.createElement('span'); ko.className = 'ko'; ko.textContent = t.ko;
     main.append(en, ko);
     main.onclick = () => {
+      if (barTarget?.key === t.en) { barTarget = null; renderWeightBar(); }
       insert(PW.formatWeight(t.en, state.rowW[t.en] ?? 1), [t.en]);
       if (t.en in state.rowW) { delete state.rowW[t.en]; renderList(); }
     };
@@ -2124,31 +2125,103 @@ function renderList() {
 
 $('search').addEventListener('input', e => { state.query = e.target.value; renderList(); });
 
-// ---------- 가중치 (Ctrl + 휠) ----------
+// ---------- 가중치 (Shift + 휠, 길게 누르기) ----------
 const weightClass = w => (w > 1.5 ? 'w-high' : w > 1 ? 'w-up' : 'w-down');
 
+// 대상: {key} = 태그 목록의 한 줄, {item} = 프롬프트 칩 번호
+const targetOf = el => (el.dataset.weightKey ? { key: el.dataset.weightKey } : { item: +el.dataset.item });
+
+function weightOf(t) {
+  if (t.key) return state.rowW[t.key] ?? 1;
+  const it = PW.splitItems(state.prompt)[t.item];
+  return it ? PW.parseWeight(it.raw).w : 1;
+}
+
+async function setWeight(t, fn) {
+  if (t.key) {
+    state.rowW[t.key] = fn(state.rowW[t.key] ?? 1);
+    if (state.rowW[t.key] === 1) delete state.rowW[t.key];
+    renderList();
+  } else {
+    await changeItem(t.item, raw => {
+      const { core, w } = PW.parseWeight(raw);
+      return PW.formatWeight(core, fn(w));
+    });
+  }
+  renderWeightBar();
+}
+
 let wheelAcc = 0;
-ROOT.addEventListener('wheel', e => {
-  if (!e.ctrlKey) return;
-  const row = e.target.closest('[data-weight-key], [data-item]');
+// Shift + 휠: Ctrl + 휠(화면 확대)은 브라우저에 그대로 둔다.
+// 크롬은 Shift + 휠을 가로 스크롤(deltaX)로 바꿔 보내서 deltaX도 같이 본다.
+window.addEventListener('wheel', e => {
+  if (!e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
+  const path = e.composedPath();
+  if (!path.includes(ROOT)) return;
+  const row = path.find(el => el.dataset && ('weightKey' in el.dataset || 'item' in el.dataset));
   if (!row) return;
-  e.preventDefault(); // 사이드 패널 확대/축소 대신 가중치 조절
-  wheelAcc += e.deltaY;
+  e.preventDefault();
+  wheelAcc += e.deltaY || e.deltaX;
   if (Math.abs(wheelAcc) < 40) return; // 트랙패드처럼 잘게 오는 휠은 모아서 한 칸
   const delta = wheelAcc < 0 ? 0.1 : -0.1;
   wheelAcc = 0;
-  if (row.dataset.weightKey) {
-    const k = row.dataset.weightKey;
-    state.rowW[k] = PW.stepWeight(state.rowW[k] ?? 1, delta);
-    if (state.rowW[k] === 1) delete state.rowW[k];
-    renderList();
-  } else {
-    changeItem(+row.dataset.item, raw => {
-      const { core, w } = PW.parseWeight(raw);
-      return PW.formatWeight(core, PW.stepWeight(w, delta));
-    });
-  }
+  setWeight(targetOf(row), w => PW.stepWeight(w, delta));
 }, { passive: false });
+
+// 터치: 길게 누르면 아래에 가중치 바가 뜬다 (마우스로 꾹 눌러도 동작)
+let barTarget = null;
+let pressTimer = null, pressStart = null, longPressed = false;
+
+function labelOf(t) {
+  if (t.key) return t.key;
+  const it = PW.splitItems(state.prompt)[t.item];
+  return it ? PW.parseWeight(it.raw).core : '';
+}
+
+function renderWeightBar() {
+  const bar = $('wbar');
+  if (!barTarget) { bar.hidden = true; return; }
+  const w = weightOf(barTarget);
+  $('wbar-label').textContent = labelOf(barTarget);
+  $('wbar-val').textContent = w.toFixed(1);
+  $('wbar-val').className = w === 1 ? '' : weightClass(w);
+  bar.hidden = false;
+}
+
+function openWeightBar(el) {
+  barTarget = targetOf(el);
+  renderWeightBar();
+  navigator.vibrate?.(15);
+}
+
+ROOT.addEventListener('pointerdown', e => {
+  const row = e.target.closest('[data-weight-key], [data-item]');
+  if (!row || e.target.closest('.icon, .x')) return;
+  pressStart = [e.clientX, e.clientY];
+  clearTimeout(pressTimer);
+  pressTimer = setTimeout(() => { longPressed = true; openWeightBar(row); }, 450);
+});
+ROOT.addEventListener('pointermove', e => {
+  if (pressStart && Math.hypot(e.clientX - pressStart[0], e.clientY - pressStart[1]) > 10) clearTimeout(pressTimer);
+});
+for (const type of ['pointerup', 'pointercancel']) {
+  ROOT.addEventListener(type, () => { clearTimeout(pressTimer); pressStart = null; });
+}
+// 길게 누른 뒤 손을 떼도 태그가 들어가지 않게
+ROOT.addEventListener('click', e => {
+  if (!longPressed) return;
+  longPressed = false;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+ROOT.addEventListener('contextmenu', e => {
+  if (e.target.closest('[data-weight-key], [data-item]')) e.preventDefault();
+});
+
+$('wbar-minus').onclick = () => barTarget && setWeight(barTarget, w => PW.stepWeight(w, -0.1));
+$('wbar-plus').onclick = () => barTarget && setWeight(barTarget, w => PW.stepWeight(w, 0.1));
+$('wbar-reset').onclick = () => barTarget && setWeight(barTarget, () => 1);
+$('wbar-close').onclick = () => { barTarget = null; renderWeightBar(); };
 
 // ---------- 프롬프트 탭 ----------
 const catOrder = new Map(DEFAULT_CATEGORIES.map(c => [c.id, c.order]));
@@ -2480,6 +2553,7 @@ ROOT.querySelectorAll('.tabs button').forEach(b => {
   b.onclick = () => {
     ROOT.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
     ROOT.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
+    barTarget = null; renderWeightBar();
     if (b.dataset.tab === 'prompt') loadPrompt(true);
   };
 });

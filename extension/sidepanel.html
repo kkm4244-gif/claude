@@ -14,7 +14,7 @@
   </nav>
 
   <section id="tab-tags" class="panel active">
-    <input id="search" type="search" placeholder="검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (Ctrl+휠: 가중치)" autocomplete="off">
+    <input id="search" type="search" placeholder="검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (가중치: Shift+휠 / 길게 누르기)" autocomplete="off">
     <div id="cats" class="chips"></div>
     <div id="count" class="muted"></div>
     <ul id="list" class="list"></ul>
@@ -27,7 +27,7 @@
     </div>
     <div id="p-conflicts"></div>
     <div id="p-chips" class="pchips"></div>
-    <p class="muted">태그 위에서 <b>Ctrl + 휠</b>로 가중치 조절 · 색은 정렬 그룹</p>
+    <p class="muted">태그 위에서 <b>Shift + 휠</b> 또는 <b>길게 누르기</b>로 가중치 조절 · 색은 정렬 그룹</p>
     <button id="p-sort" class="primary wide">정렬 미리보기</button>
     <div id="p-preview" class="card" hidden>
       <h3>정렬 결과</h3>
@@ -77,6 +77,14 @@
     </div>
   </section>
 
+  <div id="wbar" class="wbar" hidden>
+    <span id="wbar-label" class="wbar-label"></span>
+    <button id="wbar-minus" title="약하게">−</button>
+    <b id="wbar-val">1.0</b>
+    <button id="wbar-plus" title="강하게">+</button>
+    <button id="wbar-reset" title="1.0으로">초기화</button>
+    <button id="wbar-close" title="닫기">✕</button>
+  </div>
   <div id="toast" class="toast"></div>
   <script src="tags.js"></script>
   <script src="presets.js"></script>
