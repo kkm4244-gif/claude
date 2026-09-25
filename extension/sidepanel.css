@@ -131,3 +131,22 @@ button.wide { width: 100%; margin-top: 8px; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 #preset-form { margin-top: 14px; }
+
+/* 충돌 경고 */
+#p-conflicts:empty { display: none; }
+#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }
+.cf {
+  display: flex; gap: 6px; align-items: flex-start;
+  padding: 7px 8px; border-radius: 8px; font-size: 12px;
+  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));
+}
+.cf.soft {
+  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));
+}
+.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cf-main b { overflow-wrap: anywhere; }
+.cf-tip { color: var(--muted); }
+.cf button { padding: 2px 8px; font-size: 12px; flex: none; }
+.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }
+.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }

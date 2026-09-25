@@ -11,6 +11,7 @@ const SORT = (() => {
     [/^looking |^facing /, 'gaze'],
     [/^holding |^(hand|hands|arm|arms|leg|legs) |sitting|standing|lying|kneeling|leaning|slouch|walking|running|crossed|pose$/, 'pose'],
     [/background$|indoors|outdoors|room$|city|street|sky|forest|beach|ocean|school|office|mansion|hall$|interior|building|architecture/, 'bg'],
+    [/tree|grass|flowers?$|leaves|leaf|river|lake|waves?$|waterfall|rock$|field$|petals|moon$|stars?$|clouds?$|snow|season|mist|fog|water$/, 'nature'],
     [/window|curtains?|table$|couch|sofa|chair|shelf|floor$|wall$|lamp$|chandelier|fireplace|bed$|rug$|carpet|glass$|bottle$|cup$/, 'props'],
     [/theme$|colou?rs?$|palette|saturat|tones?$|grading/, 'color'],
     [/lighting$|light$|lights$|shadow|glow/, 'light'],

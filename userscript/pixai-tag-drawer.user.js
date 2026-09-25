@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.5.0
+// @version      0.6.0
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -806,6 +806,86 @@ cozy|아늑한|포근
 messy room|어질러진 방|지저분
 ` },
   {
+    id: 'nature', name: '자연', order: 6.03, tags: `
+tree|나무
+pine tree|소나무|침엽수 나무
+palm tree|야자수|나무 여름
+bamboo|대나무
+bamboo forest|대나무 숲|죽림
+tree shade|나무 그늘|그늘
+branch|나뭇가지
+leaf|나뭇잎|잎
+falling leaves|떨어지는 나뭇잎|낙엽
+ginkgo leaf|은행잎|가을
+maple leaf|단풍잎|가을
+foliage|우거진 잎|초록 녹음
+tall grass|키 큰 풀|풀숲 수풀
+field|들판|벌판
+wheat field|밀밭|들판
+meadow|초원|풀밭
+bush|덤불|수풀
+vines|덩굴|넝쿨
+ivy|담쟁이|덩굴
+moss|이끼
+mushroom|버섯
+sunflower|해바라기|꽃
+hydrangea|수국|꽃
+wisteria|등나무 꽃|꽃
+lily (flower)|백합|꽃
+lavender (flower)|라벤더|꽃 보라
+spider lily|꽃무릇|석산 꽃 빨강
+falling petals|흩날리는 꽃잎|꽃잎
+rock|바위|돌
+cliff|절벽
+hill|언덕
+valley|계곡|골짜기
+cave|동굴
+river|강
+stream|개울|시냇물
+lake|호수
+pond|연못
+waterfall|폭포
+water|물
+waves|파도
+shore|해안|물가
+sand|모래
+horizon|수평선|지평선
+island|섬
+underwater|물속|수중 바닷속
+reflection|반사|물에 비침
+ripples|물결|파문
+splashing|물보라|튀는 물
+bubble|물방울 거품|기포
+ice|얼음
+snowing|눈 내림|함박눈
+snowflakes|눈송이
+desert|사막
+spring (season)|봄|계절
+autumn|가을|계절
+cloudy sky|흐린 하늘|구름
+overcast|잔뜩 흐림|먹구름
+cumulonimbus cloud|뭉게구름 (적란운)|여름 구름
+gradient sky|그라데이션 하늘
+orange sky|주황 하늘|노을
+purple sky|보라 하늘|노을
+rainbow|무지개
+lightning|번개
+storm|폭풍|태풍
+aurora|오로라
+milky way|은하수|별
+shooting star|별똥별|유성
+crescent moon|초승달|달
+fireflies|반딧불이
+butterfly|나비
+dragonfly|잠자리
+bird|새
+crow|까마귀|새
+seagull|갈매기|새 바다
+cat|고양이
+dog|개|강아지
+fish|물고기
+` },
+  {
     id: 'props', name: '인테리어·소품', order: 6.05, tags: `
 curtains|커튼
 sheer curtains|얇은 커튼|시스루 레이스
@@ -996,7 +1076,7 @@ function parseDefaultTags() {
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '색감', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '자연', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -1163,6 +1243,42 @@ const DEFAULT_PRESETS = [
     text: 'outdoors, rooftop, railing, sunset, cityscape, wind, orange sky over the city skyline' },
   { g: '배경', name: '비 오는 네온 골목', desc: '젖은 바닥에 네온 반사',
     text: 'outdoors, alley, night, rain, neon lights, wet pavement reflecting neon lights, puddles' },
+
+  // 자연 (장면 레시피)
+  { g: '자연', name: '햇살 드는 숲', desc: '나뭇잎 사이로 빛줄기',
+    text: 'outdoors, forest, tree, foliage, moss, dappled sunlight, light rays, sunbeams filtering through the leaves, lush green atmosphere' },
+  { g: '자연', name: '비 내리는 숲길', desc: '안개 + 젖은 잎',
+    text: 'outdoors, forest, rain, fog, tree, wet leaves glistening, narrow forest path, misty atmosphere' },
+  { g: '자연', name: '대나무 숲', desc: '높이 솟은 대나무 + 빛줄기',
+    text: 'outdoors, bamboo forest, bamboo, light rays, tall bamboo stalks towering overhead, quiet path' },
+  { g: '자연', name: '벚꽃길', desc: '흩날리는 꽃잎',
+    text: 'outdoors, spring (season), cherry blossoms, tree, falling petals, path lined with blooming cherry trees, soft pink atmosphere' },
+  { g: '자연', name: '단풍 공원', desc: '떨어지는 낙엽 + 황금빛',
+    text: 'outdoors, autumn, autumn leaves, maple leaf, falling leaves, tree, park bench, warm golden foliage' },
+  { g: '자연', name: '여름 바다', desc: '파란 하늘 + 뭉게구름 + 파도',
+    text: 'outdoors, summer, beach, ocean, waves, sand, blue sky, cumulonimbus cloud, horizon, sparkling sea' },
+  { g: '자연', name: '노을 해변', desc: '바다에 비친 주황 하늘',
+    text: 'outdoors, beach, sunset, ocean, horizon, reflection, orange sky, orange sky mirrored on the calm sea' },
+  { g: '자연', name: '달빛 밤바다', desc: '어두운 파도 위 은빛 달빛',
+    text: 'outdoors, night, ocean, waves, moon, moonlight, reflection, silver moonlight shimmering on dark waves' },
+  { g: '자연', name: '안개 낀 호숫가', desc: '산이 비치는 잔잔한 호수',
+    text: 'outdoors, lake, reflection, mountain, tree, fog, calm water, mist hovering over the lake' },
+  { g: '자연', name: '폭포', desc: '이끼 낀 바위 + 물보라',
+    text: 'outdoors, waterfall, rock, moss, river, splashing, water spray, lush greenery' },
+  { g: '자연', name: '바람 부는 초원', desc: '끝없는 풀밭 + 흘러가는 구름',
+    text: 'outdoors, meadow, tall grass, wind, blue sky, cloud, grass swaying in the wind, vast open field' },
+  { g: '자연', name: '해바라기밭', desc: '한여름 햇살',
+    text: 'outdoors, summer, sunflower, flower field, blue sky, sunlight, cumulonimbus cloud' },
+  { g: '자연', name: '눈 덮인 숲', desc: '조용히 내리는 눈',
+    text: 'outdoors, winter, snow, snowing, snowflakes, pine tree, snow-covered forest, quiet snowfall' },
+  { g: '자연', name: '별이 쏟아지는 밤', desc: '은하수 + 별똥별 + 언덕',
+    text: 'outdoors, night, starry sky, milky way, shooting star, hill, grass, vast sky full of stars' },
+  { g: '자연', name: '반딧불 여름밤', desc: '풀숲 위를 떠다니는 빛',
+    text: 'outdoors, night, summer, fireflies, tall grass, forest, glowing fireflies drifting in the dark' },
+  { g: '자연', name: '바닷속', desc: '수면에서 내려오는 빛',
+    text: 'underwater, water, bubble, fish, light rays, sunlight filtering down from the surface' },
+  { g: '자연', name: '폭풍 치는 절벽', desc: '먹구름 + 거센 파도',
+    text: 'outdoors, cliff, ocean, waves, storm, overcast, wind, dramatic sky, waves crashing against the rocks' },
 ];
 
 // 프롬프트 파싱·가중치 도구 (content script와 사이드 패널이 함께 사용)
@@ -1274,6 +1390,7 @@ const SORT = (() => {
     [/^looking |^facing /, 'gaze'],
     [/^holding |^(hand|hands|arm|arms|leg|legs) |sitting|standing|lying|kneeling|leaning|slouch|walking|running|crossed|pose$/, 'pose'],
     [/background$|indoors|outdoors|room$|city|street|sky|forest|beach|ocean|school|office|mansion|hall$|interior|building|architecture/, 'bg'],
+    [/tree|grass|flowers?$|leaves|leaf|river|lake|waves?$|waterfall|rock$|field$|petals|moon$|stars?$|clouds?$|snow|season|mist|fog|water$/, 'nature'],
     [/window|curtains?|table$|couch|sofa|chair|shelf|floor$|wall$|lamp$|chandelier|fireplace|bed$|rug$|carpet|glass$|bottle$|cup$/, 'props'],
     [/theme$|colou?rs?$|palette|saturat|tones?$|grading/, 'color'],
     [/lighting$|light$|lights$|shadow|glow/, 'light'],
@@ -1344,6 +1461,139 @@ const SORT = (() => {
   }
 
   return { sortPrompt, classify };
+})();
+
+// 같이 쓰면 어색하거나 서로 부딪히는 태그 검사 (사이드 패널에서 사용)
+// pair: a쪽과 b쪽이 둘 다 있으면 경고. group: 같은 그룹 안에서 서로 다른 종류가 2개 이상이면 경고
+// look: 외형 규칙 (여러 명이 나오는 그림이면 건너뜀)
+const CONFLICT = (() => {
+  const HAPPY = { name: '웃음', tags: ['smile', 'light smile', 'grin', ':d', 'laughing', 'happy'],
+    re: /\b(smil(e|es|ing)|laugh(s|ing)?|grin(s|ning)?)\b/,
+    not: /\b(evil|crazy|sad|bitter\w*|forced|wry|sinister|unhinged|awkward)\b/ };
+  const ANGRY = { name: '화남', tags: ['angry', 'annoyed', 'frown', 'glaring', 'furrowed brow', 'scowl'],
+    re: /\b(angry|furious|rage|annoyed|glar(e|es|ing)|scowl(ing)?)\b/ };
+  const SAD = { name: '슬픔', tags: ['sad', 'crying', 'tears', 'tearing up'],
+    re: /\b(sad|cry(ing)?|sob(s|bing)?|tears?)\b/, not: /smil/ };
+  const BORED = { name: '지루함·무표정', tags: ['bored', 'expressionless'],
+    re: /\b(bored|expressionless|emotionless|indifferent)\b/ };
+  const SURPRISED = { name: '놀람', tags: ['surprised', 'wide-eyed', ':o'], re: /\b(surprised|startled|shocked)\b/ };
+  const MULTI = ['2boys', '3boys', 'multiple boys', '2girls', 'multiple girls', 'couple', 'hetero'];
+
+  const kinds = list => list.map(t => ({ k: t, tags: [t] }));
+
+  const RULES = [
+    // 표정
+    { id: 'happy-angry', a: HAPPY, b: ANGRY, msg: '웃음과 화남이 같이 있어요',
+      tip: '비웃음·도발이면 smirk, 억지웃음이면 forced smile + clenched teeth' },
+    { id: 'happy-sad', a: HAPPY, b: SAD, except: ['laughing'], msg: '웃음과 슬픔이 같이 있어요',
+      tip: '울면서 웃는 거라면 괜찮아요. 씁쓸한 미소는 sad smile, bittersweet expression' },
+    { id: 'happy-bored', a: HAPPY, b: BORED, msg: '웃음과 지루함·무표정이 같이 있어요',
+      tip: '심드렁한 미소를 원하면 light smile + half-closed eyes' },
+    { id: 'surprised-bored', a: SURPRISED, b: BORED, msg: '놀람과 지루함·무표정이 같이 있어요',
+      tip: '둘 중 하나만 남기세요' },
+    { id: 'mouth', a: { name: '입 벌림', tags: ['open mouth', ':d', ':o'] },
+      b: { name: '입 다묾', tags: ['closed mouth'] }, msg: '입을 벌린 태그와 다문 태그가 같이 있어요',
+      tip: '살짝 벌린 입은 parted lips' },
+    { id: 'eyes-closed', a: { name: '눈 감음', tags: ['closed eyes'] },
+      b: { name: '눈 뜬 표현', tags: ['looking at viewer', 'eye contact', 'wide-eyed', 'glaring', 'looking away', 'looking up', 'looking down'] },
+      msg: '눈을 감았는데 눈을 뜬 표현이 있어요', tip: '한쪽만 감으려면 one eye closed' },
+    { id: 'gaze', a: { name: '정면 응시', tags: ['looking at viewer', 'eye contact'] },
+      b: { name: '시선 피함', tags: ['looking away'] }, msg: '정면 응시와 시선 피함이 같이 있어요',
+      tip: '곁눈질로 보는 거면 side glance at viewer' },
+    // 구도·자세
+    { id: 'framing', group: '구도', kinds: kinds(['portrait', 'close-up', 'upper body', 'cowboy shot', 'full body', 'lower body']),
+      msg: '구도 태그가 여러 개예요', tip: '구도는 하나만 (주로 upper body / cowboy shot / full body)' },
+    { id: 'angle', a: { name: '위에서', tags: ['from above'] }, b: { name: '아래에서', tags: ['from below'] },
+      msg: '위·아래 앵글이 같이 있어요', tip: '올려다보는 구도로 내려다보는 시선은 from below + looking down' },
+    { id: 'posture', group: '자세', msg: '자세 태그가 여러 개예요', tip: '자세는 하나만 남기세요',
+      kinds: ['standing', 'sitting', 'lying', 'kneeling', 'squatting'].map(k => ({ k, tags: [k], re: new RegExp(`\\b${k}\\b`) })) },
+    // 외형 (여러 명이면 건너뜀)
+    { id: 'hair-length', look: true, group: '머리 길이', msg: '머리 길이 태그가 여러 개예요', tip: '머리 길이는 하나만',
+      kinds: kinds(['very short hair', 'short hair', 'medium hair', 'long hair', 'very long hair']) },
+    { id: 'hair-color', look: true, group: '머리색', msg: '머리색이 여러 개예요',
+      tip: '투톤이면 two-tone hair, 브릿지면 streaked hair를 추가하세요',
+      except: ['multicolored hair', 'two-tone hair', 'streaked hair', 'gradient hair', 'colored inner hair'],
+      kinds: kinds(['black hair', 'brown hair', 'blonde hair', 'white hair', 'grey hair', 'red hair', 'blue hair',
+        'dark blue hair', 'pink hair', 'purple hair', 'green hair', 'orange hair', 'aqua hair']) },
+    { id: 'eye-color', look: true, group: '눈 색', msg: '눈 색이 여러 개예요', tip: '양쪽 눈 색이 다르면 heterochromia',
+      except: ['heterochromia'],
+      kinds: kinds(['black eyes', 'blue eyes', 'red eyes', 'green eyes', 'brown eyes', 'yellow eyes', 'purple eyes',
+        'grey eyes', 'pink eyes', 'orange eyes', 'aqua eyes']) },
+    { id: 'sleeves', look: true, group: '소매', msg: '소매 길이 태그가 여러 개예요', tip: '소매 길이는 하나만',
+      kinds: kinds(['long sleeves', 'short sleeves', 'sleeveless']) },
+    // 인원
+    { id: 'solo-multi', a: { name: 'solo', tags: ['solo'] }, b: { name: '여러 명', tags: MULTI },
+      msg: '혼자(solo)인데 여러 명 태그가 있어요', tip: '둘 중 하나만 남기세요' },
+    { id: 'boys', group: '남자 수', msg: '남자 인원 태그가 여러 개예요', tip: '인원 태그는 하나만',
+      kinds: kinds(['1boy', '2boys', '3boys', 'multiple boys']) },
+    { id: 'girls', group: '여자 수', msg: '여자 인원 태그가 여러 개예요', tip: '인원 태그는 하나만',
+      kinds: kinds(['1girl', '2girls', 'multiple girls']) },
+    // 시간·장소·색감
+    { id: 'day-night', a: { name: '낮', tags: ['day'] }, b: { name: '밤', tags: ['night', 'night sky', 'starry sky'] },
+      msg: '낮과 밤이 같이 있어요', tip: '해 질 녘이면 sunset / evening / twilight' },
+    { id: 'in-out', a: { name: '실내', tags: ['indoors'] }, b: { name: '야외', tags: ['outdoors'] },
+      msg: '실내와 야외가 같이 있어요', tip: '창밖 풍경이면 indoors + window, scenery outside the window' },
+    { id: 'color', a: { name: '톤다운', tags: ['muted color', 'desaturated', 'pale color', 'monochrome', 'greyscale', 'faded colors'] },
+      b: { name: '비비드', tags: ['vivid colors', 'saturated', 'colorful'] },
+      msg: '톤다운과 비비드가 같이 있어요', tip: '한 색만 쨍하게 살리려면 spot color' },
+  ];
+
+  function matches(concept, it) {
+    if (concept.tags.includes(it.norm)) return true;
+    return !!concept.re && concept.re.test(it.norm) && !(concept.not && concept.not.test(it.norm));
+  }
+
+  // 한쪽이 전부 약하게(0.8 미만) 걸려 있으면 약한 경고
+  const weak = list => list.every(it => it.w < 0.8);
+
+  // text → [{ key, level: 'hard' | 'soft', items: [번호…], label, msg, tip }]
+  function check(text, ignored = {}) {
+    const items = PW.splitItems(text).map((it, i) => {
+      if (PW.isLora(it.raw)) return null;
+      const { core, w } = PW.parseWeight(it.raw);
+      return { i, core, w, norm: PW.normalize(core) };
+    }).filter(Boolean);
+    const norms = new Set(items.map(it => it.norm));
+    const multi = MULTI.some(t => norms.has(t));
+    const out = [];
+
+    for (const r of RULES) {
+      if (r.look && multi) continue;
+      if (r.except && r.except.some(t => norms.has(t))) continue;
+      let sides;
+      if (r.group) {
+        // 종류별로 모은 뒤, 서로 다른 종류가 2개 이상이면 충돌
+        const byKind = new Map();
+        for (const it of items) {
+          const kind = r.kinds.find(k => k.tags.includes(it.norm) || (k.re && k.re.test(it.norm)));
+          if (kind) byKind.set(kind.k, [...(byKind.get(kind.k) || []), it]);
+        }
+        if (byKind.size < 2) continue;
+        sides = [...byKind.values()];
+      } else {
+        const a = items.filter(it => matches(r.a, it));
+        const b = items.filter(it => matches(r.b, it) && !a.includes(it));
+        if (!a.length || !b.length) continue;
+        sides = [a, b];
+      }
+      const involved = sides.flat();
+      const key = r.id + ':' + [...new Set(involved.map(it => it.norm))].sort().join('|');
+      if (ignored[key]) continue;
+      // 약하게 걸린 쪽을 빼고도 두 종류 이상 남으면 진짜 충돌
+      const strong = sides.filter(s => !weak(s));
+      out.push({
+        key,
+        level: strong.length >= 2 ? 'hard' : 'soft',
+        items: involved.map(it => it.i),
+        label: sides.map(s => s.map(it => it.core).join(', ')).join(' ↔ '),
+        msg: r.msg,
+        tip: r.tip,
+      });
+    }
+    return out;
+  }
+
+  return { check };
 })();
 
 // PixAI 페이지에 주입되어 사이드 패널과 입력칸 사이를 이어준다.
@@ -1613,9 +1863,9 @@ const SORT = (() => {
 })();
 
 
-const PANEL_HTML = "<nav class=\"tabs\">\n    <button data-tab=\"tags\" class=\"active\">태그</button>\n    <button data-tab=\"prompt\">프롬프트</button>\n    <button data-tab=\"presets\">프리셋</button>\n    <button data-tab=\"settings\">내 태그·백업</button>\n  </nav>\n\n  <section id=\"tab-tags\" class=\"panel active\">\n    <input id=\"search\" type=\"search\" placeholder=\"검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (Ctrl+휠: 가중치)\" autocomplete=\"off\">\n    <div id=\"cats\" class=\"chips\"></div>\n    <div id=\"count\" class=\"muted\"></div>\n    <ul id=\"list\" class=\"list\"></ul>\n  </section>\n\n  <section id=\"tab-prompt\" class=\"panel\">\n    <div class=\"row between\">\n      <span class=\"muted\">PixAI에서 마지막으로 클릭한 입력칸</span>\n      <button id=\"p-refresh\">새로고침</button>\n    </div>\n    <div id=\"p-chips\" class=\"pchips\"></div>\n    <p class=\"muted\">태그 위에서 <b>Ctrl + 휠</b>로 가중치 조절 · 색은 정렬 그룹</p>\n    <button id=\"p-sort\" class=\"primary wide\">정렬 미리보기</button>\n    <div id=\"p-preview\" class=\"card\" hidden>\n      <h3>정렬 결과</h3>\n      <div id=\"p-preview-text\" class=\"preview\"></div>\n      <ul id=\"p-notes\" class=\"notes\"></ul>\n      <div class=\"row\">\n        <button id=\"p-cancel\">취소</button>\n        <button id=\"p-apply\" class=\"primary\">적용</button>\n      </div>\n    </div>\n  </section>\n\n  <section id=\"tab-presets\" class=\"panel\">\n    <input id=\"preset-search\" type=\"search\" placeholder=\"검색: 웃음, 분노, 부끄, smirk…\" autocomplete=\"off\">\n    <div id=\"preset-groups\" class=\"chips\"></div>\n    <ul id=\"preset-list\" class=\"list\"></ul>\n    <form id=\"preset-form\" class=\"card\">\n      <h3>내 프리셋 만들기 · 수정</h3>\n      <input id=\"preset-name\" placeholder=\"프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)\" required>\n      <select id=\"preset-group\"></select>\n      <input id=\"preset-desc\" placeholder=\"한 줄 설명 (선택)\">\n      <textarea id=\"preset-text\" rows=\"4\" placeholder=\"1boy, black hair, black eyes, white shirt, sleeve rolled up\" required></textarea>\n      <div class=\"row\">\n        <button type=\"button\" id=\"preset-grab\">PixAI 입력칸에서 가져오기</button>\n        <button type=\"submit\" class=\"primary\">저장</button>\n      </div>\n    </form>\n  </section>\n\n  <section id=\"tab-settings\" class=\"panel\">\n    <form id=\"custom-form\" class=\"card\">\n      <h3>내 태그 추가</h3>\n      <input id=\"c-en\" placeholder=\"영어 태그 (예: sleeve rolled up)\" required>\n      <input id=\"c-ko\" placeholder=\"한글 설명 (예: 소매 걷어올림)\">\n      <input id=\"c-alias\" placeholder=\"추가 검색어 (공백 구분, 선택)\">\n      <select id=\"c-cat\"></select>\n      <button type=\"submit\" class=\"primary\">추가</button>\n    </form>\n    <div class=\"card\">\n      <h3>백업</h3>\n      <p class=\"muted\">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>\n      <div class=\"row\">\n        <button id=\"export\">내보내기</button>\n        <button id=\"import\">가져오기</button>\n        <input id=\"import-file\" type=\"file\" accept=\"application/json\" hidden>\n      </div>\n    </div>\n  </section>\n\n  <div id=\"toast\" class=\"toast\"></div>";
-const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n";
-const SHELL_CSS = "\n:host { all: initial; }\n.ptd-wrap {\n  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw;\n  transform: translateZ(0); /* 안쪽 position:fixed(토스트)가 패널 기준으로 붙도록 */\n  overflow-y: auto; border-left: 1px solid var(--line);\n  box-shadow: -6px 0 24px rgba(0, 0, 0, .18);\n}\n.ptd-wrap.closed { display: none; }\n.ptd-close {\n  position: absolute; top: 6px; right: 6px; z-index: 3;\n  border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer;\n}\n.ptd-toggle {\n  position: fixed; right: 0; top: 45%; z-index: 1;\n  writing-mode: vertical-rl; padding: 10px 5px; border-radius: 8px 0 0 8px;\n  border: 0; background: #7c4dff; color: #fff; cursor: pointer;\n  font: 600 12px/1 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n  box-shadow: -2px 2px 8px rgba(0, 0, 0, .2);\n}\n.ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }\n.tabs { padding-right: 32px; }\n";
+const PANEL_HTML = "<nav class=\"tabs\">\n    <button data-tab=\"tags\" class=\"active\">태그</button>\n    <button data-tab=\"prompt\">프롬프트</button>\n    <button data-tab=\"presets\">프리셋</button>\n    <button data-tab=\"settings\">내 태그·백업</button>\n  </nav>\n\n  <section id=\"tab-tags\" class=\"panel active\">\n    <input id=\"search\" type=\"search\" placeholder=\"검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (Ctrl+휠: 가중치)\" autocomplete=\"off\">\n    <div id=\"cats\" class=\"chips\"></div>\n    <div id=\"count\" class=\"muted\"></div>\n    <ul id=\"list\" class=\"list\"></ul>\n  </section>\n\n  <section id=\"tab-prompt\" class=\"panel\">\n    <div class=\"row between\">\n      <span class=\"muted\">PixAI에서 마지막으로 클릭한 입력칸</span>\n      <button id=\"p-refresh\">새로고침</button>\n    </div>\n    <div id=\"p-conflicts\"></div>\n    <div id=\"p-chips\" class=\"pchips\"></div>\n    <p class=\"muted\">태그 위에서 <b>Ctrl + 휠</b>로 가중치 조절 · 색은 정렬 그룹</p>\n    <button id=\"p-sort\" class=\"primary wide\">정렬 미리보기</button>\n    <div id=\"p-preview\" class=\"card\" hidden>\n      <h3>정렬 결과</h3>\n      <div id=\"p-preview-text\" class=\"preview\"></div>\n      <ul id=\"p-notes\" class=\"notes\"></ul>\n      <div class=\"row\">\n        <button id=\"p-cancel\">취소</button>\n        <button id=\"p-apply\" class=\"primary\">적용</button>\n      </div>\n    </div>\n  </section>\n\n  <section id=\"tab-presets\" class=\"panel\">\n    <input id=\"preset-search\" type=\"search\" placeholder=\"검색: 웃음, 분노, 부끄, smirk…\" autocomplete=\"off\">\n    <div id=\"preset-groups\" class=\"chips\"></div>\n    <ul id=\"preset-list\" class=\"list\"></ul>\n    <form id=\"preset-form\" class=\"card\">\n      <h3>내 프리셋 만들기 · 수정</h3>\n      <input id=\"preset-name\" placeholder=\"프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)\" required>\n      <select id=\"preset-group\"></select>\n      <input id=\"preset-desc\" placeholder=\"한 줄 설명 (선택)\">\n      <textarea id=\"preset-text\" rows=\"4\" placeholder=\"1boy, black hair, black eyes, white shirt, sleeve rolled up\" required></textarea>\n      <div class=\"row\">\n        <button type=\"button\" id=\"preset-grab\">PixAI 입력칸에서 가져오기</button>\n        <button type=\"submit\" class=\"primary\">저장</button>\n      </div>\n    </form>\n  </section>\n\n  <section id=\"tab-settings\" class=\"panel\">\n    <form id=\"custom-form\" class=\"card\">\n      <h3>내 태그 추가</h3>\n      <input id=\"c-en\" placeholder=\"영어 태그 (예: sleeve rolled up)\" required>\n      <input id=\"c-ko\" placeholder=\"한글 설명 (예: 소매 걷어올림)\">\n      <input id=\"c-alias\" placeholder=\"추가 검색어 (공백 구분, 선택)\">\n      <select id=\"c-cat\"></select>\n      <button type=\"submit\" class=\"primary\">추가</button>\n    </form>\n    <div class=\"card\">\n      <h3>백업</h3>\n      <p class=\"muted\">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>\n      <div class=\"row\">\n        <button id=\"export\">내보내기</button>\n        <button id=\"import\">가져오기</button>\n        <input id=\"import-file\" type=\"file\" accept=\"application/json\" hidden>\n      </div>\n    </div>\n  </section>\n\n  <div id=\"toast\" class=\"toast\"></div>";
+const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n\n/* 충돌 경고 */\n#p-conflicts:empty { display: none; }\n#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }\n.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }\n.cf {\n  display: flex; gap: 6px; align-items: flex-start;\n  padding: 7px 8px; border-radius: 8px; font-size: 12px;\n  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));\n}\n.cf.soft {\n  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));\n}\n.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }\n.cf-main b { overflow-wrap: anywhere; }\n.cf-tip { color: var(--muted); }\n.cf button { padding: 2px 8px; font-size: 12px; flex: none; }\n.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }\n.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }\n";
+const SHELL_CSS = "\n:host { all: initial; }\n.ptd-wrap {\n  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw;\n  transform: translateZ(0); /* 안쪽 position:fixed(토스트)가 패널 기준으로 붙도록 */\n  overflow-y: auto; border-left: 1px solid var(--line);\n  box-shadow: -6px 0 24px rgba(0, 0, 0, .18);\n}\n.ptd-wrap.closed { display: none; }\n.ptd-close {\n  position: absolute; top: 6px; right: 6px; z-index: 3;\n  border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer;\n}\n.ptd-toggle {\n  position: fixed; right: 0; top: 45%; z-index: 1;\n  writing-mode: vertical-rl; padding: 10px 5px; border-radius: 8px 0 0 8px;\n  border: 0; background: #7c4dff; color: #fff; cursor: pointer;\n  font: 600 12px/1 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n  box-shadow: -2px 2px 8px rgba(0, 0, 0, .2);\n}\n.ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }\n.tabs { padding-right: 32px; }\n.tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }\n";
 
 // 저장소: 탬퍼몽키 저장 공간 (크롬 확장과는 따로 저장돼요. 옮길 때는 백업 JSON 사용)
 const gmStorage = {
@@ -1669,6 +1919,7 @@ const state = {
   favs: {},     // {en: true}
   uses: {},     // {en: count}
   presets: [],  // [{id, name, text, g(그룹), desc}]
+  ignored: {},  // 무시한 충돌 경고 {key: true}
   cat: 'all',
   query: '',
   rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
@@ -1695,11 +1946,12 @@ const $ = id => ROOT.getElementById(id);
 
 // ---------- 저장소 ----------
 async function load() {
-  const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets']);
+  const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets', 'ignored']);
   state.custom = d.custom || [];
   state.favs = d.favs || {};
   state.uses = d.uses || {};
   state.presets = d.presets || [];
+  state.ignored = d.ignored || {};
 }
 const save = (...keys) =>
   HOST.storage.set(Object.fromEntries(keys.map(k => [k, state[k]])));
@@ -1948,8 +2200,38 @@ function changeItem(i, fn) {
   writePrompt(text.slice(0, s) + text.slice(e));
 }
 
+// 같이 쓰면 부딪히는 태그 경고
+function renderConflicts(conflicts) {
+  const box = $('p-conflicts');
+  if (!conflicts.length) return box.replaceChildren();
+  const head = document.createElement('div');
+  head.className = 'cf-head';
+  head.textContent = `⚠ 충돌 가능 ${conflicts.length}건`;
+  box.replaceChildren(head, ...conflicts.map(c => {
+    const row = document.createElement('div');
+    row.className = 'cf ' + c.level;
+    const main = document.createElement('div');
+    main.className = 'cf-main';
+    const label = document.createElement('b'); label.textContent = c.label;
+    const msg = document.createElement('span'); msg.textContent = c.msg;
+    const tip = document.createElement('span'); tip.className = 'cf-tip'; tip.textContent = '💡 ' + c.tip;
+    main.append(label, msg, tip);
+    const ig = document.createElement('button');
+    ig.textContent = '무시'; ig.title = '이 조합은 의도한 거예요 (다시 경고 안 함)';
+    ig.onclick = () => { state.ignored[c.key] = true; save('ignored'); renderPrompt(); };
+    row.append(main, ig);
+    return row;
+  }));
+}
+
 function renderPrompt() {
   tagIndex = new Map(allTags().map(t => [PW.normalize(t.en), t]));
+  const conflicts = CONFLICT.check(state.prompt, state.ignored);
+  const flagged = new Map();
+  for (const c of conflicts) for (const i of c.items) {
+    if (flagged.get(i) !== 'hard') flagged.set(i, c.level);
+  }
+  renderConflicts(conflicts);
   const items = PW.splitItems(state.prompt);
   const box = $('p-chips');
   if (!items.length) {
@@ -1968,7 +2250,7 @@ function renderPrompt() {
     }
     const { core, w } = PW.parseWeight(it.raw);
     const { cat, g } = groupOf(it.raw);
-    chip.className = `pchip g${g}`;
+    chip.className = `pchip g${g}` + (flagged.has(i) ? ` cf-${flagged.get(i)}` : '');
     chip.title = cat ? catName.get(cat) : '분류 못함';
     const label = document.createElement('span');
     label.textContent = core;
@@ -2164,7 +2446,7 @@ $('custom-form').addEventListener('submit', e => {
 });
 
 $('export').addEventListener('click', () => {
-  const data = { version: 1, custom: state.custom, favs: state.favs, uses: state.uses, presets: state.presets };
+  const data = { version: 1, custom: state.custom, favs: state.favs, uses: state.uses, presets: state.presets, ignored: state.ignored };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
   const a = document.createElement('a');
   a.href = url; a.download = `pixai-tag-drawer-${new Date().toISOString().slice(0, 10)}.json`;
@@ -2184,7 +2466,8 @@ $('import-file').addEventListener('change', async e => {
     state.favs = d.favs || {};
     state.uses = d.uses || {};
     state.presets = d.presets || [];
-    await save('custom', 'favs', 'uses', 'presets');
+    state.ignored = d.ignored || {};
+    await save('custom', 'favs', 'uses', 'presets', 'ignored');
     renderList(); renderPresets();
     toast('백업을 불러왔어요');
   } catch (_) {

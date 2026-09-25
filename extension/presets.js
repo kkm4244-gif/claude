@@ -2,7 +2,7 @@
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '색감', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '자연', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -169,4 +169,40 @@ const DEFAULT_PRESETS = [
     text: 'outdoors, rooftop, railing, sunset, cityscape, wind, orange sky over the city skyline' },
   { g: '배경', name: '비 오는 네온 골목', desc: '젖은 바닥에 네온 반사',
     text: 'outdoors, alley, night, rain, neon lights, wet pavement reflecting neon lights, puddles' },
+
+  // 자연 (장면 레시피)
+  { g: '자연', name: '햇살 드는 숲', desc: '나뭇잎 사이로 빛줄기',
+    text: 'outdoors, forest, tree, foliage, moss, dappled sunlight, light rays, sunbeams filtering through the leaves, lush green atmosphere' },
+  { g: '자연', name: '비 내리는 숲길', desc: '안개 + 젖은 잎',
+    text: 'outdoors, forest, rain, fog, tree, wet leaves glistening, narrow forest path, misty atmosphere' },
+  { g: '자연', name: '대나무 숲', desc: '높이 솟은 대나무 + 빛줄기',
+    text: 'outdoors, bamboo forest, bamboo, light rays, tall bamboo stalks towering overhead, quiet path' },
+  { g: '자연', name: '벚꽃길', desc: '흩날리는 꽃잎',
+    text: 'outdoors, spring (season), cherry blossoms, tree, falling petals, path lined with blooming cherry trees, soft pink atmosphere' },
+  { g: '자연', name: '단풍 공원', desc: '떨어지는 낙엽 + 황금빛',
+    text: 'outdoors, autumn, autumn leaves, maple leaf, falling leaves, tree, park bench, warm golden foliage' },
+  { g: '자연', name: '여름 바다', desc: '파란 하늘 + 뭉게구름 + 파도',
+    text: 'outdoors, summer, beach, ocean, waves, sand, blue sky, cumulonimbus cloud, horizon, sparkling sea' },
+  { g: '자연', name: '노을 해변', desc: '바다에 비친 주황 하늘',
+    text: 'outdoors, beach, sunset, ocean, horizon, reflection, orange sky, orange sky mirrored on the calm sea' },
+  { g: '자연', name: '달빛 밤바다', desc: '어두운 파도 위 은빛 달빛',
+    text: 'outdoors, night, ocean, waves, moon, moonlight, reflection, silver moonlight shimmering on dark waves' },
+  { g: '자연', name: '안개 낀 호숫가', desc: '산이 비치는 잔잔한 호수',
+    text: 'outdoors, lake, reflection, mountain, tree, fog, calm water, mist hovering over the lake' },
+  { g: '자연', name: '폭포', desc: '이끼 낀 바위 + 물보라',
+    text: 'outdoors, waterfall, rock, moss, river, splashing, water spray, lush greenery' },
+  { g: '자연', name: '바람 부는 초원', desc: '끝없는 풀밭 + 흘러가는 구름',
+    text: 'outdoors, meadow, tall grass, wind, blue sky, cloud, grass swaying in the wind, vast open field' },
+  { g: '자연', name: '해바라기밭', desc: '한여름 햇살',
+    text: 'outdoors, summer, sunflower, flower field, blue sky, sunlight, cumulonimbus cloud' },
+  { g: '자연', name: '눈 덮인 숲', desc: '조용히 내리는 눈',
+    text: 'outdoors, winter, snow, snowing, snowflakes, pine tree, snow-covered forest, quiet snowfall' },
+  { g: '자연', name: '별이 쏟아지는 밤', desc: '은하수 + 별똥별 + 언덕',
+    text: 'outdoors, night, starry sky, milky way, shooting star, hill, grass, vast sky full of stars' },
+  { g: '자연', name: '반딧불 여름밤', desc: '풀숲 위를 떠다니는 빛',
+    text: 'outdoors, night, summer, fireflies, tall grass, forest, glowing fireflies drifting in the dark' },
+  { g: '자연', name: '바닷속', desc: '수면에서 내려오는 빛',
+    text: 'underwater, water, bubble, fish, light rays, sunlight filtering down from the surface' },
+  { g: '자연', name: '폭풍 치는 절벽', desc: '먹구름 + 거센 파도',
+    text: 'outdoors, cliff, ocean, waves, storm, overcast, wind, dramatic sky, waves crashing against the rocks' },
 ];

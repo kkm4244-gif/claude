@@ -788,6 +788,86 @@ cozy|아늑한|포근
 messy room|어질러진 방|지저분
 ` },
   {
+    id: 'nature', name: '자연', order: 6.03, tags: `
+tree|나무
+pine tree|소나무|침엽수 나무
+palm tree|야자수|나무 여름
+bamboo|대나무
+bamboo forest|대나무 숲|죽림
+tree shade|나무 그늘|그늘
+branch|나뭇가지
+leaf|나뭇잎|잎
+falling leaves|떨어지는 나뭇잎|낙엽
+ginkgo leaf|은행잎|가을
+maple leaf|단풍잎|가을
+foliage|우거진 잎|초록 녹음
+tall grass|키 큰 풀|풀숲 수풀
+field|들판|벌판
+wheat field|밀밭|들판
+meadow|초원|풀밭
+bush|덤불|수풀
+vines|덩굴|넝쿨
+ivy|담쟁이|덩굴
+moss|이끼
+mushroom|버섯
+sunflower|해바라기|꽃
+hydrangea|수국|꽃
+wisteria|등나무 꽃|꽃
+lily (flower)|백합|꽃
+lavender (flower)|라벤더|꽃 보라
+spider lily|꽃무릇|석산 꽃 빨강
+falling petals|흩날리는 꽃잎|꽃잎
+rock|바위|돌
+cliff|절벽
+hill|언덕
+valley|계곡|골짜기
+cave|동굴
+river|강
+stream|개울|시냇물
+lake|호수
+pond|연못
+waterfall|폭포
+water|물
+waves|파도
+shore|해안|물가
+sand|모래
+horizon|수평선|지평선
+island|섬
+underwater|물속|수중 바닷속
+reflection|반사|물에 비침
+ripples|물결|파문
+splashing|물보라|튀는 물
+bubble|물방울 거품|기포
+ice|얼음
+snowing|눈 내림|함박눈
+snowflakes|눈송이
+desert|사막
+spring (season)|봄|계절
+autumn|가을|계절
+cloudy sky|흐린 하늘|구름
+overcast|잔뜩 흐림|먹구름
+cumulonimbus cloud|뭉게구름 (적란운)|여름 구름
+gradient sky|그라데이션 하늘
+orange sky|주황 하늘|노을
+purple sky|보라 하늘|노을
+rainbow|무지개
+lightning|번개
+storm|폭풍|태풍
+aurora|오로라
+milky way|은하수|별
+shooting star|별똥별|유성
+crescent moon|초승달|달
+fireflies|반딧불이
+butterfly|나비
+dragonfly|잠자리
+bird|새
+crow|까마귀|새
+seagull|갈매기|새 바다
+cat|고양이
+dog|개|강아지
+fish|물고기
+` },
+  {
     id: 'props', name: '인테리어·소품', order: 6.05, tags: `
 curtains|커튼
 sheer curtains|얇은 커튼|시스루 레이스

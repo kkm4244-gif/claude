@@ -6,6 +6,7 @@ const state = {
   favs: {},     // {en: true}
   uses: {},     // {en: count}
   presets: [],  // [{id, name, text, g(그룹), desc}]
+  ignored: {},  // 무시한 충돌 경고 {key: true}
   cat: 'all',
   query: '',
   rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
@@ -32,11 +33,12 @@ const $ = id => ROOT.getElementById(id);
 
 // ---------- 저장소 ----------
 async function load() {
-  const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets']);
+  const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets', 'ignored']);
   state.custom = d.custom || [];
   state.favs = d.favs || {};
   state.uses = d.uses || {};
   state.presets = d.presets || [];
+  state.ignored = d.ignored || {};
 }
 const save = (...keys) =>
   HOST.storage.set(Object.fromEntries(keys.map(k => [k, state[k]])));
@@ -285,8 +287,38 @@ function changeItem(i, fn) {
   writePrompt(text.slice(0, s) + text.slice(e));
 }
 
+// 같이 쓰면 부딪히는 태그 경고
+function renderConflicts(conflicts) {
+  const box = $('p-conflicts');
+  if (!conflicts.length) return box.replaceChildren();
+  const head = document.createElement('div');
+  head.className = 'cf-head';
+  head.textContent = `⚠ 충돌 가능 ${conflicts.length}건`;
+  box.replaceChildren(head, ...conflicts.map(c => {
+    const row = document.createElement('div');
+    row.className = 'cf ' + c.level;
+    const main = document.createElement('div');
+    main.className = 'cf-main';
+    const label = document.createElement('b'); label.textContent = c.label;
+    const msg = document.createElement('span'); msg.textContent = c.msg;
+    const tip = document.createElement('span'); tip.className = 'cf-tip'; tip.textContent = '💡 ' + c.tip;
+    main.append(label, msg, tip);
+    const ig = document.createElement('button');
+    ig.textContent = '무시'; ig.title = '이 조합은 의도한 거예요 (다시 경고 안 함)';
+    ig.onclick = () => { state.ignored[c.key] = true; save('ignored'); renderPrompt(); };
+    row.append(main, ig);
+    return row;
+  }));
+}
+
 function renderPrompt() {
   tagIndex = new Map(allTags().map(t => [PW.normalize(t.en), t]));
+  const conflicts = CONFLICT.check(state.prompt, state.ignored);
+  const flagged = new Map();
+  for (const c of conflicts) for (const i of c.items) {
+    if (flagged.get(i) !== 'hard') flagged.set(i, c.level);
+  }
+  renderConflicts(conflicts);
   const items = PW.splitItems(state.prompt);
   const box = $('p-chips');
   if (!items.length) {
@@ -305,7 +337,7 @@ function renderPrompt() {
     }
     const { core, w } = PW.parseWeight(it.raw);
     const { cat, g } = groupOf(it.raw);
-    chip.className = `pchip g${g}`;
+    chip.className = `pchip g${g}` + (flagged.has(i) ? ` cf-${flagged.get(i)}` : '');
     chip.title = cat ? catName.get(cat) : '분류 못함';
     const label = document.createElement('span');
     label.textContent = core;
@@ -501,7 +533,7 @@ $('custom-form').addEventListener('submit', e => {
 });
 
 $('export').addEventListener('click', () => {
-  const data = { version: 1, custom: state.custom, favs: state.favs, uses: state.uses, presets: state.presets };
+  const data = { version: 1, custom: state.custom, favs: state.favs, uses: state.uses, presets: state.presets, ignored: state.ignored };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
   const a = document.createElement('a');
   a.href = url; a.download = `pixai-tag-drawer-${new Date().toISOString().slice(0, 10)}.json`;
@@ -521,7 +553,8 @@ $('import-file').addEventListener('change', async e => {
     state.favs = d.favs || {};
     state.uses = d.uses || {};
     state.presets = d.presets || [];
-    await save('custom', 'favs', 'uses', 'presets');
+    state.ignored = d.ignored || {};
+    await save('custom', 'favs', 'uses', 'presets', 'ignored');
     renderList(); renderPresets();
     toast('백업을 불러왔어요');
   } catch (_) {

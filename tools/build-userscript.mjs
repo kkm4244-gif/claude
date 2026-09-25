@@ -41,6 +41,7 @@ const shellCss = `
 }
 .ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }
 .tabs { padding-right: 32px; }
+.tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }
 `;
 
 const body = `
@@ -116,6 +117,7 @@ ${ext('tags.js')}
 ${ext('presets.js')}
 ${ext('prompt.js')}
 ${ext('sort.js')}
+${ext('conflicts.js')}
 ${ext('content.js')}
 
 const PANEL_HTML = ${JSON.stringify(htmlBody)};
