@@ -8,15 +8,35 @@
 <body>
   <nav class="tabs">
     <button data-tab="tags" class="active">태그</button>
+    <button data-tab="prompt">프롬프트</button>
     <button data-tab="presets">프리셋</button>
     <button data-tab="settings">내 태그·백업</button>
   </nav>
 
   <section id="tab-tags" class="panel active">
-    <input id="search" type="search" placeholder="검색: 소매, 검은 머리, ㅅㅁ, sleeve…" autocomplete="off">
+    <input id="search" type="search" placeholder="검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (Ctrl+휠: 가중치)" autocomplete="off">
     <div id="cats" class="chips"></div>
     <div id="count" class="muted"></div>
     <ul id="list" class="list"></ul>
+  </section>
+
+  <section id="tab-prompt" class="panel">
+    <div class="row between">
+      <span class="muted">PixAI에서 마지막으로 클릭한 입력칸</span>
+      <button id="p-refresh">새로고침</button>
+    </div>
+    <div id="p-chips" class="pchips"></div>
+    <p class="muted">태그 위에서 <b>Ctrl + 휠</b>로 가중치 조절 · 색은 정렬 그룹</p>
+    <button id="p-sort" class="primary wide">정렬 미리보기</button>
+    <div id="p-preview" class="card" hidden>
+      <h3>정렬 결과</h3>
+      <div id="p-preview-text" class="preview"></div>
+      <ul id="p-notes" class="notes"></ul>
+      <div class="row">
+        <button id="p-cancel">취소</button>
+        <button id="p-apply" class="primary">적용</button>
+      </div>
+    </div>
   </section>
 
   <section id="tab-presets" class="panel">
@@ -53,6 +73,8 @@
 
   <div id="toast" class="toast"></div>
   <script src="tags.js"></script>
+  <script src="prompt.js"></script>
+  <script src="sort.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>

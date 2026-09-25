@@ -8,6 +8,9 @@ const state = {
   presets: [],  // [{id, name, text}]
   cat: 'all',
   query: '',
+  rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
+  prompt: '',   // PixAI 입력칸에서 읽어 온 프롬프트
+  sorted: null, // 정렬 미리보기 결과
 };
 
 const $ = id => document.getElementById(id);
@@ -78,14 +81,19 @@ function search(tags, query) {
   return scored.sort((a, b) => b[0] - a[0]).map(x => x[1]);
 }
 
-// ---------- 넣기 ----------
-async function insert(text, usageKeys = []) {
-  let ok = false;
+// ---------- PixAI 탭과 통신 ----------
+async function sendToPage(msg) {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    const res = await chrome.tabs.sendMessage(tab.id, { type: 'pixai-insert', text });
-    ok = !!res?.ok;
-  } catch (_) { /* PixAI 탭이 아니거나 새로고침 전 */ }
+    return await chrome.tabs.sendMessage(tab.id, msg);
+  } catch (_) {
+    return null; // PixAI 탭이 아니거나 새로고침 전
+  }
+}
+
+// ---------- 넣기 ----------
+async function insert(text, usageKeys = []) {
+  const ok = !!(await sendToPage({ type: 'pixai-insert', text }))?.ok;
   for (const k of usageKeys) state.uses[k] = (state.uses[k] || 0) + 1;
   if (usageKeys.length) save('uses');
   if (ok) return toast(`넣었어요: ${text}`);
@@ -140,10 +148,16 @@ function renderList() {
     const main = document.createElement('button');
     main.className = 'main';
     main.title = '클릭하면 PixAI 입력칸에 넣어요';
-    const en = document.createElement('span'); en.className = 'en'; en.textContent = t.en;
+    const w = state.rowW[t.en] ?? 1;
+    li.dataset.weightKey = t.en;
+    const en = document.createElement('span'); en.className = 'en'; en.textContent = PW.formatWeight(t.en, w);
+    if (w !== 1) en.classList.add(weightClass(w));
     const ko = document.createElement('span'); ko.className = 'ko'; ko.textContent = t.ko;
     main.append(en, ko);
-    main.onclick = () => insert(t.en, [t.en]);
+    main.onclick = () => {
+      insert(PW.formatWeight(t.en, state.rowW[t.en] ?? 1), [t.en]);
+      if (t.en in state.rowW) { delete state.rowW[t.en]; renderList(); }
+    };
     li.append(main);
 
     if (state.uses[t.en]) {
@@ -177,6 +191,160 @@ function renderList() {
 }
 
 $('search').addEventListener('input', e => { state.query = e.target.value; renderList(); });
+
+// ---------- 가중치 (Ctrl + 휠) ----------
+const weightClass = w => (w > 1.5 ? 'w-high' : w > 1 ? 'w-up' : 'w-down');
+
+let wheelAcc = 0;
+document.addEventListener('wheel', e => {
+  if (!e.ctrlKey) return;
+  const row = e.target.closest('[data-weight-key], [data-item]');
+  if (!row) return;
+  e.preventDefault(); // 사이드 패널 확대/축소 대신 가중치 조절
+  wheelAcc += e.deltaY;
+  if (Math.abs(wheelAcc) < 40) return; // 트랙패드처럼 잘게 오는 휠은 모아서 한 칸
+  const delta = wheelAcc < 0 ? 0.1 : -0.1;
+  wheelAcc = 0;
+  if (row.dataset.weightKey) {
+    const k = row.dataset.weightKey;
+    state.rowW[k] = PW.stepWeight(state.rowW[k] ?? 1, delta);
+    if (state.rowW[k] === 1) delete state.rowW[k];
+    renderList();
+  } else {
+    changeItem(+row.dataset.item, raw => {
+      const { core, w } = PW.parseWeight(raw);
+      return PW.formatWeight(core, PW.stepWeight(w, delta));
+    });
+  }
+}, { passive: false });
+
+// ---------- 프롬프트 탭 ----------
+const catOrder = new Map(DEFAULT_CATEGORIES.map(c => [c.id, c.order]));
+const catName = new Map(DEFAULT_CATEGORIES.map(c => [c.id, c.name]));
+let tagIndex = null;
+let lastLocalEdit = 0;
+
+// 정렬 그룹 번호 (칩 색): 0 화질 1 인원 2 외형 3 의상 4 표정·포즈 5 구도 6 배경·조명 7 네거티브
+function groupOf(raw) {
+  if (PW.isLora(raw)) return 'x';
+  const norm = PW.normalize(PW.parseWeight(raw).core);
+  const c = SORT.classify(norm, tagIndex, catOrder);
+  return { cat: c.cat, g: c.cat ? Math.floor(c.order) : 'x' };
+}
+
+async function loadPrompt(quiet) {
+  const res = await sendToPage({ type: 'pixai-get' });
+  if (!res?.ok) {
+    if (!quiet) toast('PixAI 생성 페이지에서 입력칸을 한 번 클릭해 주세요');
+    return;
+  }
+  if (res.text !== state.prompt) { state.prompt = res.text; renderPrompt(); }
+}
+
+async function writePrompt(text) {
+  state.prompt = text;
+  lastLocalEdit = Date.now();
+  renderPrompt();
+  const res = await sendToPage({ type: 'pixai-set', text });
+  if (!res?.ok) toast('PixAI 입력칸에 쓰지 못했어요');
+}
+
+// i번째 항목을 fn(raw)로 바꾼다. fn이 null을 돌려주면 항목 삭제
+function changeItem(i, fn) {
+  const text = state.prompt;
+  const items = PW.splitItems(text);
+  const it = items[i];
+  if (!it) return;
+  const rep = fn(it.raw);
+  if (rep !== null) return writePrompt(text.slice(0, it.start) + rep + text.slice(it.end));
+  // 삭제: 뒤 항목까지의 구분자도 함께 지운다 (마지막이면 앞 구분자)
+  const next = items[i + 1], prev = items[i - 1];
+  const [s, e] = next ? [it.start, next.start] : prev ? [prev.end, it.end] : [it.start, it.end];
+  writePrompt(text.slice(0, s) + text.slice(e));
+}
+
+function renderPrompt() {
+  tagIndex = new Map(allTags().map(t => [PW.normalize(t.en), t]));
+  const items = PW.splitItems(state.prompt);
+  const box = $('p-chips');
+  if (!items.length) {
+    const p = document.createElement('span');
+    p.className = 'muted';
+    p.textContent = '프롬프트가 비어 있어요.';
+    return box.replaceChildren(p);
+  }
+  box.replaceChildren(...items.map((it, i) => {
+    const chip = document.createElement('span');
+    chip.dataset.item = i;
+    if (PW.isLora(it.raw)) {
+      chip.className = 'pchip lora gx';
+      chip.textContent = it.raw;
+      return chip;
+    }
+    const { core, w } = PW.parseWeight(it.raw);
+    const { cat, g } = groupOf(it.raw);
+    chip.className = `pchip g${g}`;
+    chip.title = cat ? catName.get(cat) : '분류 못함';
+    const label = document.createElement('span');
+    label.textContent = core;
+    chip.append(label);
+    if (w !== 1) {
+      const b = document.createElement('span');
+      b.className = weightClass(w);
+      b.textContent = w;
+      chip.append(b);
+    }
+    const x = document.createElement('button');
+    x.className = 'x'; x.textContent = '✕'; x.title = '삭제';
+    x.onclick = () => changeItem(i, () => null);
+    chip.append(x);
+    return chip;
+  }));
+}
+
+function hidePreview() {
+  state.sorted = null;
+  $('p-preview').hidden = true;
+}
+
+$('p-refresh').addEventListener('click', () => loadPrompt(false));
+
+$('p-sort').addEventListener('click', async () => {
+  await loadPrompt(false);
+  if (!state.prompt.trim()) return;
+  const r = SORT.sortPrompt(state.prompt, allTags(), DEFAULT_CATEGORIES);
+  state.sorted = r.text;
+  $('p-preview-text').textContent = r.text;
+  const notes = [];
+  const note = (label, text) => {
+    const li = document.createElement('li');
+    const b = document.createElement('b'); b.textContent = label;
+    li.append(b, ' ' + text);
+    notes.push(li);
+  };
+  if (r.dupes.length) note('중복 제거:', r.dupes.join(', '));
+  for (const s of r.suggestions) note('오타?', `${s.from} → ${s.to}`);
+  if (r.guessed.length) note('추측 분류:', r.guessed.map(g => `${g.tag}(${catName.get(g.cat)})`).join(', '));
+  if (r.unknown.length) note('분류 못함 (인물 묘사 뒤에 둠):', r.unknown.join(', '));
+  if (r.text === state.prompt.trim().replace(/,\s*$/, '') && !notes.length) note('', '이미 정렬되어 있어요.');
+  $('p-notes').replaceChildren(...notes);
+  $('p-preview').hidden = false;
+});
+
+$('p-cancel').addEventListener('click', hidePreview);
+$('p-apply').addEventListener('click', async () => {
+  if (state.sorted === null) return;
+  await writePrompt(state.sorted);
+  hidePreview();
+  toast('정렬했어요 (PixAI 입력칸에서 Ctrl+Z로 되돌릴 수 있어요)');
+});
+
+// 프롬프트 탭이 열려 있는 동안 PixAI 입력칸 변화를 따라간다
+setInterval(() => {
+  if (!$('tab-prompt').classList.contains('active') || document.hidden) return;
+  if (Date.now() - lastLocalEdit < 1500) return;
+  loadPrompt(true);
+}, 1500);
 
 // ---------- 프리셋 탭 ----------
 function renderPresets() {
@@ -229,11 +397,8 @@ $('preset-form').addEventListener('submit', e => {
 });
 
 $('preset-grab').addEventListener('click', async () => {
-  try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    const res = await chrome.tabs.sendMessage(tab.id, { type: 'pixai-get' });
-    if (res?.ok) { $('preset-text').value = res.text; return; }
-  } catch (_) {}
+  const res = await sendToPage({ type: 'pixai-get' });
+  if (res?.ok) { $('preset-text').value = res.text; return; }
   toast('PixAI 생성 페이지에서 입력칸을 한 번 클릭한 뒤 다시 눌러 주세요');
 });
 
@@ -290,6 +455,7 @@ document.querySelectorAll('.tabs button').forEach(b => {
   b.onclick = () => {
     document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b));
     document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
+    if (b.dataset.tab === 'prompt') loadPrompt(true);
   };
 });
 

@@ -1,10 +1,14 @@
-// PixAI 페이지에 주입되어, 사이드 패널에서 보낸 태그를 마지막으로 쓰던 입력칸의 커서 위치에 넣는다.
+// PixAI 페이지에 주입되어 사이드 패널과 입력칸 사이를 이어준다.
+// - 태그 넣기 (마지막으로 쓰던 입력칸의 커서 위치)
+// - 프롬프트 전체 읽기/바꾸기 (정렬, 가중치 칩)
+// - 입력칸에서 Ctrl+↑/↓ 로 가중치 조절
 (() => {
   let lastEl = null;
   let lastRange = null; // contenteditable용 커서 위치
 
   const isEditable = el =>
     el && (el.tagName === 'TEXTAREA' || el.isContentEditable);
+  const isTextarea = el => el.tagName === 'TEXTAREA';
 
   document.addEventListener('focusin', e => {
     if (isEditable(e.target)) lastEl = e.target;
@@ -20,7 +24,7 @@
     }
   });
 
-  // 기억해 둔 입력칸이 없으면 화면에 보이는 가장 큰 textarea를 쓴다 (커서는 맨 끝)
+  // 기억해 둔 입력칸이 없으면 화면에 보이는 가장 큰 입력칸을 쓴다 (커서는 맨 끝)
   function findTarget() {
     if (lastEl && lastEl.isConnected) return { el: lastEl, fresh: false };
     const cands = [...document.querySelectorAll('textarea, [contenteditable="true"]')]
@@ -29,17 +33,61 @@
     return cands[0] ? { el: cands[0], fresh: true } : null;
   }
 
-  // 앞뒤 문맥을 보고 쉼표 구분자를 붙인다
-  function withSeparators(before, text, after) {
-    const b = before.replace(/[ \t]+$/, '');
-    let pre = '';
-    if (b && !/[,(\n]$/.test(b)) pre = ', ';
-    else if (b.endsWith(',')) pre = ' ';
-    let post;
-    if (/^\s*[,)]/.test(after)) post = '';
-    else if (after.trim() === '') post = ', ';
-    else post = after.startsWith(' ') ? ',' : ', ';
-    return { trimmed: before.length - b.length, text: pre + text + post };
+  // ---------- contenteditable 텍스트 오프셋 ↔ DOM 위치 ----------
+  function editableText(el) {
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    return r.toString();
+  }
+
+  function offsetOf(el, node, offset) {
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    r.setEnd(node, offset);
+    return r.toString().length;
+  }
+
+  function pointAt(el, offset) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let node, last = null;
+    while ((node = walker.nextNode())) {
+      if (offset <= node.length) return [node, offset];
+      offset -= node.length;
+      last = node;
+    }
+    return last ? [last, last.length] : [el, el.childNodes.length];
+  }
+
+  function selectEditable(el, start, end) {
+    const r = document.createRange();
+    r.setStart(...pointAt(el, start));
+    r.setEnd(...pointAt(el, end));
+    const sel = getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  // ---------- 공통 읽기/쓰기 ----------
+  function read(el, fresh) {
+    if (isTextarea(el)) {
+      const len = el.value.length;
+      return {
+        text: el.value,
+        start: fresh ? len : el.selectionStart ?? len,
+        end: fresh ? len : el.selectionEnd ?? len,
+      };
+    }
+    const text = editableText(el);
+    let range = null;
+    const sel = getSelection();
+    if (sel.rangeCount && el.contains(sel.getRangeAt(0).startContainer)) range = sel.getRangeAt(0);
+    else if (lastRange && el.contains(lastRange.startContainer)) range = lastRange;
+    if (fresh || !range) return { text, start: text.length, end: text.length };
+    return {
+      text,
+      start: offsetOf(el, range.startContainer, range.startOffset),
+      end: offsetOf(el, range.endContainer, range.endOffset),
+    };
   }
 
   function setNativeValue(el, value) {
@@ -49,57 +97,75 @@
     el.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  function insertIntoTextarea(el, text, fresh) {
-    const val = el.value;
-    let start = fresh ? val.length : el.selectionStart ?? val.length;
-    const end = fresh ? val.length : el.selectionEnd ?? start;
-    const sep = withSeparators(val.slice(0, start), text, val.slice(end));
-    start -= sep.trimmed;
-    const expected = val.slice(0, start) + sep.text + val.slice(end);
-
+  // [start, end) 구간을 insert로 바꾸고 커서를 selStart~selEnd에 둔다 (실행 취소 가능하게 insertText 사용)
+  function replaceRange(el, start, end, insert, selStart, selEnd) {
     el.focus();
-    el.setSelectionRange(start, end);
-    let ok = false;
-    try { ok = document.execCommand('insertText', false, sep.text); } catch (_) {}
-    if (!ok || el.value !== expected) setNativeValue(el, expected);
-    const pos = start + sep.text.length;
-    el.setSelectionRange(pos, pos);
-  }
-
-  function insertIntoEditable(el, text) {
-    el.focus();
-    const sel = getSelection();
-    if (lastRange && el.contains(lastRange.startContainer)) {
-      sel.removeAllRanges();
-      sel.addRange(lastRange);
+    if (isTextarea(el)) {
+      const expected = el.value.slice(0, start) + insert + el.value.slice(end);
+      el.setSelectionRange(start, end);
+      let ok = false;
+      try { ok = document.execCommand('insertText', false, insert); } catch (_) {}
+      if (!ok || el.value !== expected) setNativeValue(el, expected);
+      el.setSelectionRange(selStart, selEnd);
     } else {
-      const r = document.createRange();
-      r.selectNodeContents(el);
-      r.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(r);
+      selectEditable(el, start, end);
+      if (insert) document.execCommand('insertText', false, insert);
+      else document.execCommand('delete');
+      selectEditable(el, selStart, selEnd);
     }
-    const range = sel.getRangeAt(0);
-    const pre = document.createRange();
-    pre.selectNodeContents(el);
-    pre.setEnd(range.startContainer, range.startOffset);
-    const post = document.createRange();
-    post.selectNodeContents(el);
-    post.setStart(range.endContainer, range.endOffset);
-    const sep = withSeparators(pre.toString(), text, post.toString());
-    document.execCommand('insertText', false, sep.text);
   }
 
+  // ---------- 태그 넣기 ----------
+  const WS = /[ \t ]+$/; // PixAI 입력칸은 끝 공백을 &nbsp;로 바꿔 두기도 한다
+
+  function withSeparators(before, text, after) {
+    const b = before.replace(WS, '');
+    let pre = '';
+    if (b && !/[,(\n]$/.test(b)) pre = ', ';
+    else if (b.endsWith(',')) pre = ' ';
+    let post;
+    if (/^[\s ]*[,)]/.test(after)) post = '';
+    else if (after.replace(/[\s ]/g, '') === '') post = ', ';
+    else post = /^[  ]/.test(after) ? ',' : ', ';
+    return { trimmed: before.length - b.length, text: pre + text + post };
+  }
+
+  function insertTag(t, text) {
+    const { el, fresh } = t;
+    const cur = read(el, fresh);
+    const sep = withSeparators(cur.text.slice(0, cur.start), text, cur.text.slice(cur.end));
+    const start = cur.start - sep.trimmed; // 끝 공백은 지우고 구분자로 다시 붙인다
+    const pos = start + sep.text.length;
+    replaceRange(el, start, cur.end, sep.text, pos, pos);
+  }
+
+  // ---------- 입력칸에서 Ctrl+↑/↓ 가중치 ----------
+  document.addEventListener('keydown', e => {
+    if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+    const el = e.target;
+    if (!isEditable(el)) return;
+    const cur = read(el, false);
+    const res = PW.adjustAt(cur.text, cur.start, cur.end, e.key === 'ArrowUp' ? 0.1 : -0.1);
+    if (!res) return;
+    e.preventDefault();
+    e.stopPropagation();
+    replaceRange(el, 0, cur.text.length, res.text, res.start, res.end);
+  }, true);
+
+  // ---------- 사이드 패널 메시지 ----------
   chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
     const t = findTarget();
+    if (!t) return reply({ ok: false });
     if (msg.type === 'pixai-insert') {
-      if (!t) return reply({ ok: false });
-      if (t.el.tagName === 'TEXTAREA') insertIntoTextarea(t.el, msg.text, t.fresh);
-      else insertIntoEditable(t.el, msg.text);
+      insertTag(t, msg.text);
       reply({ ok: true });
     } else if (msg.type === 'pixai-get') {
-      if (!t) return reply({ ok: false });
-      reply({ ok: true, text: t.el.tagName === 'TEXTAREA' ? t.el.value : t.el.innerText });
+      reply({ ok: true, text: read(t.el, true).text });
+    } else if (msg.type === 'pixai-set') {
+      const len = read(t.el, true).text.length;
+      replaceRange(t.el, 0, len, msg.text, msg.text.length, msg.text.length);
+      reply({ ok: true });
     }
   });
 })();
