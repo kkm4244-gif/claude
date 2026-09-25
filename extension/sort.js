@@ -19,6 +19,7 @@ const SORT = (() => {
     [/hair|bangs|ponytail|braids?$|twintails|ahoge/, 'hairstyle'],
     [/eyes?$|pupils|eyebrows?|eyelashes|eyewear|glasses/, 'eyes'],
     [/muscul|abs$|skin|scar|beard|stubble|tattoo|freckles|mole|veins|pectoral|ears$|horns?$|tail$|wings$/, 'body'],
+    [/hands?$|fingers?$|neck$|nape|back$|waist$|hips$|thighs?$|legs?$|feet$|arms?$|shoulders?$|lips$|jaw|chin$|nails?$|wrists?$/, 'parts'],
     [/shirts?$|jackets?$|coats?$|dress$|uniform|sweater|hoodie|vest$|suit$|necktie|tie$|sleeves?|collar|cape$|robe$|kimono/, 'top'],
     [/pants$|shorts$|skirt$|jeans$|socks$|thighhighs|boots$|shoes$|footwear|sneakers|heels$/, 'bottom'],
     [/hat$|cap$|gloves$|earrings?$|necklace|mask$|bag$|ring$|bracelet|scarf$|watch$|weapon|sword/, 'acc'],

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.8.0
+// @version      0.8.1
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -237,21 +237,11 @@ straight eyebrows|일자 눈썹|눈썹 straight eyebrow
 muscular male|근육질 남성|근육 몸좋은
 muscular|근육질|근육
 toned male|잔근육 남성|탄탄 근육
-abs|복근|근육
-pectorals|가슴 근육|흉근 근육
-biceps|이두근|팔 근육
 broad shoulders|넓은 어깨|어깨깡패 체형
 tall male|키 큰 남성|체형
 slender|호리호리|날씬 마른 체형
 skinny|마른 체형|날씬 슬림
 fat man|뚱뚱한 남성|통통 체형
-veins|핏줄|힘줄
-veiny arms|핏줄 선 팔|팔뚝 힘줄
-veiny hands|핏줄 선 손|손등 힘줄
-forearms|팔뚝|전완
-large hands|큰 손|손
-collarbone|쇄골
-adam's apple|목젖|목
 facial hair|수염 (전반)|턱수염
 stubble|까끌한 수염|면도 자국 수염
 beard|턱수염|수염
@@ -297,9 +287,58 @@ bruise|멍|상처
 injury|부상|상처
 blood on face|얼굴에 피|상처
 v-taper|역삼각형 몸매|V자 체형 어깨 허리
-large pectorals|큰 가슴 근육|흉근 근육
 bright skin|밝은 피부|피부 하얀
 glossy skin|윤기 나는 피부|광택 피부
+` },
+  {
+    id: 'parts', name: '신체', order: 2.35, tags: `
+abs|복근|근육
+pectorals|가슴 근육|흉근 근육
+biceps|이두근|팔 근육
+veins|핏줄|힘줄
+veiny arms|핏줄 선 팔|팔뚝 힘줄
+veiny hands|핏줄 선 손|손등 힘줄
+forearms|팔뚝|전완
+large hands|큰 손|손
+collarbone|쇄골
+adam's apple|목젖|목
+large pectorals|큰 가슴 근육|흉근 근육
+neck|목
+nape|목덜미|뒷목
+shoulders|어깨
+back|등
+muscular back|근육질 등|등근육
+shoulder blades|견갑골|날개뼈 등
+chest|가슴 (상체)|흉부
+waist|허리
+narrow waist|잘록한 허리|허리
+hips|골반|허리
+arms|팔
+wrist|손목
+hands|손
+fingers|손가락
+long fingers|긴 손가락|손
+knuckles|손마디|주먹
+fingernails|손톱
+black nails|검은 손톱|네일
+nail polish|매니큐어|네일 손톱
+detailed hands|섬세한 손|손 디테일
+hand focus|손 강조 구도|손 클로즈업
+legs|다리
+long legs|긴 다리|다리 비율
+thighs|허벅지
+knees|무릎
+ankles|발목
+feet|발
+lips|입술
+thick lips|도톰한 입술|입술
+pink lips|분홍 입술|입술
+tongue|혀
+ears|귀
+nose|코
+chin|턱
+sharp jawline|날렵한 턱선|턱선 브이라인
+high cheekbones|높은 광대|광대뼈
 ` },
   {
     id: 'top', name: '상의·겉옷', order: 3.0, tags: `
@@ -1454,6 +1493,7 @@ const SORT = (() => {
     [/hair|bangs|ponytail|braids?$|twintails|ahoge/, 'hairstyle'],
     [/eyes?$|pupils|eyebrows?|eyelashes|eyewear|glasses/, 'eyes'],
     [/muscul|abs$|skin|scar|beard|stubble|tattoo|freckles|mole|veins|pectoral|ears$|horns?$|tail$|wings$/, 'body'],
+    [/hands?$|fingers?$|neck$|nape|back$|waist$|hips$|thighs?$|legs?$|feet$|arms?$|shoulders?$|lips$|jaw|chin$|nails?$|wrists?$/, 'parts'],
     [/shirts?$|jackets?$|coats?$|dress$|uniform|sweater|hoodie|vest$|suit$|necktie|tie$|sleeves?|collar|cape$|robe$|kimono/, 'top'],
     [/pants$|shorts$|skirt$|jeans$|socks$|thighhighs|boots$|shoes$|footwear|sneakers|heels$/, 'bottom'],
     [/hat$|cap$|gloves$|earrings?$|necklace|mask$|bag$|ring$|bracelet|scarf$|watch$|weapon|sword/, 'acc'],
