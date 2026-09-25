@@ -249,7 +249,12 @@ async function writePrompt(text) {
   lastLocalEdit = Date.now();
   renderPrompt();
   const res = await sendToPage({ type: 'pixai-set', text });
-  if (!res?.ok) toast('PixAI 입력칸에 쓰지 못했어요');
+  if (!res?.ok) {
+    toast(/chip/.test(res?.reason || '')
+      ? 'LoRA 칩을 건드릴 수 있어서 멈췄어요. 입력칸은 그대로예요'
+      : 'PixAI 입력칸에 쓰지 못했어요');
+    loadPrompt(true);
+  }
 }
 
 // i번째 항목을 fn(raw)로 바꾼다. fn이 null을 돌려주면 항목 삭제

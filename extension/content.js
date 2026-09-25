@@ -34,28 +34,60 @@
   }
 
   // ---------- contenteditable 텍스트 오프셋 ↔ DOM 위치 ----------
-  function editableText(el) {
-    const r = document.createRange();
-    r.selectNodeContents(el);
-    return r.toString();
+  // PixAI 입력칸 안의 LoRA 칩(아이콘·버튼이 달린 인라인 요소)은 프롬프트 글자가 아니다.
+  // 칩 안의 글자는 읽지도 쓰지도 않는다.
+  function isChip(node, el) {
+    for (let p = node.parentElement; p && p !== el; p = p.parentElement) {
+      if (p.getAttribute('contenteditable') === 'false') return true;
+      if (p.tagName === 'BUTTON' || p.getAttribute('role') === 'button') return true;
+      if (p.querySelector('img, svg') && getComputedStyle(p).display.startsWith('inline')) return true;
+    }
+    return false;
   }
 
+  const isChipEl = e => e?.nodeType === 1 &&
+    (e.getAttribute('contenteditable') === 'false' || !!e.querySelector('img, svg'));
+
+  function textNodes(el) {
+    const out = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walker.nextNode())) {
+      if (isChip(n, el)) continue;
+      // 칩 사이에 낀 공백 글자도 프롬프트가 아니다
+      if (/^[\s\u00a0]*$/.test(n.data) && (isChipEl(n.previousSibling) || isChipEl(n.nextSibling))) continue;
+      out.push(n);
+    }
+    return out;
+  }
+
+  const chipCount = el => el.querySelectorAll('img, svg, [contenteditable="false"]').length;
+
+  function editableText(el) {
+    return textNodes(el).map(n => n.data).join('');
+  }
+
+  // DOM 위치(node, offset) → 칩을 뺀 글자 기준 위치
   function offsetOf(el, node, offset) {
-    const r = document.createRange();
-    r.selectNodeContents(el);
-    r.setEnd(node, offset);
-    return r.toString().length;
+    const point = document.createRange();
+    point.setStart(node, offset);
+    let acc = 0;
+    for (const n of textNodes(el)) {
+      if (n === node) return acc + offset;
+      if (point.comparePoint(n, n.length) > 0) break; // 이 글자 노드는 커서보다 뒤
+      acc += n.length;
+    }
+    return acc;
   }
 
   function pointAt(el, offset) {
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-    let node, last = null;
-    while ((node = walker.nextNode())) {
-      if (offset <= node.length) return [node, offset];
-      offset -= node.length;
-      last = node;
+    const nodes = textNodes(el);
+    for (const n of nodes) {
+      if (offset <= n.length) return [n, offset];
+      offset -= n.length;
     }
-    return last ? [last, last.length] : [el, el.childNodes.length];
+    const last = nodes[nodes.length - 1];
+    return last ? [last, last.length] : [el, 0];
   }
 
   function selectEditable(el, start, end) {
@@ -109,7 +141,13 @@
       el.setSelectionRange(selStart, selEnd);
     } else {
       const before = editableText(el);
+      const chips = chipCount(el);
       selectEditable(el, start, end);
+      // 바꿀 범위 안에 LoRA 칩이 끼어 있으면 건드리지 않는다
+      const sel = getSelection();
+      if (sel.rangeCount && sel.getRangeAt(0).cloneContents().querySelector('img, svg, [contenteditable="false"], button')) {
+        throw new Error('chip-in-range');
+      }
       if (insert) document.execCommand('insertText', false, insert);
       else document.execCommand('delete');
       // 에디터 라이브러리가 execCommand를 무시하면 beforeinput 이벤트로 한 번 더 시도
@@ -119,8 +157,23 @@
           inputType: 'insertText', data: insert, bubbles: true, cancelable: true,
         }));
       }
+      // 혹시라도 칩이 사라졌으면 되돌린다
+      if (chipCount(el) < chips) {
+        document.execCommand('undo');
+        throw new Error('chip-lost');
+      }
       selectEditable(el, selStart, selEnd);
     }
+  }
+
+  // 전체 글자를 next로 바꾸되, 실제로 달라진 부분만 교체한다
+  function replaceAll(el, cur, next, selStart, selEnd) {
+    let p = 0;
+    while (p < cur.length && p < next.length && cur[p] === next[p]) p++;
+    let q = 0;
+    while (q < cur.length - p && q < next.length - p &&
+           cur[cur.length - 1 - q] === next[next.length - 1 - q]) q++;
+    replaceRange(el, p, cur.length - q, next.slice(p, next.length - q), selStart, selEnd);
   }
 
   // 어느 칸에 넣었는지 보이도록 잠깐 테두리 표시
@@ -173,11 +226,19 @@
     if (!res) return;
     e.preventDefault();
     e.stopPropagation();
-    replaceRange(el, 0, cur.text.length, res.text, res.start, res.end);
+    try { replaceAll(el, cur.text, res.text, res.start, res.end); } catch (_) { /* LoRA 칩 보호 */ }
   }, true);
 
   // ---------- 사이드 패널 메시지 ----------
   chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
+    try {
+      handle(msg, reply);
+    } catch (e) {
+      reply({ ok: false, reason: String(e.message || e) });
+    }
+  });
+
+  function handle(msg, reply) {
     const t = findTarget();
     if (!t) return reply({ ok: false });
     if (msg.type === 'pixai-insert') {
@@ -190,9 +251,9 @@
     } else if (msg.type === 'pixai-get') {
       reply({ ok: true, text: read(t.el, true).text });
     } else if (msg.type === 'pixai-set') {
-      const len = read(t.el, true).text.length;
-      replaceRange(t.el, 0, len, msg.text, msg.text.length, msg.text.length);
+      const cur = read(t.el, true).text;
+      replaceAll(t.el, cur, msg.text, msg.text.length, msg.text.length);
       reply({ ok: true });
     }
-  });
+  }
 })();
