@@ -9,7 +9,7 @@ const SORT = (() => {
     [/^\d+\+?(boys?|girls?|others?)$|^(solo|male focus|female focus)$/, 'people'],
     [/quality|masterpiece|aesthetic|res$|detailed|\(style\)|\(medium\)|artstyle/, 'quality'],
     [/^looking |^facing /, 'gaze'],
-    [/^holding |^(hand|hands|arm|arms|leg|legs) |sitting|standing|lying|kneeling|leaning|walking|running|pose$/, 'pose'],
+    [/^holding |^(hand|hands|arm|arms|leg|legs) |sitting|standing|lying|kneeling|leaning|slouch|walking|running|crossed|pose$/, 'pose'],
     [/background$|indoors|outdoors|room$|city|street|sky|forest|beach|ocean|school|office/, 'bg'],
     [/lighting$|light$|lights$|shadow|glow|theme$/, 'light'],
     [/^(from |upper body|lower body|full body|close-up|portrait)|shot$|view$|angle$/, 'view'],

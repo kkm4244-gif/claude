@@ -3,7 +3,7 @@
 // order: 정렬할 때의 위치 (화질 → 인원 → 외형 → 의상·소품 → 표정·포즈 → 구도 → 배경·조명)
 const DEFAULT_CATEGORIES = [
   {
-    id: 'quality', name: '화질·화풍', order: 0, tags: `
+    id: 'quality', name: '화질·화풍·분위기', order: 0, tags: `
 masterpiece|걸작|퀄리티
 best quality|최고 품질|퀄리티
 high quality|고품질|퀄리티
@@ -34,6 +34,10 @@ retro artstyle|레트로 화풍|복고 90년대
 pixel art|픽셀 아트|도트
 chibi|치비|SD 꼬마
 comic|만화 컷|코믹
+high-class atmosphere|고급스러운 분위기|럭셔리 상류층
+elegant|우아함|분위기 기품
+sophisticated|세련됨|분위기 도시적
+noir|누아르|분위기 어두운 범죄 영화
 ` },
   {
     id: 'people', name: '인원', order: 1, tags: `
@@ -58,6 +62,7 @@ teenage|10대|청소년
 child|어린아이|아이 꼬마
 bishounen|미소년|꽃미남
 bara|바라 (근육질 남성 화풍)|근육 마초
+aged up|나이 올림|성인화 어른
 ` },
   {
     id: 'role', name: '직업·컨셉', order: 1.5, tags: `
@@ -161,6 +166,10 @@ hair tie|머리끈
 hairband|머리띠
 headband|헤어밴드|머리띠
 hair flower|머리 꽃장식
+curtained hair|커튼 머리|5대5 가르마 커튼펌 앞머리
+hair strand|흘러내린 머리 한 가닥|잔머리
+forehead|이마 드러냄|이마 깐 머리 까
+pomade|포마드 (효과 약함)|올백 광택 머리
 ` },
   {
     id: 'eyes', name: '눈·안경', order: 2.2, tags: `
@@ -205,6 +214,7 @@ sunglasses|선글라스|안경
 aviator sunglasses|보잉 선글라스|안경
 monocle|외알 안경|모노클
 eyewear on head|머리에 올린 안경|선글라스
+straight eyebrows|일자 눈썹|눈썹 straight eyebrow
 ` },
   {
     id: 'body', name: '체형·얼굴 특징', order: 2.3, tags: `
@@ -270,6 +280,10 @@ bandaid on nose|코에 반창고|밴드
 bruise|멍|상처
 injury|부상|상처
 blood on face|얼굴에 피|상처
+v-taper|역삼각형 몸매|V자 체형 어깨 허리
+large pectorals|큰 가슴 근육|흉근 근육
+bright skin|밝은 피부|피부 하얀
+glossy skin|윤기 나는 피부|광택 피부
 ` },
   {
     id: 'top', name: '상의·겉옷', order: 3.0, tags: `
@@ -371,6 +385,9 @@ shirtless|웃통 벗음|상의 탈의
 topless male|상의 탈의 (남성)|웃통 벗음
 open clothes|옷 풀어헤침
 bandages|붕대
+navy necktie|남색 넥타이|넥타이
+grey vest|회색 조끼|조끼 베스트
+arm garter|팔 가터|암밴드 소매
 ` },
   {
     id: 'bottom', name: '하의·신발', order: 3.1, tags: `
@@ -400,6 +417,9 @@ sandals|샌들|신발
 geta|게타|나막신
 slippers|슬리퍼
 barefoot|맨발
+grey pants|회색 바지
+black socks|검은 양말|양말
+black shoes|검은 구두|신발
 ` },
   {
     id: 'acc', name: '소품·액세서리', order: 3.2, tags: `
@@ -523,6 +543,7 @@ tongue out|혀 내밀기|메롱
 fang|송곳니|덧니
 teeth|이 보임
 sigh|한숨
+dominant|지배적인 분위기|오만 강압 위압감
 ` },
   {
     id: 'gaze', name: '시선', order: 4.1, tags: `
@@ -536,6 +557,7 @@ looking to the side|옆을 봄|시선
 looking at another|다른 사람을 봄|시선
 looking over eyewear|안경 너머로 봄|시선 안경
 looking at phone|폰을 봄|시선
+condescending gaze|깔보는 시선|내려다봄 오만
 ` },
   {
     id: 'pose', name: '포즈·동작', order: 4.2, tags: `
@@ -612,6 +634,8 @@ holding book|책을 듦|손에 든
 holding umbrella|우산을 듦|손에 든
 holding flower|꽃을 듦|손에 든
 carrying over shoulder|어깨에 메고 감|들쳐메기
+slouching|구부정한 자세|늘어진 기대앉은
+sitting on couch|소파에 앉음|앉음
 ` },
   {
     id: 'duo', name: '2인 상호작용', order: 4.3, tags: `
@@ -667,6 +691,8 @@ depth of field|피사계 심도|배경 흐림 아웃포커스
 blurry background|흐린 배경|아웃포커스
 blurry foreground|흐린 전경|아웃포커스
 letterboxed|레터박스|영화 비율
+side view|옆에서 본 구도|측면
+cinematic composition|영화 같은 구도
 ` },
   {
     id: 'bg', name: '배경·장소', order: 6, tags: `
@@ -736,6 +762,7 @@ autumn leaves|단풍|가을
 cherry blossoms|벚꽃|봄
 summer|여름|계절
 winter|겨울|계절
+couch|소파
 ` },
   {
     id: 'light', name: '조명·효과', order: 6.1, tags: `
@@ -776,6 +803,7 @@ colorful|화려한 색감|컬러풀
 red theme|빨간 톤|테마
 blue theme|파란 톤|테마
 black theme|검은 톤|테마
+dark moody lighting|어둡고 무드 있는 조명|분위기
 ` },
   {
     id: 'negative', name: '네거티브', order: 7, tags: `
