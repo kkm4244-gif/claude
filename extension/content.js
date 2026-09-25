@@ -108,11 +108,34 @@
       if (!ok || el.value !== expected) setNativeValue(el, expected);
       el.setSelectionRange(selStart, selEnd);
     } else {
+      const before = editableText(el);
       selectEditable(el, start, end);
       if (insert) document.execCommand('insertText', false, insert);
       else document.execCommand('delete');
+      // 에디터 라이브러리가 execCommand를 무시하면 beforeinput 이벤트로 한 번 더 시도
+      if (editableText(el) === before && insert) {
+        selectEditable(el, start, end);
+        el.dispatchEvent(new InputEvent('beforeinput', {
+          inputType: 'insertText', data: insert, bubbles: true, cancelable: true,
+        }));
+      }
       selectEditable(el, selStart, selEnd);
     }
+  }
+
+  // 어느 칸에 넣었는지 보이도록 잠깐 테두리 표시
+  function flash(el) {
+    el.scrollIntoView({ block: 'nearest' });
+    const prev = [el.style.outline, el.style.outlineOffset];
+    el.style.outline = '3px solid #7c4dff';
+    el.style.outlineOffset = '2px';
+    setTimeout(() => { [el.style.outline, el.style.outlineOffset] = prev; }, 900);
+  }
+
+  function labelOf(el) {
+    const s = el.getAttribute('placeholder') || el.getAttribute('aria-label') ||
+      el.dataset.placeholder || '';
+    return s.trim().slice(0, 30) || '프롬프트';
   }
 
   // ---------- 태그 넣기 ----------
@@ -158,8 +181,12 @@
     const t = findTarget();
     if (!t) return reply({ ok: false });
     if (msg.type === 'pixai-insert') {
+      const before = read(t.el, true).text;
       insertTag(t, msg.text);
-      reply({ ok: true });
+      // 실제로 글자가 바뀌었는지 확인해서, 안 바뀌었으면 실패로 알려준다 (패널이 클립보드로 복사)
+      if (read(t.el, true).text === before) return reply({ ok: false, reason: 'unchanged' });
+      flash(t.el);
+      reply({ ok: true, label: labelOf(t.el) });
     } else if (msg.type === 'pixai-get') {
       reply({ ok: true, text: read(t.el, true).text });
     } else if (msg.type === 'pixai-set') {

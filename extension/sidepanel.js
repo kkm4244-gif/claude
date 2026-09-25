@@ -93,12 +93,15 @@ async function sendToPage(msg) {
 
 // ---------- 넣기 ----------
 async function insert(text, usageKeys = []) {
-  const ok = !!(await sendToPage({ type: 'pixai-insert', text }))?.ok;
+  const res = await sendToPage({ type: 'pixai-insert', text });
+  const ok = !!res?.ok;
   for (const k of usageKeys) state.uses[k] = (state.uses[k] || 0) + 1;
   if (usageKeys.length) save('uses');
-  if (ok) return toast(`넣었어요: ${text}`);
+  if (ok) return toast(`'${res.label}' 칸에 넣었어요: ${text}`);
   await navigator.clipboard.writeText(text);
-  toast('PixAI 입력칸을 못 찾아서 클립보드에 복사했어요');
+  toast(res?.reason === 'unchanged'
+    ? '입력칸에 글자가 안 들어가서 클립보드에 복사했어요 (Ctrl+V로 붙여넣기)'
+    : 'PixAI 입력칸을 못 찾아서 클립보드에 복사했어요');
 }
 
 let toastTimer;
