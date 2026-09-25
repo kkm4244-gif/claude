@@ -710,7 +710,6 @@ indoors|실내
 office|사무실
 classroom|교실
 hallway|복도
-stairs|계단
 bedroom|침실|방
 living room|거실
 kitchen|주방|부엌
@@ -764,7 +763,101 @@ autumn leaves|단풍|가을
 cherry blossoms|벚꽃|봄
 summer|여름|계절
 winter|겨울|계절
-couch|소파
+mansion|저택|대저택 부잣집
+dining room|식당 (집)|다이닝룸
+ballroom|무도회장|연회장 홀
+study|서재|책방
+hotel|호텔
+hotel room|호텔 방|스위트룸
+lobby|로비
+greenhouse|온실
+garden|정원
+courtyard|안뜰|중정
+balcony|발코니|베란다
+veranda|테라스|베란다
+wine cellar|와인 저장고|지하실
+museum|박물관|미술관 갤러리
+casino|카지노
+architecture|건축물|건물
+gothic architecture|고딕 건축|성당
+victorian|빅토리아풍|서양 고풍
+scenery|풍경|배경
+detailed background|디테일한 배경|배경 묘사
+luxurious|호화로운|고급 럭셔리
+cozy|아늑한|포근
+messy room|어질러진 방|지저분
+` },
+  {
+    id: 'props', name: '인테리어·소품', order: 6.05, tags: `
+curtains|커튼
+sheer curtains|얇은 커튼|시스루 레이스
+curtains blowing in the wind|바람에 날리는 커튼|커튼
+window|창문
+open window|열린 창문|창문
+large window|큰 창문|통창
+window blinds|블라인드|창문
+stained glass|스테인드글라스|성당 창문
+door|문
+doorway|문간|출입구
+stairs|계단
+spiral staircase|나선 계단|계단
+railing|난간
+pillar|기둥|대리석
+arch|아치
+wall|벽
+brick wall|벽돌 벽
+wooden wall|나무 벽|원목
+wooden floor|나무 바닥|마루
+marble floor|대리석 바닥
+tiled floor|타일 바닥
+carpet|카펫|양탄자
+rug|러그|양탄자
+couch|소파|카우치
+leather couch|가죽 소파|소파
+armchair|안락의자|1인 소파
+chair|의자
+table|테이블|탁자
+coffee table|커피 테이블|낮은 탁자
+round table|원형 테이블|탁자
+desk|책상
+bookshelf|책장|서재
+book stack|쌓인 책|책 더미
+bed|침대
+canopy bed|캐노피 침대|공주 침대
+pillow|베개
+cushion|쿠션
+blanket|담요|이불
+fireplace|벽난로
+chandelier|샹들리에|조명
+lamp|램프|스탠드
+desk lamp|책상 스탠드|램프
+candle|초|촛불
+candlestand|촛대
+mirror|거울
+painting (object)|걸린 그림|액자 회화
+picture frame|액자
+vase|꽃병
+potted plant|화분|식물
+plant|식물
+clock|시계 (벽시계)
+piano|피아노
+grand piano|그랜드 피아노|피아노
+chess piece|체스 말|체스
+globe|지구본
+television|텔레비전|TV
+laptop|노트북
+computer|컴퓨터
+monitor|모니터
+counter|카운터|바 테이블
+bar stool|바 의자|스툴
+bottle|병
+wine bottle|와인병|술병
+wine glass|와인잔
+drinking glass|유리잔|컵
+teacup|찻잔
+teapot|찻주전자
+mug|머그컵
+ashtray|재떨이
 ` },
   {
     id: 'light', name: '조명·효과', order: 6.1, tags: `
@@ -800,6 +893,10 @@ wind|바람
 petals|꽃잎 날림
 blood|피
 dark moody lighting|어둡고 무드 있는 조명|분위기
+window shadow|창틀 그림자|창문 빛
+sunlight through window|창문으로 드는 햇빛|창가 빛
+warm lighting|따뜻한 조명|노란 불빛
+dim lighting|어둑한 조명|어두운 방
 ` },
   {
     id: 'color', name: '색감', order: 6.2, tags: `

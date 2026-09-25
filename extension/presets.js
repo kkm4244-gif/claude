@@ -2,7 +2,7 @@
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '색감', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -135,4 +135,38 @@ const DEFAULT_PRESETS = [
     text: 'vivid colors, oversaturated, colorful, saturated' },
   { g: '색감', name: '[네거티브] 색 빠짐 방지', desc: '네거티브 칸에 넣으면 비비드 유지',
     text: 'monochrome, greyscale, desaturated, muted color, dull colors' },
+
+  // 배경 (장면 레시피)
+  { g: '배경', name: '저택 거실', desc: '샹들리에 + 벽난로 + 가죽 소파',
+    text: 'indoors, mansion, living room, luxurious, chandelier, fireplace, leather couch, coffee table, rug, tall windows with heavy velvet curtains, warm dim lighting, detailed background' },
+  { g: '배경', name: '저택 복도', desc: '대리석 바닥 + 걸린 그림',
+    text: 'indoors, mansion, hallway, marble floor, chandelier, painting (object), long corridor lined with portraits, grand staircase in the distance, detailed background' },
+  { g: '배경', name: '무도회장', desc: '금장식 + 대리석 기둥',
+    text: 'indoors, ballroom, chandelier, marble floor, pillar, luxurious, golden ornate decorations, grand hall, detailed background' },
+  { g: '배경', name: '서재', desc: '책장 + 스탠드 + 안락의자',
+    text: 'indoors, study, bookshelf, desk, desk lamp, armchair, book stack, wooden wall, warm lamplight, cozy atmosphere, detailed background' },
+  { g: '배경', name: '창가 아침 햇살', desc: '얇은 커튼이 바람에 날림',
+    text: 'indoors, window, sheer curtains, curtains blowing in the wind, sunlight, light rays, morning light streaming through the window, soft shadows' },
+  { g: '배경', name: '비 오는 밤 창가', desc: '빗방울 유리 너머 도시 불빛',
+    text: 'indoors, night, window, rain, dim lighting, raindrops on the window glass, blurred city lights outside, reflection on the glass' },
+  { g: '배경', name: '호텔 스위트 야경', desc: '통창 너머 밤 도시',
+    text: 'indoors, hotel room, night, large window, city lights, bed, floor-to-ceiling windows overlooking the night city, modern luxury interior' },
+  { g: '배경', name: '침실 (아늑)', desc: '구겨진 시트 + 스탠드',
+    text: 'indoors, bedroom, bed, pillow, blanket, lamp, cozy, warm lighting, rumpled sheets, soft morning light' },
+  { g: '배경', name: '바 카운터', desc: '호박색 조명 + 술병',
+    text: 'indoors, bar (place), counter, bar stool, wine bottle, wine glass, dim lighting, warm amber lights, shelves of liquor bottles, moody atmosphere' },
+  { g: '배경', name: '야근 사무실', desc: '스탠드 하나만 켜진 밤',
+    text: 'indoors, office, desk, computer, night, window, city lights, desk lamp, empty office late at night, only the desk lamp lit' },
+  { g: '배경', name: '카페 창가', desc: '햇살 + 화분 + 커피',
+    text: 'indoors, cafe, table, mug, window, sunlight, potted plant, cozy cafe interior, latte on the table' },
+  { g: '배경', name: '방과후 교실', desc: '빈 교실 + 노을빛',
+    text: 'indoors, classroom, desk, chair, window, sunset, empty classroom after school, orange light through the windows' },
+  { g: '배경', name: '온실', desc: '유리 천장 + 초록 식물',
+    text: 'indoors, greenhouse, plant, flower, sunlight, dappled sunlight, glass roof, lush green plants' },
+  { g: '배경', name: '고딕 성당', desc: '스테인드글라스 빛 + 촛불',
+    text: 'indoors, church, stained glass, pillar, candle, light rays, gothic architecture, colorful light pouring through stained glass windows' },
+  { g: '배경', name: '옥상 노을', desc: '난간 + 도시 스카이라인',
+    text: 'outdoors, rooftop, railing, sunset, cityscape, wind, orange sky over the city skyline' },
+  { g: '배경', name: '비 오는 네온 골목', desc: '젖은 바닥에 네온 반사',
+    text: 'outdoors, alley, night, rain, neon lights, wet pavement reflecting neon lights, puddles' },
 ];

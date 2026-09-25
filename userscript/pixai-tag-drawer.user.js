@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.4.0
+// @version      0.5.0
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -728,7 +728,6 @@ indoors|실내
 office|사무실
 classroom|교실
 hallway|복도
-stairs|계단
 bedroom|침실|방
 living room|거실
 kitchen|주방|부엌
@@ -782,7 +781,101 @@ autumn leaves|단풍|가을
 cherry blossoms|벚꽃|봄
 summer|여름|계절
 winter|겨울|계절
-couch|소파
+mansion|저택|대저택 부잣집
+dining room|식당 (집)|다이닝룸
+ballroom|무도회장|연회장 홀
+study|서재|책방
+hotel|호텔
+hotel room|호텔 방|스위트룸
+lobby|로비
+greenhouse|온실
+garden|정원
+courtyard|안뜰|중정
+balcony|발코니|베란다
+veranda|테라스|베란다
+wine cellar|와인 저장고|지하실
+museum|박물관|미술관 갤러리
+casino|카지노
+architecture|건축물|건물
+gothic architecture|고딕 건축|성당
+victorian|빅토리아풍|서양 고풍
+scenery|풍경|배경
+detailed background|디테일한 배경|배경 묘사
+luxurious|호화로운|고급 럭셔리
+cozy|아늑한|포근
+messy room|어질러진 방|지저분
+` },
+  {
+    id: 'props', name: '인테리어·소품', order: 6.05, tags: `
+curtains|커튼
+sheer curtains|얇은 커튼|시스루 레이스
+curtains blowing in the wind|바람에 날리는 커튼|커튼
+window|창문
+open window|열린 창문|창문
+large window|큰 창문|통창
+window blinds|블라인드|창문
+stained glass|스테인드글라스|성당 창문
+door|문
+doorway|문간|출입구
+stairs|계단
+spiral staircase|나선 계단|계단
+railing|난간
+pillar|기둥|대리석
+arch|아치
+wall|벽
+brick wall|벽돌 벽
+wooden wall|나무 벽|원목
+wooden floor|나무 바닥|마루
+marble floor|대리석 바닥
+tiled floor|타일 바닥
+carpet|카펫|양탄자
+rug|러그|양탄자
+couch|소파|카우치
+leather couch|가죽 소파|소파
+armchair|안락의자|1인 소파
+chair|의자
+table|테이블|탁자
+coffee table|커피 테이블|낮은 탁자
+round table|원형 테이블|탁자
+desk|책상
+bookshelf|책장|서재
+book stack|쌓인 책|책 더미
+bed|침대
+canopy bed|캐노피 침대|공주 침대
+pillow|베개
+cushion|쿠션
+blanket|담요|이불
+fireplace|벽난로
+chandelier|샹들리에|조명
+lamp|램프|스탠드
+desk lamp|책상 스탠드|램프
+candle|초|촛불
+candlestand|촛대
+mirror|거울
+painting (object)|걸린 그림|액자 회화
+picture frame|액자
+vase|꽃병
+potted plant|화분|식물
+plant|식물
+clock|시계 (벽시계)
+piano|피아노
+grand piano|그랜드 피아노|피아노
+chess piece|체스 말|체스
+globe|지구본
+television|텔레비전|TV
+laptop|노트북
+computer|컴퓨터
+monitor|모니터
+counter|카운터|바 테이블
+bar stool|바 의자|스툴
+bottle|병
+wine bottle|와인병|술병
+wine glass|와인잔
+drinking glass|유리잔|컵
+teacup|찻잔
+teapot|찻주전자
+mug|머그컵
+ashtray|재떨이
 ` },
   {
     id: 'light', name: '조명·효과', order: 6.1, tags: `
@@ -818,6 +911,10 @@ wind|바람
 petals|꽃잎 날림
 blood|피
 dark moody lighting|어둡고 무드 있는 조명|분위기
+window shadow|창틀 그림자|창문 빛
+sunlight through window|창문으로 드는 햇빛|창가 빛
+warm lighting|따뜻한 조명|노란 불빛
+dim lighting|어둑한 조명|어두운 방
 ` },
   {
     id: 'color', name: '색감', order: 6.2, tags: `
@@ -899,7 +996,7 @@ function parseDefaultTags() {
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '색감', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '배경', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -1032,6 +1129,40 @@ const DEFAULT_PRESETS = [
     text: 'vivid colors, oversaturated, colorful, saturated' },
   { g: '색감', name: '[네거티브] 색 빠짐 방지', desc: '네거티브 칸에 넣으면 비비드 유지',
     text: 'monochrome, greyscale, desaturated, muted color, dull colors' },
+
+  // 배경 (장면 레시피)
+  { g: '배경', name: '저택 거실', desc: '샹들리에 + 벽난로 + 가죽 소파',
+    text: 'indoors, mansion, living room, luxurious, chandelier, fireplace, leather couch, coffee table, rug, tall windows with heavy velvet curtains, warm dim lighting, detailed background' },
+  { g: '배경', name: '저택 복도', desc: '대리석 바닥 + 걸린 그림',
+    text: 'indoors, mansion, hallway, marble floor, chandelier, painting (object), long corridor lined with portraits, grand staircase in the distance, detailed background' },
+  { g: '배경', name: '무도회장', desc: '금장식 + 대리석 기둥',
+    text: 'indoors, ballroom, chandelier, marble floor, pillar, luxurious, golden ornate decorations, grand hall, detailed background' },
+  { g: '배경', name: '서재', desc: '책장 + 스탠드 + 안락의자',
+    text: 'indoors, study, bookshelf, desk, desk lamp, armchair, book stack, wooden wall, warm lamplight, cozy atmosphere, detailed background' },
+  { g: '배경', name: '창가 아침 햇살', desc: '얇은 커튼이 바람에 날림',
+    text: 'indoors, window, sheer curtains, curtains blowing in the wind, sunlight, light rays, morning light streaming through the window, soft shadows' },
+  { g: '배경', name: '비 오는 밤 창가', desc: '빗방울 유리 너머 도시 불빛',
+    text: 'indoors, night, window, rain, dim lighting, raindrops on the window glass, blurred city lights outside, reflection on the glass' },
+  { g: '배경', name: '호텔 스위트 야경', desc: '통창 너머 밤 도시',
+    text: 'indoors, hotel room, night, large window, city lights, bed, floor-to-ceiling windows overlooking the night city, modern luxury interior' },
+  { g: '배경', name: '침실 (아늑)', desc: '구겨진 시트 + 스탠드',
+    text: 'indoors, bedroom, bed, pillow, blanket, lamp, cozy, warm lighting, rumpled sheets, soft morning light' },
+  { g: '배경', name: '바 카운터', desc: '호박색 조명 + 술병',
+    text: 'indoors, bar (place), counter, bar stool, wine bottle, wine glass, dim lighting, warm amber lights, shelves of liquor bottles, moody atmosphere' },
+  { g: '배경', name: '야근 사무실', desc: '스탠드 하나만 켜진 밤',
+    text: 'indoors, office, desk, computer, night, window, city lights, desk lamp, empty office late at night, only the desk lamp lit' },
+  { g: '배경', name: '카페 창가', desc: '햇살 + 화분 + 커피',
+    text: 'indoors, cafe, table, mug, window, sunlight, potted plant, cozy cafe interior, latte on the table' },
+  { g: '배경', name: '방과후 교실', desc: '빈 교실 + 노을빛',
+    text: 'indoors, classroom, desk, chair, window, sunset, empty classroom after school, orange light through the windows' },
+  { g: '배경', name: '온실', desc: '유리 천장 + 초록 식물',
+    text: 'indoors, greenhouse, plant, flower, sunlight, dappled sunlight, glass roof, lush green plants' },
+  { g: '배경', name: '고딕 성당', desc: '스테인드글라스 빛 + 촛불',
+    text: 'indoors, church, stained glass, pillar, candle, light rays, gothic architecture, colorful light pouring through stained glass windows' },
+  { g: '배경', name: '옥상 노을', desc: '난간 + 도시 스카이라인',
+    text: 'outdoors, rooftop, railing, sunset, cityscape, wind, orange sky over the city skyline' },
+  { g: '배경', name: '비 오는 네온 골목', desc: '젖은 바닥에 네온 반사',
+    text: 'outdoors, alley, night, rain, neon lights, wet pavement reflecting neon lights, puddles' },
 ];
 
 // 프롬프트 파싱·가중치 도구 (content script와 사이드 패널이 함께 사용)
@@ -1142,7 +1273,8 @@ const SORT = (() => {
     [/quality|masterpiece|aesthetic|res$|detailed|\(style\)|\(medium\)|artstyle/, 'quality'],
     [/^looking |^facing /, 'gaze'],
     [/^holding |^(hand|hands|arm|arms|leg|legs) |sitting|standing|lying|kneeling|leaning|slouch|walking|running|crossed|pose$/, 'pose'],
-    [/background$|indoors|outdoors|room$|city|street|sky|forest|beach|ocean|school|office/, 'bg'],
+    [/background$|indoors|outdoors|room$|city|street|sky|forest|beach|ocean|school|office|mansion|hall$|interior|building|architecture/, 'bg'],
+    [/window|curtains?|table$|couch|sofa|chair|shelf|floor$|wall$|lamp$|chandelier|fireplace|bed$|rug$|carpet|glass$|bottle$|cup$/, 'props'],
     [/theme$|colou?rs?$|palette|saturat|tones?$|grading/, 'color'],
     [/lighting$|light$|lights$|shadow|glow/, 'light'],
     [/^(from |upper body|lower body|full body|close-up|portrait)|shot$|view$|angle$/, 'view'],
