@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.7.0
+// @version      0.7.1
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -76,8 +76,6 @@ twins|쌍둥이
 father and son|아버지와 아들|부자
 mature male|성숙한 남성|어른 아저씨 성인
 old man|노인 남성|할아버지
-teenage|10대|청소년
-child|어린아이|아이 꼬마
 bishounen|미소년|꽃미남
 bara|바라 (근육질 남성 화풍)|근육 마초
 aged up|나이 올림|성인화 어른

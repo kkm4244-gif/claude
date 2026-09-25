@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PixAI 태그 서랍",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 사이드 패널",
   "permissions": ["sidePanel", "storage", "clipboardWrite"],
   "background": { "service_worker": "background.js" },
