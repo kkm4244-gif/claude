@@ -799,13 +799,31 @@ motion lines|효과선|움직임
 wind|바람
 petals|꽃잎 날림
 blood|피
-limited palette|제한된 색감|팔레트
-pastel colors|파스텔 색감
-colorful|화려한 색감|컬러풀
-red theme|빨간 톤|테마
-blue theme|파란 톤|테마
-black theme|검은 톤|테마
 dark moody lighting|어둡고 무드 있는 조명|분위기
+` },
+  {
+    id: 'color', name: '색감', order: 6.2, tags: `
+muted color|채도 낮춤|톤다운 차분 무채색
+desaturated|채도 빠진 색감|톤다운 무채색
+pale color|연한 색감|물 빠진 흐린
+faded colors|바랜 색감|빈티지 톤다운
+sepia|세피아|빈티지 갈색
+low contrast|낮은 대비|흐릿 차분 톤다운
+limited palette|제한된 색감|팔레트 톤다운
+spot color|한 색만 포인트|흑백 포인트 컬러
+partially colored|부분 채색|흑백 포인트
+vivid colors|쨍한 색감|비비드 채도 높음 원색
+saturated|채도 높음|비비드 쨍한
+colorful|화려한 색감|컬러풀 비비드
+pastel colors|파스텔 색감|연한
+cool color palette|차가운 톤|청량 블루 쿨톤
+warm color palette|따뜻한 톤|웜톤 노을 주황
+aqua theme|청록 톤|청량 민트 테마
+white theme|흰 톤|청량 밝은 테마
+blue theme|파란 톤|청량 테마
+red theme|빨간 톤|테마
+black theme|검은 톤|어두운 테마
+cinematic color grading|영화 색보정|시네마틱 톤
 ` },
   {
     id: 'negative', name: '네거티브', order: 7, tags: `

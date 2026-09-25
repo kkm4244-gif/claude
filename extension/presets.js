@@ -2,7 +2,7 @@
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
   '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
-  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '기타',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '색감', '기타',
 ];
 
 const DEFAULT_PRESETS = [
@@ -107,4 +107,32 @@ const DEFAULT_PRESETS = [
     text: 'blush, light smile, wide-eyed, parted lips, looking at another, flustered, heart pounding' },
   { g: '설렘·애정', name: '애틋한 눈빛', desc: '곤란한 눈썹 + 그리운 눈',
     text: 'troubled eyebrows, light smile, blush, looking at another, longing gaze, tender expression' },
+
+  // 색감 (톤다운)
+  { g: '색감', name: '차분한 톤다운', desc: '채도 낮춤 기본형',
+    text: '(muted color:1.2), desaturated colors, muted tones, low saturation, subdued color palette' },
+  { g: '색감', name: '누아르 무채색', desc: '차가운 회색 톤 + 강한 명암',
+    text: 'noir, muted color, high contrast, deep shadows, desaturated cinematic color grading, cold grey tones' },
+  { g: '색감', name: '빈티지 필름', desc: '바랜 색 + 필름 질감',
+    text: 'film grain, muted color, faded colors, vintage film photography look, soft warm tint' },
+  { g: '색감', name: '흑백 + 포인트 컬러', desc: '한 색만 남기기 (red를 원하는 색으로)',
+    text: 'monochrome, spot color, black and white image with a single red accent' },
+  { g: '색감', name: '파스텔 톤', desc: '연하고 부드러운 색',
+    text: 'pale color, pastel colors, soft light, airy and gentle color palette' },
+  // 색감 (비비드·청량)
+  { g: '색감', name: '쨍한 비비드', desc: '채도·대비 높게',
+    text: '(vivid colors:1.2), colorful, saturated, high contrast, bold vibrant color palette' },
+  { g: '색감', name: '청량한 여름', desc: '파란 하늘 + 햇살 + 청록',
+    text: 'summer, blue sky, sunlight, light rays, aqua theme, crisp cool tones, fresh and clear color palette, refreshing atmosphere' },
+  { g: '색감', name: '투명한 청량감', desc: '밝고 맑은 블루·화이트',
+    text: 'cool color palette, white theme, soft light, translucent clear colors, light blue and white tones, clean airy atmosphere' },
+  { g: '색감', name: '네온 시티팝', desc: '밤거리 + 마젠타·시안',
+    text: 'night, city lights, neon lights, vivid colors, synthwave-inspired color palette, magenta and cyan glow' },
+  { g: '색감', name: '따뜻한 노을', desc: '골든아워 역광',
+    text: 'sunset, backlighting, warm color palette, golden hour lighting, orange and pink tones' },
+  // 색감 (네거티브 칸용)
+  { g: '색감', name: '[네거티브] 채도 낮추기', desc: '네거티브 칸에 넣으면 톤다운',
+    text: 'vivid colors, oversaturated, colorful, saturated' },
+  { g: '색감', name: '[네거티브] 색 빠짐 방지', desc: '네거티브 칸에 넣으면 비비드 유지',
+    text: 'monochrome, greyscale, desaturated, muted color, dull colors' },
 ];
