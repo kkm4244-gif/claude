@@ -40,15 +40,20 @@
   </section>
 
   <section id="tab-presets" class="panel">
+    <input id="preset-search" type="search" placeholder="검색: 웃음, 분노, 부끄, smirk…" autocomplete="off">
+    <div id="preset-groups" class="chips"></div>
+    <ul id="preset-list" class="list"></ul>
     <form id="preset-form" class="card">
-      <input id="preset-name" placeholder="프리셋 이름 (예: 내 캐릭터 A)" required>
+      <h3>내 프리셋 만들기 · 수정</h3>
+      <input id="preset-name" placeholder="프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)" required>
+      <select id="preset-group"></select>
+      <input id="preset-desc" placeholder="한 줄 설명 (선택)">
       <textarea id="preset-text" rows="4" placeholder="1boy, black hair, black eyes, white shirt, sleeve rolled up" required></textarea>
       <div class="row">
         <button type="button" id="preset-grab">PixAI 입력칸에서 가져오기</button>
         <button type="submit" class="primary">저장</button>
       </div>
     </form>
-    <ul id="preset-list" class="list"></ul>
   </section>
 
   <section id="tab-settings" class="panel">
@@ -73,6 +78,7 @@
 
   <div id="toast" class="toast"></div>
   <script src="tags.js"></script>
+  <script src="presets.js"></script>
   <script src="prompt.js"></script>
   <script src="sort.js"></script>
   <script src="sidepanel.js"></script>

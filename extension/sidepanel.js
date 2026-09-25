@@ -5,7 +5,7 @@ const state = {
   custom: [],   // [{en, ko, alias, cat}]
   favs: {},     // {en: true}
   uses: {},     // {en: count}
-  presets: [],  // [{id, name, text}]
+  presets: [],  // [{id, name, text, g(그룹), desc}]
   cat: 'all',
   query: '',
   rowW: {},     // 태그 목록에서 Ctrl+휠로 정해 둔 가중치 {en: w} (넣으면 초기화)
@@ -355,53 +355,110 @@ setInterval(() => {
 }, 1500);
 
 // ---------- 프리셋 탭 ----------
+// 기본 표정 레시피(DEFAULT_PRESETS)와 내 프리셋을 함께 보여준다
+let presetGroup = 'all';
+let presetQuery = '';
+
+function allPresets() {
+  const mine = state.presets.map(p => ({ ...p, g: p.g || '기타', mine: true }));
+  const defaults = DEFAULT_PRESETS.map((p, i) => ({ ...p, id: 'd' + i }));
+  return [...mine, ...defaults];
+}
+
+function renderPresetGroups() {
+  const groups = [['all', '전체'], ['mine', '내 프리셋'], ...PRESET_GROUPS.map(g => [g, g])];
+  $('preset-groups').replaceChildren(...groups.map(([id, name]) => {
+    const b = document.createElement('button');
+    b.textContent = name;
+    b.classList.toggle('active', presetGroup === id);
+    b.onclick = () => { presetGroup = id; renderPresetGroups(); renderPresets(); };
+    return b;
+  }));
+}
+
 function renderPresets() {
-  const list = $('preset-list');
-  if (!state.presets.length) {
+  const q = presetQuery.toLowerCase().trim();
+  const list = allPresets().filter(p =>
+    (presetGroup === 'all' || (presetGroup === 'mine' ? p.mine : p.g === presetGroup)) &&
+    (!q || [p.name, p.desc, p.text, p.g].join(' ').toLowerCase().includes(q)));
+
+  if (!list.length) {
     const li = document.createElement('li');
     li.className = 'muted'; li.style.padding = '8px 0';
-    li.textContent = '아직 프리셋이 없어요. 자주 쓰는 태그 조합을 저장해 보세요.';
-    return list.replaceChildren(li);
+    li.textContent = presetGroup === 'mine'
+      ? '아직 내 프리셋이 없어요. 아래에서 저장하거나, 기본 레시피의 ✎로 고쳐 저장해 보세요.'
+      : '맞는 프리셋이 없어요.';
+    return $('preset-list').replaceChildren(li);
   }
-  list.replaceChildren(...state.presets.map(p => {
+
+  $('preset-list').replaceChildren(...list.map(p => {
     const li = document.createElement('li');
     li.className = 'preset';
     const main = document.createElement('button');
     main.className = 'main'; main.title = p.text;
-    const n = document.createElement('span'); n.className = 'en'; n.textContent = p.name;
-    const tx = document.createElement('span'); tx.className = 'ko'; tx.textContent = p.text;
-    main.append(n, tx);
+    const n = document.createElement('span'); n.className = 'en';
+    n.textContent = p.name;
+    const tag = document.createElement('span'); tag.className = 'ptag';
+    tag.textContent = p.mine ? `내 · ${p.g}` : p.g;
+    n.append(' ', tag);
+    main.append(n);
+    if (p.desc) {
+      const d = document.createElement('span'); d.className = 'ko'; d.textContent = p.desc;
+      main.append(d);
+    }
+    const tx = document.createElement('span'); tx.className = 'ptext'; tx.textContent = p.text;
+    main.append(tx);
     main.onclick = () => insert(p.text);
 
     const edit = document.createElement('button');
-    edit.className = 'icon'; edit.textContent = '✎'; edit.title = '폼으로 불러와 수정';
+    edit.className = 'icon'; edit.textContent = '✎';
+    edit.title = p.mine ? '폼으로 불러와 수정' : '내 버전으로 고쳐 저장';
     edit.onclick = () => {
-      $('preset-name').value = p.name; $('preset-text').value = p.text;
-      $('preset-name').focus();
+      $('preset-name').value = p.mine ? p.name : `${p.name} (내 버전)`;
+      $('preset-group').value = p.g;
+      $('preset-desc').value = p.desc || '';
+      $('preset-text').value = p.text;
+      $('preset-form').scrollIntoView({ behavior: 'smooth' });
+      $('preset-text').focus();
     };
-    const del = document.createElement('button');
-    del.className = 'icon'; del.textContent = '✕'; del.title = '삭제';
-    del.onclick = () => {
-      if (!confirm(`'${p.name}' 프리셋을 삭제할까요?`)) return;
-      state.presets = state.presets.filter(x => x.id !== p.id);
-      save('presets'); renderPresets();
-    };
-    li.append(main, edit, del);
+    li.append(main, edit);
+
+    if (p.mine) {
+      const del = document.createElement('button');
+      del.className = 'icon'; del.textContent = '✕'; del.title = '삭제';
+      del.onclick = () => {
+        if (!confirm(`'${p.name}' 프리셋을 삭제할까요?`)) return;
+        state.presets = state.presets.filter(x => x.id !== p.id);
+        save('presets'); renderPresets();
+      };
+      li.append(del);
+    }
     return li;
   }));
 }
+
+$('preset-group').replaceChildren(...PRESET_GROUPS.map(g => {
+  const o = document.createElement('option');
+  o.value = g; o.textContent = g;
+  return o;
+}));
+$('preset-group').value = '기타';
+
+$('preset-search').addEventListener('input', e => { presetQuery = e.target.value; renderPresets(); });
 
 $('preset-form').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('preset-name').value.trim();
   const text = $('preset-text').value.trim().replace(/,\s*$/, '');
   if (!name || !text) return;
+  const data = { name, text, g: $('preset-group').value, desc: $('preset-desc').value.trim() };
   const existing = state.presets.find(p => p.name === name);
-  if (existing) existing.text = text;
-  else state.presets.push({ id: Date.now().toString(36), name, text });
+  if (existing) Object.assign(existing, data);
+  else state.presets.unshift({ id: Date.now().toString(36), ...data });
   save('presets'); renderPresets();
   e.target.reset();
-  toast(existing ? '프리셋을 수정했어요' : '프리셋을 저장했어요');
+  $('preset-group').value = '기타';
+  toast(existing ? '프리셋을 수정했어요' : '내 프리셋에 저장했어요');
 });
 
 $('preset-grab').addEventListener('click', async () => {
@@ -470,6 +527,7 @@ document.querySelectorAll('.tabs button').forEach(b => {
 load().then(() => {
   renderCats();
   renderList();
+  renderPresetGroups();
   renderPresets();
   $('search').focus();
 });

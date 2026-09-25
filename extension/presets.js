@@ -1,0 +1,110 @@
+// 기본 표정 레시피: 기본 태그 + 자연어 묘사 + 시선·각도 조합
+// 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
+const PRESET_GROUPS = [
+  '웃음', '도발·오만', '분노', '슬픔', '당황·부끄러움', '놀람',
+  '냉담·무표정', '피곤·나른', '진지·긴장', '광기', '설렘·애정', '기타',
+];
+
+const DEFAULT_PRESETS = [
+  // 웃음
+  { g: '웃음', name: '환하게 웃는 얼굴', desc: '눈까지 웃는 밝은 웃음 + 홍조',
+    text: 'smile, open mouth, :d, blush, happy, bright genuine smile reaching his eyes, eyes slightly narrowed from laughing' },
+  { g: '웃음', name: '부드러운 미소', desc: '입 다문 잔잔한 미소',
+    text: 'light smile, closed mouth, gentle expression, soft eyes, warm gaze, relaxed eyebrows' },
+  { g: '웃음', name: '수줍은 미소', desc: '시선 피하며 살짝 웃음',
+    text: 'light smile, blush, looking away, embarrassed, shy smile, lowering his gaze, hand partially covering his mouth' },
+  { g: '웃음', name: '장난스러운 웃음', desc: '윙크 + 혀 + 갸웃',
+    text: 'grin, one eye closed, tongue out, head tilt, playful expression, mischievous smile' },
+  { g: '웃음', name: '폭소', desc: '고개 젖히고 크게 웃음',
+    text: 'laughing, open mouth, closed eyes, tears, head thrown back in laughter, hand on own stomach' },
+  { g: '웃음', name: '씁쓸한 미소', desc: '곤란한 눈썹 + 슬픈 웃음',
+    text: 'light smile, troubled eyebrows, sad smile, bittersweet expression, eyes cast down' },
+  { g: '웃음', name: '다정하게 내려다봄', desc: '아래에서 올려다본 구도, 부드러운 눈빛',
+    text: 'light smile, half-closed eyes, looking at viewer, from below, tender expression, looking down at the viewer affectionately' },
+
+  // 도발·오만
+  { g: '도발·오만', name: '깔보는 비웃음', desc: '턱 들고 한쪽 입꼬리만 올림',
+    text: 'smirk, half-closed eyes, condescending gaze, from below, one corner of his mouth raised, chin slightly lifted, looking down at the viewer' },
+  { g: '도발·오만', name: '여유로운 도발', desc: '게슴츠레한 눈 + 턱 괴기',
+    text: 'smirk, jitome, head tilt, hand on own chin, confident expression, amused gaze, teasing look' },
+  { g: '도발·오만', name: '지배적인 시선', desc: '무표정으로 위에서 내려다봄',
+    text: 'expressionless, narrowed eyes, looking at viewer, from below, dominant, cold stare looking down at the viewer, chin up' },
+  { g: '도발·오만', name: '악역 미소', desc: '얼굴 반쯤 그림자 + 빛나는 눈',
+    text: 'evil smile, shaded face, glowing eyes, narrowed eyes, sinister grin, half of his face in shadow' },
+  { g: '도발·오만', name: '안경 너머 한심한 눈빛', desc: '안경 내리고 위로 쳐다봄',
+    text: 'glasses, looking over eyewear, jitome, raised eyebrow, unimpressed expression, peering over his glasses' },
+
+  // 분노
+  { g: '분노', name: '버럭 화냄', desc: '소리치는 얼굴 + 핏줄',
+    text: 'angry, v-shaped eyebrows, open mouth, clenched teeth, veins, shouting, furious expression' },
+  { g: '분노', name: '짜증에 머리 헝클', desc: '머리 쥐어뜯으며 내려다봄',
+    text: 'angry, v-shaped eyebrows, parted lips, glaring, hand in own hair, messy hair, from below, gripping his own hair in frustration, looking down' },
+  { g: '분노', name: '조용한 분노', desc: '무표정인데 눈이 차갑게 가라앉음',
+    text: 'angry, expressionless, glaring, shaded face, narrowed eyes, suppressed rage, jaw clenched, cold eyes' },
+  { g: '분노', name: '째려봄', desc: '옆눈질로 짜증',
+    text: 'annoyed, glaring, jitome, frown, furrowed brow, looking at viewer, side glance' },
+  { g: '분노', name: '이 악물고 참음', desc: '떨릴 만큼 참는 얼굴',
+    text: 'angry, clenched teeth, furrowed brow, sweat, trembling with anger, holding back his rage' },
+
+  // 슬픔
+  { g: '슬픔', name: '눈물 글썽', desc: '참으려는데 차오름',
+    text: 'sad, tearing up, troubled eyebrows, parted lips, glistening eyes, holding back tears' },
+  { g: '슬픔', name: '소리 없이 눈물', desc: '무표정에 눈물 한 줄기',
+    text: 'crying, tears, expressionless, closed mouth, empty eyes, a single tear rolling down his cheek' },
+  { g: '슬픔', name: '오열', desc: '얼굴 감싸고 흐느낌',
+    text: 'crying, tears, open mouth, troubled eyebrows, sobbing, hand covering his face' },
+  { g: '슬픔', name: '공허함', desc: '고개 떨군 텅 빈 눈',
+    text: 'empty eyes, expressionless, looking down, hollow gaze, head hanging low, exhausted' },
+
+  // 당황·부끄러움
+  { g: '당황·부끄러움', name: '얼굴 새빨개짐', desc: '눈 커지고 허둥댐',
+    text: 'blush, embarrassed, wide-eyed, open mouth, sweatdrop, flustered, face turning bright red' },
+  { g: '당황·부끄러움', name: '부끄러워 입 가림', desc: '손등으로 입 가리고 시선 회피',
+    text: 'blush, covering mouth, looking away, embarrassed, avoiding eye contact, back of his hand over his mouth' },
+  { g: '당황·부끄러움', name: '츤데레 삐짐', desc: '팔짱 끼고 고개 홱',
+    text: 'blush, pout, looking away, annoyed, crossed arms, turning his face away' },
+  { g: '당황·부끄러움', name: '난처한 웃음', desc: '볼 긁으며 어색하게',
+    text: 'nervous, sweatdrop, troubled eyebrows, light smile, awkward smile, scratching his cheek' },
+
+  // 놀람
+  { g: '놀람', name: '깜짝 놀람', desc: '동공 수축 + 입 벌림',
+    text: 'surprised, wide-eyed, open mouth, :o, constricted pupils, startled' },
+  { g: '놀람', name: '어리둥절', desc: '갸웃하며 멍한 얼굴',
+    text: 'confused, head tilt, parted lips, blank stare, puzzled expression' },
+
+  // 냉담·무표정
+  { g: '냉담·무표정', name: '무심한 얼굴', desc: '관심 없는 듯 시선 돌림',
+    text: 'expressionless, half-closed eyes, bored, closed mouth, looking away, indifferent gaze' },
+  { g: '냉담·무표정', name: '차가운 시선', desc: '감정 없이 똑바로 봄',
+    text: 'expressionless, narrowed eyes, looking at viewer, cold eyes, sharp gaze, emotionless face' },
+  { g: '냉담·무표정', name: '한숨', desc: '이마 짚고 질린 얼굴',
+    text: 'sigh, closed eyes, tired, annoyed, hand on own forehead, exhaling in exasperation' },
+
+  // 피곤·나른
+  { g: '피곤·나른', name: '졸린 얼굴', desc: '하품 + 눈 비빔',
+    text: 'sleepy, half-closed eyes, yawning, messy hair, drowsy expression, rubbing his eye' },
+  { g: '피곤·나른', name: '지친 얼굴', desc: '다크서클 + 넥타이 풀림',
+    text: 'tired, bags under eyes, half-closed eyes, sweat, loose necktie, exhausted after a long day' },
+  { g: '피곤·나른', name: '나른한 매력', desc: '반쯤 뜬 눈 + 기대앉음',
+    text: 'half-closed eyes, light smile, parted lips, leaning back, relaxed, languid gaze' },
+
+  // 진지·긴장
+  { g: '진지·긴장', name: '결연함', desc: '정면을 강하게 응시',
+    text: 'serious, v-shaped eyebrows, closed mouth, looking at viewer, determined expression, intense gaze' },
+  { g: '진지·긴장', name: '집중', desc: '아래를 보며 몰두',
+    text: 'serious, narrowed eyes, looking down, focused expression, concentrating' },
+  { g: '진지·긴장', name: '긴장', desc: '식은땀 + 침 삼킴',
+    text: 'nervous, sweat, clenched teeth, troubled eyebrows, anxious expression, swallowing hard' },
+
+  // 광기
+  { g: '광기', name: '광기 어린 미소', desc: '동공 수축 + 갸웃',
+    text: 'crazy smile, constricted pupils, shaded face, wide-eyed, head tilt, unhinged grin' },
+  { g: '광기', name: '집착하는 시선', desc: '텅 빈 눈으로 미소',
+    text: 'empty eyes, light smile, head tilt, looking at viewer, shaded face, obsessive gaze' },
+
+  // 설렘·애정
+  { g: '설렘·애정', name: '설레는 얼굴', desc: '홍조 + 살짝 벌린 입',
+    text: 'blush, light smile, wide-eyed, parted lips, looking at another, flustered, heart pounding' },
+  { g: '설렘·애정', name: '애틋한 눈빛', desc: '곤란한 눈썹 + 그리운 눈',
+    text: 'troubled eyebrows, light smile, blush, looking at another, longing gaze, tender expression' },
+];

@@ -515,6 +515,8 @@ frown|찡그림|인상
 furrowed brow|미간 찌푸림|인상 눈썹
 raised eyebrow|한쪽 눈썹 올림|눈썹 의아
 v-shaped eyebrows|V자 눈썹|화남 눈썹
+troubled eyebrows|곤란한 눈썹 (안쪽이 올라감)|처진 눈썹 걱정 困り眉 코마리
+worried|걱정|불안 근심
 angry|화남|분노
 annoyed|짜증
 disgust|혐오|역겨움
