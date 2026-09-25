@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>PixAI 태그 서랍</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <nav class="tabs">
+    <button data-tab="tags" class="active">태그</button>
+    <button data-tab="presets">프리셋</button>
+    <button data-tab="settings">내 태그·백업</button>
+  </nav>
+
+  <section id="tab-tags" class="panel active">
+    <input id="search" type="search" placeholder="검색: 소매, 검은 머리, ㅅㅁ, sleeve…" autocomplete="off">
+    <div id="cats" class="chips"></div>
+    <div id="count" class="muted"></div>
+    <ul id="list" class="list"></ul>
+  </section>
+
+  <section id="tab-presets" class="panel">
+    <form id="preset-form" class="card">
+      <input id="preset-name" placeholder="프리셋 이름 (예: 내 캐릭터 A)" required>
+      <textarea id="preset-text" rows="4" placeholder="1boy, black hair, black eyes, white shirt, sleeve rolled up" required></textarea>
+      <div class="row">
+        <button type="button" id="preset-grab">PixAI 입력칸에서 가져오기</button>
+        <button type="submit" class="primary">저장</button>
+      </div>
+    </form>
+    <ul id="preset-list" class="list"></ul>
+  </section>
+
+  <section id="tab-settings" class="panel">
+    <form id="custom-form" class="card">
+      <h3>내 태그 추가</h3>
+      <input id="c-en" placeholder="영어 태그 (예: sleeve rolled up)" required>
+      <input id="c-ko" placeholder="한글 설명 (예: 소매 걷어올림)">
+      <input id="c-alias" placeholder="추가 검색어 (공백 구분, 선택)">
+      <select id="c-cat"></select>
+      <button type="submit" class="primary">추가</button>
+    </form>
+    <div class="card">
+      <h3>백업</h3>
+      <p class="muted">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>
+      <div class="row">
+        <button id="export">내보내기</button>
+        <button id="import">가져오기</button>
+        <input id="import-file" type="file" accept="application/json" hidden>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+  <script src="tags.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
