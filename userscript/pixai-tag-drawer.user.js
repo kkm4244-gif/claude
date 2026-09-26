@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.8.2
+// @version      0.8.3
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -306,6 +306,26 @@ huge penis|거대 페니스|신체
 inflation|팽창|신체
 belly bulge|배 부풂|신체
 pregnant|임신|신체
+bodybuilder|보디빌더 체형|큰 근육 남캐 체형 벌크 단부루
+shredded muscles|선명하게 갈라지는 근육|데피니션 낮은 체지방 남캐 체형 단부루
+strongman waist|두껍고 근육질인 허리|통허리 힘센 체형 남캐 단부루
+thick neck|굵은 목|두꺼운 목 남캐 체형 단부루
+thick arms|굵은 팔|두꺼운 팔 남캐 체형 단부루
+plump|살집 있는 체형|통통 부드러운 몸 체형 단부루
+slim legs|가느다란 다리|가는 다리 슬림 체형 비율 단부루
+hip dips|골반 옆쪽의 오목한 윤곽|힙딥 골반 체형 단부루
+lean athletic build|마르고 탄탄한 운동형 체형 (자연어)|남캐 체형 잔근육 슬림 자연어
+slender frame with broad shoulders|마른 골격에 넓은 어깨 (자연어)|남캐 체형 어깨 비율 자연어
+compact muscular build|다부지고 근육질인 체형 (자연어)|남캐 체형 단단 아담 자연어
+stocky powerful build|넓고 두툼한 건장한 체형 (자연어)|남캐 체형 듬직 우람 자연어
+soft bulky build|살집과 덩치가 있는 부드러운 체형 (자연어)|남캐 체형 큰몸 자연어
+lightly defined muscles|은은하게 드러나는 근육 (자연어)|남캐 체형 잔근육 과하지않은 자연어
+long limbs relative to the torso|몸통에 비해 긴 팔다리 (자연어)|남캐 비율 장신 긴팔다리 자연어
+long torso with shorter legs|긴 몸통과 상대적으로 짧은 다리 (자연어)|남캐 비율 상체 긴허리 자연어
+wide shoulders tapering to a narrow waist|어깨에서 허리로 좁아지는 체형 (자연어)|남캐 비율 역삼각형 자연어
+slender wrists and ankles|가느다란 손목과 발목 (자연어)|남캐 체형 가는뼈 자연어
+broad chest with a flat abdomen|넓은 흉곽과 평평한 복부 (자연어)|남캐 체형 가슴 배 자연어
+long legs with lean thighs|길고 날씬한 다리 (자연어)|남캐 비율 긴다리 허벅지 자연어
 ` },
   {
     id: 'parts', name: '신체', order: 2.35, tags: `
@@ -408,6 +428,12 @@ lactation|모유|체액
 milk|모유|체액
 squirting|스쿼팅|체액
 female ejaculation|여성 사정|체액
+back muscles|등 근육|등근육 광배근 남캐 근육 단부루
+deltoids|삼각근|어깨 근육 남캐 단부루
+triceps|삼두근|팔 뒤쪽 근육 남캐 단부루
+obliques|복사근|옆구리 근육 남캐 단부루
+linea alba|복부 중앙선|배 세로선 복근 단부루
+median furrow|등 중앙의 세로 홈|척추선 등골 등근육 단부루
 ` },
   {
     id: 'top', name: '상의·겉옷', order: 3.0, tags: `
@@ -431,7 +457,7 @@ wide sleeves|넓은 소매|펄럭
 sleeves past wrists|손 덮는 긴 소매|소매 길게
 puffy sleeves|퍼프 소매|볼륨
 detached sleeves|분리된 소매
-sleeve garter|소매 가터|암밴드
+sleeve garter|셔츠 소매 위 가터|소매 가터 슬리브 가터 암 가터 암가터 암밴드 정장 소품 누아르
 t-shirt|티셔츠|반팔티
 print shirt|프린트 티셔츠|그래픽티
 polo shirt|폴로 셔츠|카라티
@@ -448,7 +474,7 @@ cardigan|가디건
 sweater vest|니트 조끼|스웨터 베스트
 vest|조끼
 black vest|검은 조끼
-waistcoat|웨이스트코트|정장 조끼
+waistcoat|웨이스트코트|정장 조끼 베스트 누아르
 jacket|재킷|자켓
 open jacket|앞 열린 재킷|자켓
 black jacket|검은 재킷|자켓
@@ -479,10 +505,10 @@ red necktie|빨간 넥타이
 striped necktie|줄무늬 넥타이
 loose necktie|느슨한 넥타이|넥타이 풀린
 bowtie|나비넥타이
-tie clip|넥타이핀
+tie clip|넥타이핀|타이핀 타이클립 정장 소품 누아르
 ascot|애스콧 타이|스카프
-suspenders|멜빵|서스펜더
-shoulder holster|어깨 총집|권총집 홀스터
+suspenders|멜빵|서스펜더 서스펜더스 정장 소품 누아르
+shoulder holster|어깨 총집|권총집 홀스터 숄더 홀스터 정장 소품 누아르
 school uniform|교복
 gakuran|학란 (남자 교복)|교복 가쿠란
 serafuku|세일러 교복|세라복
@@ -511,7 +537,7 @@ open clothes|옷 풀어헤침
 bandages|붕대
 navy necktie|남색 넥타이|넥타이
 grey vest|회색 조끼|조끼 베스트
-arm garter|팔 가터|암밴드 소매
+arm garter|맨팔에 두르는 가터|팔 가터 암 가터 암가터 암밴드 소매와 구별
 lingerie|란제리|의상
 micro bikini|마이크로 비키니|의상
 sling bikini|슬링 비키니|의상
@@ -520,6 +546,25 @@ torn clothes|찢어진 옷|의상
 no bra|브라 없음|의상
 pasties|패스티스|의상
 nipple pasties|유두 패스티스|의상
+overcoat|오버코트|정장 외투 누아르 단부루
+peacoat|피코트|더블 코트 해군 외투 단부루
+fur coat|모피 코트|털코트 누아르 단부루
+fur-trimmed coat|털 장식 코트|퍼트림 외투 누아르 단부루
+business suit|비즈니스 정장|회사원 수트 누아르 단부루
+double-breasted|두 줄 단추 여밈|더블브레스티드 더블 정장 누아르 단부루
+lapels|라펠 (재킷의 접힌 옷깃)|옷깃 정장 디테일 누아르 단부루
+buttoned cuffs|단추를 채운 소맷단|커프스 셔츠 정장 디테일 단부루
+pinstripe pattern|가는 줄무늬|핀스트라이프 정장 무늬 누아르 단부루
+houndstooth|하운드투스 무늬|지도리 격자 체크 정장 무늬 단부루
+taut shirt|팽팽하게 당겨진 셔츠|몸에 붙는 셔츠 핏 단부루
+compression shirt|컴프레션 셔츠|밀착 운동복 압박 티셔츠 단부루
+ribbed sweater|골지 스웨터|리브 니트 세로 골 단부루
+tailored three-piece suit|몸에 맞춘 쓰리피스 정장 (자연어)|조끼 수트 누아르 정장 자연어
+fitted waistcoat over a dress shirt|셔츠 위에 꼭 맞는 정장 조끼 (자연어)|베스트 웨이스트코트 누아르 자연어
+wide peaked lapels|넓고 끝이 뾰족한 옷깃 (자연어)|피크드 라펠 정장 디테일 누아르 자연어
+rolled sleeves secured with sleeve garters|가터로 고정한 걷어올린 소매 (자연어)|암 가터 소매 가터 셔츠 누아르 자연어
+charcoal suit with subtle pinstripes|가는 줄무늬의 차콜 정장 (자연어)|회색 수트 핀스트라이프 누아르 자연어
+slightly rumpled dress shirt|살짝 구겨진 정장 셔츠 (자연어)|생활감 주름 누아르 자연어
 ` },
   {
     id: 'bottom', name: '하의·신발', order: 3.1, tags: `
@@ -555,16 +600,26 @@ black shoes|검은 구두|신발
 no panties|팬티 없음|의상
 crotchless|밑트임|의상
 open crotch|가랑이 트임|의상
+oxfords|옥스퍼드 구두|끈구두 정장 신발 누아르 단부루
+monk shoes|버클로 여미는 구두|몽크 스트랩 정장 신발 누아르 단부루
+spats|구두 위 발목 덮개|스패츠 각반 빈티지 정장 누아르 단부루
+ankle boots|발목 부츠|앵클부츠 신발 단부루
+lace-up boots|끈으로 여미는 부츠|레이스업 워커 누아르 단부루
+work boots|작업용 부츠|워크부츠 신발 단부루
+pants rolled up|바짓단 걷어올림|롤업 바지 단부루
+high-waisted tailored trousers|허리가 높고 재단이 깔끔한 바지 (자연어)|하이웨이스트 슬랙스 정장 비율 누아르 자연어
+straight-leg trousers with pressed creases|주름선을 잡은 일자 바지 (자연어)|슬랙스 정장 바지 누아르 자연어
+polished black leather shoes|광택을 낸 검은 가죽 구두 (자연어)|정장 신발 누아르 자연어
 ` },
   {
     id: 'acc', name: '소품·액세서리', order: 3.2, tags: `
 gloves|장갑
 black gloves|검은 장갑
 white gloves|흰 장갑
-leather gloves|가죽 장갑
+leather gloves|가죽 장갑|레더 글러브 정장 소품 누아르
 fingerless gloves|손가락 없는 장갑
 hat|모자
-fedora|페도라|중절모 모자
+fedora|페도라|중절모 모자 정장 소품 누아르
 baseball cap|야구 모자|캡 모자
 backwards hat|거꾸로 쓴 모자|모자
 beanie|비니|모자
@@ -629,6 +684,35 @@ bouquet|꽃다발|꽃
 ball gag|볼 개그|의상
 collar|목걸이|의상
 leash|목줄|의상
+cuff links|커프스링크 (셔츠 소매 단추 장식)|커프스 커프링크 소매단추 정장 소품 누아르 단부루
+pocket watch|회중시계|주머니 시계 정장 소품 누아르 빈티지 단부루
+lapel pin|옷깃 핀|라펠핀 브로치 정장 소품 누아르 단부루
+collar chain|옷깃 연결 체인|카라 체인 정장 소품 누아르 단부루
+collar tips|깃 끝 장식|카라 팁 금속 정장 소품 단부루
+wallet chain|지갑 체인|허리 체인 바지 쇠사슬 누아르 단부루
+boutonniere|옷깃에 꽂은 꽃|부토니에 부토니아 라펠 정장 소품 단부루
+pocket square|가슴주머니 장식 손수건|포켓스퀘어 행커치프 정장 소품 누아르 단부루
+cummerbund|턱시도 허리띠|커머번드 예복 정장 소품 단부루
+brooch|브로치|옷 장식 정장 소품 단부루
+medallion|메달형 장신구|메달리온 펜던트 목걸이 단부루
+ear cuffs|이어커프|귀찌 귀 장식 단부루
+armband|완장|팔띠 암밴드 제복 단부루
+arm belt|팔 벨트|팔띠 버클 스트랩 누아르 단부루
+hand chains|손 장식 체인|핸드체인 손등 사슬 단부루
+wrist cuffs|손목 커프스 장식|손목띠 커프스 단부루
+bandolier|어깨에 두르는 탄띠|탄약띠 군장 누아르 단부루
+cane|지팡이|스틱 신사 정장 소품 누아르 단부루
+cigarette holder|담배 홀더|시가렛 홀더 긴 담뱃대 누아르 단부루
+handkerchief|손수건|행커치프 정장 소품 단부루
+shirt stay|셔츠 고정 스트랩|셔츠스테이 셔츠 가터 정장 소품 단부루
+chest harness|가슴 하네스|흉부 스트랩 가죽 벨트 누아르 단부루
+watch fob|회중시계의 줄·장식|시계 체인 정장 소품 누아르 단부루
+sam browne belt|허리띠와 어깨끈이 연결된 벨트|샘브라운 제복 누아르 단부루
+shoulder belt|어깨 벨트|숄더 스트랩 제복 누아르 단부루
+ear chain|귀 장식 체인|이어체인 귀걸이 사슬 단부루
+pocket watch chain draped across a waistcoat|조끼 앞에 늘어진 회중시계 체인 (자연어)|시계줄 정장 소품 누아르 자연어
+black leather shoulder holster over a shirt|셔츠 위 검은 가죽 어깨 총집 (자연어)|홀스터 숄더 누아르 자연어
+silver cuff links at the wrists|손목 소맷단의 은색 커프스링크 (자연어)|커프스 정장 소품 누아르 자연어
 ` },
   {
     id: 'allure', name: '섹시·분위기', order: 3.3, tags: `

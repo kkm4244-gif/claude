@@ -1,0 +1,679 @@
+{
+  "version": "0.8.3",
+  "checkedOn": "2026-09-26",
+  "note": "단부루 항목은 링크된 위키 또는 분류표에서 표기를 확인했습니다. 모델별 생성 효과는 시험하지 않았습니다. 자연어 항목은 직접 작성한 묘사이며 단부루 정식 태그로 주장하지 않습니다.",
+  "entries": [
+    {
+      "en": "cuff links",
+      "ko": "커프스링크 (셔츠 소매 단추 장식)",
+      "alias": "커프스 커프링크 소매단추 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "pocket watch",
+      "ko": "회중시계",
+      "alias": "주머니 시계 정장 소품 누아르 빈티지 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "lapel pin",
+      "ko": "옷깃 핀",
+      "alias": "라펠핀 브로치 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "collar chain",
+      "ko": "옷깃 연결 체인",
+      "alias": "카라 체인 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "collar tips",
+      "ko": "깃 끝 장식",
+      "alias": "카라 팁 금속 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "wallet chain",
+      "ko": "지갑 체인",
+      "alias": "허리 체인 바지 쇠사슬 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "boutonniere",
+      "ko": "옷깃에 꽂은 꽃",
+      "alias": "부토니에 부토니아 라펠 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "pocket square",
+      "ko": "가슴주머니 장식 손수건",
+      "alias": "포켓스퀘어 행커치프 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "cummerbund",
+      "ko": "턱시도 허리띠",
+      "alias": "커머번드 예복 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "brooch",
+      "ko": "브로치",
+      "alias": "옷 장식 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "medallion",
+      "ko": "메달형 장신구",
+      "alias": "메달리온 펜던트 목걸이 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "ear cuffs",
+      "ko": "이어커프",
+      "alias": "귀찌 귀 장식 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "armband",
+      "ko": "완장",
+      "alias": "팔띠 암밴드 제복 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "arm belt",
+      "ko": "팔 벨트",
+      "alias": "팔띠 버클 스트랩 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "hand chains",
+      "ko": "손 장식 체인",
+      "alias": "핸드체인 손등 사슬 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "wrist cuffs",
+      "ko": "손목 커프스 장식",
+      "alias": "손목띠 커프스 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "bandolier",
+      "ko": "어깨에 두르는 탄띠",
+      "alias": "탄약띠 군장 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "cane",
+      "ko": "지팡이",
+      "alias": "스틱 신사 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "cigarette holder",
+      "ko": "담배 홀더",
+      "alias": "시가렛 홀더 긴 담뱃대 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "handkerchief",
+      "ko": "손수건",
+      "alias": "행커치프 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "shirt stay",
+      "ko": "셔츠 고정 스트랩",
+      "alias": "셔츠스테이 셔츠 가터 정장 소품 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "chest harness",
+      "ko": "가슴 하네스",
+      "alias": "흉부 스트랩 가죽 벨트 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:accessories"
+    },
+    {
+      "en": "watch fob",
+      "ko": "회중시계의 줄·장식",
+      "alias": "시계 체인 정장 소품 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "sam browne belt",
+      "ko": "허리띠와 어깨끈이 연결된 벨트",
+      "alias": "샘브라운 제복 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "shoulder belt",
+      "ko": "어깨 벨트",
+      "alias": "숄더 스트랩 제복 누아르 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "ear chain",
+      "ko": "귀 장식 체인",
+      "alias": "이어체인 귀걸이 사슬 단부루",
+      "cat": "acc",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "overcoat",
+      "ko": "오버코트",
+      "alias": "정장 외투 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "peacoat",
+      "ko": "피코트",
+      "alias": "더블 코트 해군 외투 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "fur coat",
+      "ko": "모피 코트",
+      "alias": "털코트 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "fur-trimmed coat",
+      "ko": "털 장식 코트",
+      "alias": "퍼트림 외투 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "business suit",
+      "ko": "비즈니스 정장",
+      "alias": "회사원 수트 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "double-breasted",
+      "ko": "두 줄 단추 여밈",
+      "alias": "더블브레스티드 더블 정장 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "lapels",
+      "ko": "라펠 (재킷의 접힌 옷깃)",
+      "alias": "옷깃 정장 디테일 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "buttoned cuffs",
+      "ko": "단추를 채운 소맷단",
+      "alias": "커프스 셔츠 정장 디테일 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "pinstripe pattern",
+      "ko": "가는 줄무늬",
+      "alias": "핀스트라이프 정장 무늬 누아르 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "houndstooth",
+      "ko": "하운드투스 무늬",
+      "alias": "지도리 격자 체크 정장 무늬 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "taut shirt",
+      "ko": "팽팽하게 당겨진 셔츠",
+      "alias": "몸에 붙는 셔츠 핏 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "compression shirt",
+      "ko": "컴프레션 셔츠",
+      "alias": "밀착 운동복 압박 티셔츠 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "ribbed sweater",
+      "ko": "골지 스웨터",
+      "alias": "리브 니트 세로 골 단부루",
+      "cat": "top",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "oxfords",
+      "ko": "옥스퍼드 구두",
+      "alias": "끈구두 정장 신발 누아르 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "monk shoes",
+      "ko": "버클로 여미는 구두",
+      "alias": "몽크 스트랩 정장 신발 누아르 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "spats",
+      "ko": "구두 위 발목 덮개",
+      "alias": "스패츠 각반 빈티지 정장 누아르 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "ankle boots",
+      "ko": "발목 부츠",
+      "alias": "앵클부츠 신발 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "lace-up boots",
+      "ko": "끈으로 여미는 부츠",
+      "alias": "레이스업 워커 누아르 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "work boots",
+      "ko": "작업용 부츠",
+      "alias": "워크부츠 신발 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "pants rolled up",
+      "ko": "바짓단 걷어올림",
+      "alias": "롤업 바지 단부루",
+      "cat": "bottom",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:attire"
+    },
+    {
+      "en": "bodybuilder",
+      "ko": "보디빌더 체형",
+      "alias": "큰 근육 남캐 체형 벌크 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "shredded muscles",
+      "ko": "선명하게 갈라지는 근육",
+      "alias": "데피니션 낮은 체지방 남캐 체형 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "strongman waist",
+      "ko": "두껍고 근육질인 허리",
+      "alias": "통허리 힘센 체형 남캐 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "thick neck",
+      "ko": "굵은 목",
+      "alias": "두꺼운 목 남캐 체형 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "thick arms",
+      "ko": "굵은 팔",
+      "alias": "두꺼운 팔 남캐 체형 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "plump",
+      "ko": "살집 있는 체형",
+      "alias": "통통 부드러운 몸 체형 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/strongman_waist"
+    },
+    {
+      "en": "slim legs",
+      "ko": "가느다란 다리",
+      "alias": "가는 다리 슬림 체형 비율 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:body_parts"
+    },
+    {
+      "en": "hip dips",
+      "ko": "골반 옆쪽의 오목한 윤곽",
+      "alias": "힙딥 골반 체형 단부루",
+      "cat": "body",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:body_parts"
+    },
+    {
+      "en": "back muscles",
+      "ko": "등 근육",
+      "alias": "등근육 광배근 남캐 근육 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "deltoids",
+      "ko": "삼각근",
+      "alias": "어깨 근육 남캐 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "triceps",
+      "ko": "삼두근",
+      "alias": "팔 뒤쪽 근육 남캐 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "obliques",
+      "ko": "복사근",
+      "alias": "옆구리 근육 남캐 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "linea alba",
+      "ko": "복부 중앙선",
+      "alias": "배 세로선 복근 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "median furrow",
+      "ko": "등 중앙의 세로 홈",
+      "alias": "척추선 등골 등근육 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/muscular"
+    },
+    {
+      "en": "lean athletic build",
+      "ko": "마르고 탄탄한 운동형 체형 (자연어)",
+      "alias": "남캐 체형 잔근육 슬림 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "slender frame with broad shoulders",
+      "ko": "마른 골격에 넓은 어깨 (자연어)",
+      "alias": "남캐 체형 어깨 비율 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "compact muscular build",
+      "ko": "다부지고 근육질인 체형 (자연어)",
+      "alias": "남캐 체형 단단 아담 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "stocky powerful build",
+      "ko": "넓고 두툼한 건장한 체형 (자연어)",
+      "alias": "남캐 체형 듬직 우람 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "soft bulky build",
+      "ko": "살집과 덩치가 있는 부드러운 체형 (자연어)",
+      "alias": "남캐 체형 큰몸 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "lightly defined muscles",
+      "ko": "은은하게 드러나는 근육 (자연어)",
+      "alias": "남캐 체형 잔근육 과하지않은 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "long limbs relative to the torso",
+      "ko": "몸통에 비해 긴 팔다리 (자연어)",
+      "alias": "남캐 비율 장신 긴팔다리 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "long torso with shorter legs",
+      "ko": "긴 몸통과 상대적으로 짧은 다리 (자연어)",
+      "alias": "남캐 비율 상체 긴허리 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "wide shoulders tapering to a narrow waist",
+      "ko": "어깨에서 허리로 좁아지는 체형 (자연어)",
+      "alias": "남캐 비율 역삼각형 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "slender wrists and ankles",
+      "ko": "가느다란 손목과 발목 (자연어)",
+      "alias": "남캐 체형 가는뼈 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "broad chest with a flat abdomen",
+      "ko": "넓은 흉곽과 평평한 복부 (자연어)",
+      "alias": "남캐 체형 가슴 배 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "long legs with lean thighs",
+      "ko": "길고 날씬한 다리 (자연어)",
+      "alias": "남캐 비율 긴다리 허벅지 자연어",
+      "cat": "body",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "tailored three-piece suit",
+      "ko": "몸에 맞춘 쓰리피스 정장 (자연어)",
+      "alias": "조끼 수트 누아르 정장 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "fitted waistcoat over a dress shirt",
+      "ko": "셔츠 위에 꼭 맞는 정장 조끼 (자연어)",
+      "alias": "베스트 웨이스트코트 누아르 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "wide peaked lapels",
+      "ko": "넓고 끝이 뾰족한 옷깃 (자연어)",
+      "alias": "피크드 라펠 정장 디테일 누아르 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "rolled sleeves secured with sleeve garters",
+      "ko": "가터로 고정한 걷어올린 소매 (자연어)",
+      "alias": "암 가터 소매 가터 셔츠 누아르 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "charcoal suit with subtle pinstripes",
+      "ko": "가는 줄무늬의 차콜 정장 (자연어)",
+      "alias": "회색 수트 핀스트라이프 누아르 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "slightly rumpled dress shirt",
+      "ko": "살짝 구겨진 정장 셔츠 (자연어)",
+      "alias": "생활감 주름 누아르 자연어",
+      "cat": "top",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "high-waisted tailored trousers",
+      "ko": "허리가 높고 재단이 깔끔한 바지 (자연어)",
+      "alias": "하이웨이스트 슬랙스 정장 비율 누아르 자연어",
+      "cat": "bottom",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "straight-leg trousers with pressed creases",
+      "ko": "주름선을 잡은 일자 바지 (자연어)",
+      "alias": "슬랙스 정장 바지 누아르 자연어",
+      "cat": "bottom",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "polished black leather shoes",
+      "ko": "광택을 낸 검은 가죽 구두 (자연어)",
+      "alias": "정장 신발 누아르 자연어",
+      "cat": "bottom",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "pocket watch chain draped across a waistcoat",
+      "ko": "조끼 앞에 늘어진 회중시계 체인 (자연어)",
+      "alias": "시계줄 정장 소품 누아르 자연어",
+      "cat": "acc",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "black leather shoulder holster over a shirt",
+      "ko": "셔츠 위 검은 가죽 어깨 총집 (자연어)",
+      "alias": "홀스터 숄더 누아르 자연어",
+      "cat": "acc",
+      "kind": "natural",
+      "source": null
+    },
+    {
+      "en": "silver cuff links at the wrists",
+      "ko": "손목 소맷단의 은색 커프스링크 (자연어)",
+      "alias": "커프스 정장 소품 누아르 자연어",
+      "cat": "acc",
+      "kind": "natural",
+      "source": null
+    }
+  ]
+}
