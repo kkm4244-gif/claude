@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.8.1
+// @version      0.8.2
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -56,6 +56,7 @@ high-class atmosphere|고급스러운 분위기|럭셔리 상류층
 elegant|우아함|분위기 기품
 sophisticated|세련됨|분위기 도시적
 noir|누아르|분위기 어두운 범죄 영화
+nsfw|19|19
 ` },
   {
     id: 'people', name: '인원', order: 1, tags: `
@@ -111,6 +112,7 @@ elf|엘프
 cyborg|사이보그|기계
 android|안드로이드|로봇
 monster boy|몬스터 소년|인외
+monster|몬스터|상황
 ` },
   {
     id: 'haircolor', name: '머리색', order: 2.0, tags: `
@@ -231,6 +233,7 @@ aviator sunglasses|보잉 선글라스|안경
 monocle|외알 안경|모노클
 eyewear on head|머리에 올린 안경|선글라스
 straight eyebrows|일자 눈썹|눈썹 straight eyebrow
+rolling eyes|눈 뒤집힌|표정
 ` },
   {
     id: 'body', name: '체형·얼굴 특징', order: 2.3, tags: `
@@ -289,6 +292,20 @@ blood on face|얼굴에 피|상처
 v-taper|역삼각형 몸매|V자 체형 어깨 허리
 bright skin|밝은 피부|피부 하얀
 glossy skin|윤기 나는 피부|광택 피부
+large breasts|큰 가슴|신체
+huge breasts|거유|신체
+small breasts|작은 가슴|신체
+perky breasts|탄력 있는 가슴|신체
+hanging breasts|처진 가슴|신체
+large ass|큰 엉덩이|신체
+huge ass|거대 엉덩이|신체
+thick thighs|두꺼운 허벅지|신체
+wide hips|넓은 골반|신체
+large penis|큰 페니스|신체
+huge penis|거대 페니스|신체
+inflation|팽창|신체
+belly bulge|배 부풂|신체
+pregnant|임신|신체
 ` },
   {
     id: 'parts', name: '신체', order: 2.35, tags: `
@@ -339,6 +356,58 @@ nose|코
 chin|턱
 sharp jawline|날렵한 턱선|턱선 브이라인
 high cheekbones|높은 광대|광대뼈
+nude|나체|신체
+completely nude|완전 나체|신체
+bare skin|맨살|신체
+exposed breasts|노출된 가슴|신체
+breasts out|가슴 노출|신체
+nipples|유두|신체
+erect nipples|발기된 유두|신체
+puffy nipples|부푼 유두|신체
+areola|유륜|신체
+cleavage|골|신체
+underboob|언더붑|신체
+sideboob|사이드붑|신체
+ass|엉덩이|신체
+cameltoe|카멜토|신체
+pussy|보지|신체
+vagina|보지|신체
+wet pussy|젖은 보지|신체
+dripping pussy|흘러내리는 보지|신체
+spread pussy|벌린 보지|신체
+clitoris|클리토리스|신체
+labia|음순|신체
+anus|항문|신체
+gaping anus|벌어진 항문|신체
+asshole|항문|신체
+penis|페니스|신체
+erect penis|발기한 페니스|신체
+foreskin|포피|신체
+testicles|고환|신체
+balls|불알|신체
+scrotum|음낭|신체
+cum|정액|체액
+semen|정액|체액
+excessive cum|과도한 정액|체액
+cum on body|몸에 묻은 정액|체액
+cum on breasts|가슴에 묻은 정액|체액
+cum on face|얼굴에 묻은 정액|체액
+facial|페이셜|체액
+cum in mouth|입에 넣은 정액|체액
+cum in pussy|보지에 사정|체액
+cum in ass|항문에 사정|체액
+cum dripping|흘러내리는 정액|체액
+cum string|정액 끈|체액
+pussy juice|보지 애액|체액
+dripping|흘러내리는|체액
+saliva|침|체액
+drool|침 흘림|체액
+saliva trail|침 끈|표정
+tentacles|텐타클|행위
+lactation|모유|체액
+milk|모유|체액
+squirting|스쿼팅|체액
+female ejaculation|여성 사정|체액
 ` },
   {
     id: 'top', name: '상의·겉옷', order: 3.0, tags: `
@@ -443,6 +512,14 @@ bandages|붕대
 navy necktie|남색 넥타이|넥타이
 grey vest|회색 조끼|조끼 베스트
 arm garter|팔 가터|암밴드 소매
+lingerie|란제리|의상
+micro bikini|마이크로 비키니|의상
+sling bikini|슬링 비키니|의상
+string bikini|스트링 비키니|의상
+torn clothes|찢어진 옷|의상
+no bra|브라 없음|의상
+pasties|패스티스|의상
+nipple pasties|유두 패스티스|의상
 ` },
   {
     id: 'bottom', name: '하의·신발', order: 3.1, tags: `
@@ -475,6 +552,9 @@ barefoot|맨발
 grey pants|회색 바지
 black socks|검은 양말|양말
 black shoes|검은 구두|신발
+no panties|팬티 없음|의상
+crotchless|밑트임|의상
+open crotch|가랑이 트임|의상
 ` },
   {
     id: 'acc', name: '소품·액세서리', order: 3.2, tags: `
@@ -546,6 +626,9 @@ microphone|마이크
 flower|꽃
 rose|장미|꽃
 bouquet|꽃다발|꽃
+ball gag|볼 개그|의상
+collar|목걸이|의상
+leash|목줄|의상
 ` },
   {
     id: 'allure', name: '섹시·분위기', order: 3.3, tags: `
@@ -582,6 +665,8 @@ sitting on lap|무릎 위에 앉음|2인
 hand on another's waist|허리에 손|2인 섹시
 whispering|귓속말|2인
 collar grab|깃·멱살 잡기|2인 넥타이
+see-through|시스루|의상
+transparent|투명한|의상
 ` },
   {
     id: 'face', name: '표정', order: 4.0, tags: `
@@ -637,6 +722,13 @@ fang|송곳니|덧니
 teeth|이 보임
 sigh|한숨
 dominant|지배적인 분위기|오만 강압 위압감
+ahegao|아헤가오|표정
+fucked silly|맛이 간 표정|표정
+pleasure face|쾌락 표정|표정
+orgasm face|오르가즘 표정|표정
+shy|수줍은|표정
+aroused|흥분한|표정
+lustful|음란한|표정
 ` },
   {
     id: 'gaze', name: '시선', order: 4.1, tags: `
@@ -729,6 +821,59 @@ holding flower|꽃을 듦|손에 든
 carrying over shoulder|어깨에 메고 감|들쳐메기
 slouching|구부정한 자세|늘어진 기대앉은
 sitting on couch|소파에 앉음|앉음
+sex|섹스|행위
+vaginal|질 삽입|행위
+anal|항문 섹스|행위
+oral|오럴|행위
+blowjob|블로우잡|행위
+deepthroat|딥스로트|행위
+handjob|핸드잡|행위
+footjob|풋잡|행위
+titjob|타이잡|행위
+paizuri|파이즈리|행위
+cunnilingus|커닐링구스|행위
+rimming|리밍|행위
+fingering|핑거링|행위
+masturbation|자위|행위
+female masturbation|여성 자위|행위
+male masturbation|남성 자위|행위
+doggy style|도기 스타일|행위
+missionary|미셔너리|행위
+cowgirl|카우걸|행위
+reverse cowgirl|리버스 카우걸|행위
+standing sex|서서 하는 섹스|행위
+piledriver|파일드라이버|행위
+full nelson|풀 넬슨|행위
+mating press|메이팅 프레스|행위
+spooning|스푸닝|행위
+on all fours|네 발로|행위
+legs up|다리 들어올린|행위
+legs spread|다리 벌린|행위
+straddling|걸터앉은|행위
+clothes pull|옷 당김|의상
+pants down|바지 내림|의상
+bondage|본디지|의상
+rope bondage|로프 본디지|의상
+shibari|시바리|의상
+after sex|섹스 후|상태
+after vaginal|질 삽입 후|상태
+after anal|항문 섹스 후|상태
+creampie|크림파이|상태
+internal cumshot|내부 사정|상태
+external cumshot|외부 사정|상태
+public sex|공공장소 섹스|상황
+outdoor sex|야외 섹스|상황
+exhibitionism|노출증|상황
+voyeurism|관음|상황
+group sex|그룹 섹스|상황
+threesome|쓰리섬|상황
+gangbang|갱뱅|상황
+orgy|난교|상황
+double penetration|더블 페네트레이션|행위
+triple penetration|트리플 페네트레이션|행위
+tentacle sex|텐타클 섹스|행위
+monster sex|몬스터 섹스|행위
+bestiality|수간|행위
 ` },
   {
     id: 'duo', name: '2인 상호작용', order: 4.3, tags: `
@@ -1145,6 +1290,120 @@ function parseDefaultTags() {
   return out;
 }
 
+
+// 초기 개인 백업에서 모두 신체로 지정됐던 항목만 새 분류로 옮긴다.
+const LEGACY_TAG_CATEGORIES = {
+  "[\"nsfw\",\"19\",\"19\"]": "quality",
+  "[\"large breasts\",\"큰 가슴\",\"신체\"]": "body",
+  "[\"huge breasts\",\"거유\",\"신체\"]": "body",
+  "[\"small breasts\",\"작은 가슴\",\"신체\"]": "body",
+  "[\"perky breasts\",\"탄력 있는 가슴\",\"신체\"]": "body",
+  "[\"hanging breasts\",\"처진 가슴\",\"신체\"]": "body",
+  "[\"large ass\",\"큰 엉덩이\",\"신체\"]": "body",
+  "[\"huge ass\",\"거대 엉덩이\",\"신체\"]": "body",
+  "[\"thick thighs\",\"두꺼운 허벅지\",\"신체\"]": "body",
+  "[\"wide hips\",\"넓은 골반\",\"신체\"]": "body",
+  "[\"large penis\",\"큰 페니스\",\"신체\"]": "body",
+  "[\"huge penis\",\"거대 페니스\",\"신체\"]": "body",
+  "[\"wet\",\"젖은\",\"체액\"]": "allure",
+  "[\"ahegao\",\"아헤가오\",\"표정\"]": "face",
+  "[\"sex\",\"섹스\",\"행위\"]": "pose",
+  "[\"vaginal\",\"질 삽입\",\"행위\"]": "pose",
+  "[\"anal\",\"항문 섹스\",\"행위\"]": "pose",
+  "[\"oral\",\"오럴\",\"행위\"]": "pose",
+  "[\"blowjob\",\"블로우잡\",\"행위\"]": "pose",
+  "[\"deepthroat\",\"딥스로트\",\"행위\"]": "pose",
+  "[\"handjob\",\"핸드잡\",\"행위\"]": "pose",
+  "[\"footjob\",\"풋잡\",\"행위\"]": "pose",
+  "[\"titjob\",\"타이잡\",\"행위\"]": "pose",
+  "[\"paizuri\",\"파이즈리\",\"행위\"]": "pose",
+  "[\"cunnilingus\",\"커닐링구스\",\"행위\"]": "pose",
+  "[\"rimming\",\"리밍\",\"행위\"]": "pose",
+  "[\"fingering\",\"핑거링\",\"행위\"]": "pose",
+  "[\"masturbation\",\"자위\",\"행위\"]": "pose",
+  "[\"female masturbation\",\"여성 자위\",\"행위\"]": "pose",
+  "[\"male masturbation\",\"남성 자위\",\"행위\"]": "pose",
+  "[\"doggy style\",\"도기 스타일\",\"행위\"]": "pose",
+  "[\"missionary\",\"미셔너리\",\"행위\"]": "pose",
+  "[\"cowgirl\",\"카우걸\",\"행위\"]": "pose",
+  "[\"reverse cowgirl\",\"리버스 카우걸\",\"행위\"]": "pose",
+  "[\"standing sex\",\"서서 하는 섹스\",\"행위\"]": "pose",
+  "[\"from behind\",\"뒤에서\",\"행위\"]": "view",
+  "[\"piledriver\",\"파일드라이버\",\"행위\"]": "pose",
+  "[\"full nelson\",\"풀 넬슨\",\"행위\"]": "pose",
+  "[\"mating press\",\"메이팅 프레스\",\"행위\"]": "pose",
+  "[\"spooning\",\"스푸닝\",\"행위\"]": "pose",
+  "[\"against wall\",\"벽에 기대어\",\"행위\"]": "pose",
+  "[\"on back\",\"누워서\",\"행위\"]": "pose",
+  "[\"on all fours\",\"네 발로\",\"행위\"]": "pose",
+  "[\"legs up\",\"다리 들어올린\",\"행위\"]": "pose",
+  "[\"legs spread\",\"다리 벌린\",\"행위\"]": "pose",
+  "[\"straddling\",\"걸터앉은\",\"행위\"]": "pose",
+  "[\"lingerie\",\"란제리\",\"의상\"]": "top",
+  "[\"micro bikini\",\"마이크로 비키니\",\"의상\"]": "top",
+  "[\"sling bikini\",\"슬링 비키니\",\"의상\"]": "top",
+  "[\"string bikini\",\"스트링 비키니\",\"의상\"]": "top",
+  "[\"see-through\",\"시스루\",\"의상\"]": "allure",
+  "[\"transparent\",\"투명한\",\"의상\"]": "allure",
+  "[\"wet clothes\",\"젖은 옷\",\"의상\"]": "allure",
+  "[\"torn clothes\",\"찢어진 옷\",\"의상\"]": "top",
+  "[\"open clothes\",\"열린 옷\",\"의상\"]": "top",
+  "[\"clothes pull\",\"옷 당김\",\"의상\"]": "pose",
+  "[\"shirt lift\",\"셔츠 올림\",\"의상\"]": "allure",
+  "[\"pants down\",\"바지 내림\",\"의상\"]": "pose",
+  "[\"no panties\",\"팬티 없음\",\"의상\"]": "bottom",
+  "[\"no bra\",\"브라 없음\",\"의상\"]": "top",
+  "[\"pasties\",\"패스티스\",\"의상\"]": "top",
+  "[\"nipple pasties\",\"유두 패스티스\",\"의상\"]": "top",
+  "[\"crotchless\",\"밑트임\",\"의상\"]": "bottom",
+  "[\"open crotch\",\"가랑이 트임\",\"의상\"]": "bottom",
+  "[\"bondage\",\"본디지\",\"의상\"]": "pose",
+  "[\"rope bondage\",\"로프 본디지\",\"의상\"]": "pose",
+  "[\"shibari\",\"시바리\",\"의상\"]": "pose",
+  "[\"ball gag\",\"볼 개그\",\"의상\"]": "acc",
+  "[\"collar\",\"목걸이\",\"의상\"]": "acc",
+  "[\"leash\",\"목줄\",\"의상\"]": "acc",
+  "[\"fucked silly\",\"맛이 간 표정\",\"표정\"]": "face",
+  "[\"rolling eyes\",\"눈 뒤집힌\",\"표정\"]": "eyes",
+  "[\"tongue out\",\"혀 내민\",\"표정\"]": "face",
+  "[\"pleasure face\",\"쾌락 표정\",\"표정\"]": "face",
+  "[\"orgasm face\",\"오르가즘 표정\",\"표정\"]": "face",
+  "[\"embarrassed\",\"부끄러운\",\"표정\"]": "face",
+  "[\"shy\",\"수줍은\",\"표정\"]": "face",
+  "[\"aroused\",\"흥분한\",\"표정\"]": "face",
+  "[\"lustful\",\"음란한\",\"표정\"]": "face",
+  "[\"after sex\",\"섹스 후\",\"상태\"]": "pose",
+  "[\"after vaginal\",\"질 삽입 후\",\"상태\"]": "pose",
+  "[\"after anal\",\"항문 섹스 후\",\"상태\"]": "pose",
+  "[\"creampie\",\"크림파이\",\"상태\"]": "pose",
+  "[\"internal cumshot\",\"내부 사정\",\"상태\"]": "pose",
+  "[\"external cumshot\",\"외부 사정\",\"상태\"]": "pose",
+  "[\"public sex\",\"공공장소 섹스\",\"상황\"]": "pose",
+  "[\"outdoor sex\",\"야외 섹스\",\"상황\"]": "pose",
+  "[\"exhibitionism\",\"노출증\",\"상황\"]": "pose",
+  "[\"voyeurism\",\"관음\",\"상황\"]": "pose",
+  "[\"group sex\",\"그룹 섹스\",\"상황\"]": "pose",
+  "[\"threesome\",\"쓰리섬\",\"상황\"]": "pose",
+  "[\"gangbang\",\"갱뱅\",\"상황\"]": "pose",
+  "[\"orgy\",\"난교\",\"상황\"]": "pose",
+  "[\"double penetration\",\"더블 페네트레이션\",\"행위\"]": "pose",
+  "[\"triple penetration\",\"트리플 페네트레이션\",\"행위\"]": "pose",
+  "[\"tentacle sex\",\"텐타클 섹스\",\"행위\"]": "pose",
+  "[\"monster\",\"몬스터\",\"상황\"]": "role",
+  "[\"monster sex\",\"몬스터 섹스\",\"행위\"]": "pose",
+  "[\"bestiality\",\"수간\",\"행위\"]": "pose",
+  "[\"inflation\",\"팽창\",\"신체\"]": "body",
+  "[\"belly bulge\",\"배 부풂\",\"신체\"]": "body",
+  "[\"pregnant\",\"임신\",\"신체\"]": "body"
+};
+
+function normalizeCustomTagCategory(tag) {
+  if (tag.cat !== 'parts') return tag;
+  const key = JSON.stringify([tag.en, tag.ko, tag.alias]);
+  const cat = LEGACY_TAG_CATEGORIES[key];
+  return cat ? { ...tag, cat } : tag;
+}
+
 // 기본 표정 레시피: 기본 태그 + 자연어 묘사 + 시선·각도 조합
 // 자연어를 잘 알아듣는 모델(예: Tsubaki.3)에서 감정이 더 살아난다.
 const PRESET_GROUPS = [
@@ -1376,6 +1635,7 @@ const DEFAULT_PRESETS = [
     text: 'whispering, light smile, half-closed eyes, blush, leaning in close to his ear' },
 ];
 
+
 // 프롬프트 파싱·가중치 도구 (content script와 사이드 패널이 함께 사용)
 const PW = (() => {
   const OPEN = '([{<', CLOSE = ')]}>';
@@ -1472,6 +1732,7 @@ const PW = (() => {
   return { splitItems, parseWeight, formatWeight, stepWeight, normalize, isLora, adjustAt };
 })();
 
+
 // 프롬프트 태그를 카테고리 순서대로 정렬 (사이드 패널에서 사용)
 // 순서: 화질·화풍 → 인원 → 외형 → 의상·소품 → 표정·포즈 → (분류 못한 태그) → 구도 → 배경·조명
 const SORT = (() => {
@@ -1558,6 +1819,7 @@ const SORT = (() => {
 
   return { sortPrompt, classify };
 })();
+
 
 // 같이 쓰면 어색하거나 서로 부딪히는 태그 검사 (사이드 패널에서 사용)
 // pair: a쪽과 b쪽이 둘 다 있으면 경고. group: 같은 그룹 안에서 서로 다른 종류가 2개 이상이면 경고
@@ -1691,6 +1953,7 @@ const CONFLICT = (() => {
 
   return { check };
 })();
+
 
 // PixAI 페이지에 주입되어 사이드 패널과 입력칸 사이를 이어준다.
 // - 태그 넣기 (마지막으로 쓰던 입력칸의 커서 위치)
@@ -1959,8 +2222,9 @@ const CONFLICT = (() => {
 })();
 
 
+
 const PANEL_HTML = "<nav class=\"tabs\">\n    <button data-tab=\"tags\" class=\"active\">태그</button>\n    <button data-tab=\"prompt\">프롬프트</button>\n    <button data-tab=\"presets\">프리셋</button>\n    <button data-tab=\"settings\">내 태그·백업</button>\n  </nav>\n\n  <section id=\"tab-tags\" class=\"panel active\">\n    <input id=\"search\" type=\"search\" placeholder=\"검색: 소매, 검은 머리, ㅅㅁ, sleeve…  (가중치: Shift+휠 / 길게 누르기)\" autocomplete=\"off\">\n    <div id=\"cats\" class=\"chips\"></div>\n    <div id=\"count\" class=\"muted\"></div>\n    <ul id=\"list\" class=\"list\"></ul>\n  </section>\n\n  <section id=\"tab-prompt\" class=\"panel\">\n    <div class=\"row between\">\n      <span class=\"muted\">PixAI에서 마지막으로 클릭한 입력칸</span>\n      <button id=\"p-refresh\">새로고침</button>\n    </div>\n    <div id=\"p-conflicts\"></div>\n    <div id=\"p-chips\" class=\"pchips\"></div>\n    <p class=\"muted\">태그 위에서 <b>Shift + 휠</b> 또는 <b>길게 누르기</b>로 가중치 조절 · 색은 정렬 그룹</p>\n    <button id=\"p-sort\" class=\"primary wide\">정렬 미리보기</button>\n    <div id=\"p-preview\" class=\"card\" hidden>\n      <h3>정렬 결과</h3>\n      <div id=\"p-preview-text\" class=\"preview\"></div>\n      <ul id=\"p-notes\" class=\"notes\"></ul>\n      <div class=\"row\">\n        <button id=\"p-cancel\">취소</button>\n        <button id=\"p-apply\" class=\"primary\">적용</button>\n      </div>\n    </div>\n  </section>\n\n  <section id=\"tab-presets\" class=\"panel\">\n    <input id=\"preset-search\" type=\"search\" placeholder=\"검색: 웃음, 분노, 부끄, smirk…\" autocomplete=\"off\">\n    <div id=\"preset-groups\" class=\"chips\"></div>\n    <ul id=\"preset-list\" class=\"list\"></ul>\n    <form id=\"preset-form\" class=\"card\">\n      <h3>내 프리셋 만들기 · 수정</h3>\n      <input id=\"preset-name\" placeholder=\"프리셋 이름 (예: 내 캐릭터 A, 짜증 섞인 웃음)\" required>\n      <select id=\"preset-group\"></select>\n      <input id=\"preset-desc\" placeholder=\"한 줄 설명 (선택)\">\n      <textarea id=\"preset-text\" rows=\"4\" placeholder=\"1boy, black hair, black eyes, white shirt, sleeve rolled up\" required></textarea>\n      <div class=\"row\">\n        <button type=\"button\" id=\"preset-grab\">PixAI 입력칸에서 가져오기</button>\n        <button type=\"submit\" class=\"primary\">저장</button>\n      </div>\n    </form>\n  </section>\n\n  <section id=\"tab-settings\" class=\"panel\">\n    <form id=\"custom-form\" class=\"card\">\n      <h3>내 태그 추가</h3>\n      <input id=\"c-en\" placeholder=\"영어 태그 (예: sleeve rolled up)\" required>\n      <input id=\"c-ko\" placeholder=\"한글 설명 (예: 소매 걷어올림)\">\n      <input id=\"c-alias\" placeholder=\"추가 검색어 (공백 구분, 선택)\">\n      <select id=\"c-cat\"></select>\n      <button type=\"submit\" class=\"primary\">추가</button>\n    </form>\n    <form id=\"bulk-form\" class=\"card\">\n      <h3>태그 한꺼번에 추가</h3>\n      <p class=\"muted\">한 줄에 하나씩 <b>영어태그|한글설명|검색어</b>. 한글·검색어는 생략해도 되고, 쉼표로 이어 붙인 태그 목록도 돼요. <b>#</b>으로 시작하는 줄은 건너뛰어요.</p>\n      <textarea id=\"bulk-text\" rows=\"6\" placeholder=\"loose hair|풀어 내린 머리|장발&#10;silver necklace|은 목걸이&#10;tie clip, cufflinks, pocket square\"></textarea>\n      <select id=\"bulk-cat\"></select>\n      <button type=\"submit\" class=\"primary\">한꺼번에 추가</button>\n    </form>\n    <div class=\"card\">\n      <h3>백업</h3>\n      <p class=\"muted\">내 태그·즐겨찾기·프리셋·사용 횟수를 JSON 파일로 저장하거나 불러와요.</p>\n      <div class=\"row\">\n        <button id=\"export\">내보내기</button>\n        <button id=\"import\">가져오기</button>\n        <input id=\"import-file\" type=\"file\" accept=\"application/json\" hidden>\n      </div>\n    </div>\n  </section>\n\n  <div id=\"wbar\" class=\"wbar\" hidden>\n    <span id=\"wbar-label\" class=\"wbar-label\"></span>\n    <button id=\"wbar-minus\" title=\"약하게\">−</button>\n    <b id=\"wbar-val\">1.0</b>\n    <button id=\"wbar-plus\" title=\"강하게\">+</button>\n    <button id=\"wbar-reset\" title=\"1.0으로\">초기화</button>\n    <button id=\"wbar-close\" title=\"닫기\">✕</button>\n  </div>\n  <div id=\"toast\" class=\"toast\"></div>";
-const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n\n/* 충돌 경고 */\n#p-conflicts:empty { display: none; }\n#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }\n.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }\n.cf {\n  display: flex; gap: 6px; align-items: flex-start;\n  padding: 7px 8px; border-radius: 8px; font-size: 12px;\n  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));\n}\n.cf.soft {\n  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));\n}\n.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }\n.cf-main b { overflow-wrap: anywhere; }\n.cf-tip { color: var(--muted); }\n.cf button { padding: 2px 8px; font-size: 12px; flex: none; }\n.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }\n.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }\n\n/* 가중치 바 (길게 누르기) */\n.wbar {\n  position: fixed; left: 10px; right: 10px; bottom: 58px; z-index: 5;\n  display: flex; align-items: center; gap: 6px;\n  padding: 8px 10px; border-radius: 10px;\n  background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(0, 0, 0, .18);\n}\n.wbar-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }\n.wbar b { min-width: 2.2em; text-align: center; }\n.wbar button { min-width: 36px; }\n.list li, .pchip { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }\n\n/* 터치 기기: 누르기 쉽게 크게 */\n@media (pointer: coarse) {\n  body, .ptd-body { font-size: 15px; }\n  button, input, select, textarea { min-height: 40px; }\n  .list .main { padding: 10px 8px; }\n  .list .icon { padding: 8px 12px; min-height: 44px; }\n  .chips button { padding: 7px 12px; font-size: 13px; min-height: 34px; }\n  .pchips { gap: 8px; }\n  .pchip { padding: 7px 6px 7px 10px; font-size: 14px; }\n  .pchip .x { padding: 4px 8px; min-height: 0; }\n  .tabs button { min-height: 44px; }\n  .wbar button { min-width: 48px; min-height: 44px; font-size: 18px; }\n  .wbar #wbar-reset { font-size: 13px; }\n}\n";
+const PANEL_CSS = ":host {\n  --bg: #ffffff;\n  --fg: #1d1d20;\n  --muted: #74747c;\n  --line: #e4e4e8;\n  --card: #f6f6f8;\n  --accent: #7c4dff;\n  --accent-fg: #ffffff;\n  --star: #f5a524;\n  color-scheme: light;\n}\n@media (prefers-color-scheme: dark) {\n  :host {\n    --bg: #18181b;\n    --fg: #ececf0;\n    --muted: #9a9aa3;\n    --line: #2e2e33;\n    --card: #222226;\n    --accent: #9d7bff;\n    --star: #f5b54a;\n    color-scheme: dark;\n  }\n}\n* { box-sizing: border-box; }\n.ptd-body {\n  margin: 0;\n  background: var(--bg);\n  color: var(--fg);\n  font: 14px/1.4 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n}\nbutton, input, select, textarea { font: inherit; color: inherit; }\ninput, select, textarea {\n  width: 100%;\n  padding: 8px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--bg);\n}\ninput:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }\nbutton {\n  padding: 6px 10px;\n  border: 1px solid var(--line);\n  border-radius: 8px;\n  background: var(--card);\n  cursor: pointer;\n}\nbutton.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n.muted { color: var(--muted); font-size: 12px; }\n\n.tabs {\n  position: sticky; top: 0; z-index: 2;\n  display: flex; background: var(--bg); border-bottom: 1px solid var(--line);\n}\n.tabs button {\n  flex: 1; border: 0; border-radius: 0; background: none;\n  padding: 10px 4px; color: var(--muted);\n}\n.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px var(--accent); font-weight: 600; }\n\n.panel { display: none; padding: 10px; }\n.panel.active { display: block; }\n\n.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }\n.chips button { padding: 3px 9px; border-radius: 999px; font-size: 12px; }\n.chips button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }\n\n.list { list-style: none; margin: 6px 0 0; padding: 0; }\n.list li {\n  display: flex; align-items: center; gap: 4px;\n  border-bottom: 1px solid var(--line);\n}\n.list .main {\n  flex: 1; min-width: 0; text-align: left;\n  border: 0; background: none; border-radius: 6px; padding: 7px 6px;\n}\n.list .main:hover { background: var(--card); }\n.list .en { display: block; font-weight: 600; overflow-wrap: anywhere; }\n.list .ko { display: block; color: var(--muted); font-size: 12px; }\n.list .icon { border: 0; background: none; padding: 4px 6px; color: var(--muted); }\n.list .icon.on { color: var(--star); }\n.list .uses { font-size: 11px; color: var(--muted); }\n\n.card {\n  display: flex; flex-direction: column; gap: 8px;\n  background: var(--card); border-radius: 10px; padding: 10px; margin-bottom: 12px;\n}\n.card h3 { margin: 0; font-size: 14px; }\n.card p { margin: 0; }\n.row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }\n.preset .main .ko { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n\n.toast {\n  position: fixed; left: 10px; right: 10px; bottom: 10px;\n  padding: 8px 12px; border-radius: 8px;\n  background: var(--fg); color: var(--bg);\n  opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none;\n}\n.toast.show { opacity: 1; transform: none; }\n\n.row.between { justify-content: space-between; align-items: center; }\nbutton.wide { width: 100%; margin-top: 8px; }\n.w-up { color: var(--accent); font-weight: 600; }\n.w-down { color: #3b82c4; font-weight: 600; }\n.w-high { color: #e5484d; font-weight: 700; }\n\n/* 프롬프트 칩: 왼쪽 색 띠 = 정렬 그룹 */\n.pchips { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 6px; min-height: 30px; }\n.pchip {\n  display: inline-flex; align-items: center; gap: 4px;\n  padding: 3px 4px 3px 8px; border: 1px solid var(--line); border-left: 4px solid var(--g, var(--line));\n  border-radius: 6px; background: var(--card); font-size: 13px; user-select: none;\n}\n.pchip .x { border: 0; background: none; padding: 0 4px; color: var(--muted); font-size: 12px; }\n.pchip.lora { font-style: italic; }\n.g0 { --g: #a78bfa; } .g1 { --g: #f472b6; } .g2 { --g: #fb923c; } .g3 { --g: #facc15; }\n.g4 { --g: #4ade80; } .g5 { --g: #22d3ee; } .g6 { --g: #60a5fa; } .g7 { --g: #9ca3af; } .gx { --g: var(--line); }\n\n.preview {\n  padding: 8px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line);\n  overflow-wrap: anywhere; user-select: text;\n}\n.notes { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }\n.notes b { color: var(--fg); }\n[hidden] { display: none !important; }\n.ptag {\n  font-size: 11px; font-weight: 400; color: var(--muted);\n  border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-left: 2px;\n}\n.ptext {\n  display: block; font-size: 11px; color: var(--muted); opacity: .8;\n  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\n}\n#preset-form { margin-top: 14px; }\n\n/* 충돌 경고 */\n#p-conflicts:empty { display: none; }\n#p-conflicts { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }\n.cf-head { font-weight: 600; color: #e5484d; font-size: 13px; }\n.cf {\n  display: flex; gap: 6px; align-items: flex-start;\n  padding: 7px 8px; border-radius: 8px; font-size: 12px;\n  background: color-mix(in srgb, #e5484d 10%, var(--bg)); border: 1px solid color-mix(in srgb, #e5484d 35%, var(--bg));\n}\n.cf.soft {\n  background: color-mix(in srgb, #f5a524 10%, var(--bg)); border-color: color-mix(in srgb, #f5a524 40%, var(--bg));\n}\n.cf-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }\n.cf-main b { overflow-wrap: anywhere; }\n.cf-tip { color: var(--muted); }\n.cf button { padding: 2px 8px; font-size: 12px; flex: none; }\n.pchip.cf-hard { border-color: #e5484d; box-shadow: 0 0 0 1px #e5484d; }\n.pchip.cf-soft { border-color: #f5a524; box-shadow: 0 0 0 1px #f5a524; }\n\n/* 가중치 바 (길게 누르기) */\n.wbar {\n  position: fixed; left: 10px; right: 10px; bottom: 58px; z-index: 5;\n  display: flex; align-items: center; gap: 6px;\n  padding: 8px 10px; border-radius: 10px;\n  background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(0, 0, 0, .18);\n}\n.wbar-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }\n.wbar b { min-width: 2.2em; text-align: center; }\n.wbar button { min-width: 36px; }\n.list li, .pchip { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }\n\n/* 터치 기기: 누르기 쉽게 크게 */\n@media (pointer: coarse) {\n  body, .ptd-body { font-size: 15px; }\n  button, input, select, textarea { min-height: 40px; }\n  .list .main { padding: 10px 8px; }\n  .list .icon { padding: 8px 12px; min-height: 44px; }\n  .chips button { padding: 7px 12px; font-size: 13px; min-height: 34px; }\n  .pchips { gap: 8px; }\n  .pchip { padding: 7px 6px 7px 10px; font-size: 14px; }\n  .pchip .x { padding: 4px 8px; min-height: 0; }\n  .tabs button { min-height: 44px; }\n  .wbar button { min-width: 48px; min-height: 44px; font-size: 18px; }\n  .wbar #wbar-reset { font-size: 13px; }\n}\n\n";
 const SHELL_CSS = "\n:host { all: initial; }\n.ptd-wrap {\n  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw;\n  transform: translateZ(0); /* 안쪽 position:fixed(토스트)가 패널 기준으로 붙도록 */\n  overflow-y: auto; border-left: 1px solid var(--line);\n  box-shadow: -6px 0 24px rgba(0, 0, 0, .18);\n}\n.ptd-wrap.closed { display: none; }\n.ptd-close {\n  position: absolute; top: 6px; right: 6px; z-index: 3;\n  border: 0; background: none; font-size: 16px; color: var(--muted); cursor: pointer;\n}\n.ptd-toggle {\n  position: fixed; right: 0; top: 45%; z-index: 1;\n  writing-mode: vertical-rl; padding: 10px 5px; border-radius: 8px 0 0 8px;\n  border: 0; background: #7c4dff; color: #fff; cursor: pointer;\n  font: 600 12px/1 system-ui, -apple-system, \"Malgun Gothic\", sans-serif;\n  box-shadow: -2px 2px 8px rgba(0, 0, 0, .2);\n}\n.ptd-wrap:not(.closed) ~ .ptd-toggle { right: 380px; }\n.tabs { padding-right: 32px; }\n.tabs button { white-space: nowrap; padding-left: 2px; padding-right: 2px; }\n/* 폰처럼 좁은 화면: 패널을 전체 폭으로 */\n@media (max-width: 600px) {\n  .ptd-wrap { width: 100vw; border-left: 0; }\n  .ptd-wrap:not(.closed) ~ .ptd-toggle { display: none; }\n}\n";
 
 // 저장소: 탬퍼몽키 저장 공간 (크롬 확장과는 따로 저장돼요. 옮길 때는 백업 JSON 사용)
@@ -2043,7 +2307,11 @@ const $ = id => ROOT.getElementById(id);
 // ---------- 저장소 ----------
 async function load() {
   const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets', 'ignored']);
-  state.custom = d.custom || [];
+  const originalCustom = d.custom || [];
+  state.custom = originalCustom.map(normalizeCustomTagCategory);
+  if (state.custom.some((tag, i) => tag !== originalCustom[i])) {
+    await HOST.storage.set({ custom: state.custom });
+  }
   state.favs = d.favs || {};
   state.uses = d.uses || {};
   state.presets = d.presets || [];
@@ -2669,7 +2937,7 @@ $('import-file').addEventListener('change', async e => {
   try {
     const d = JSON.parse(await file.text());
     if (!confirm('지금 데이터를 백업 파일 내용으로 덮어쓸까요?')) return;
-    state.custom = d.custom || [];
+    state.custom = (d.custom || []).map(normalizeCustomTagCategory);
     state.favs = d.favs || {};
     state.uses = d.uses || {};
     state.presets = d.presets || [];
@@ -2699,6 +2967,7 @@ load().then(() => {
   renderPresets();
   if (HOST.autofocus) $('search').focus();
 });
+
 
 }
 

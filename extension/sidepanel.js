@@ -34,7 +34,11 @@ const $ = id => ROOT.getElementById(id);
 // ---------- 저장소 ----------
 async function load() {
   const d = await HOST.storage.get(['custom', 'favs', 'uses', 'presets', 'ignored']);
-  state.custom = d.custom || [];
+  const originalCustom = d.custom || [];
+  state.custom = originalCustom.map(normalizeCustomTagCategory);
+  if (state.custom.some((tag, i) => tag !== originalCustom[i])) {
+    await HOST.storage.set({ custom: state.custom });
+  }
   state.favs = d.favs || {};
   state.uses = d.uses || {};
   state.presets = d.presets || [];
@@ -660,7 +664,7 @@ $('import-file').addEventListener('change', async e => {
   try {
     const d = JSON.parse(await file.text());
     if (!confirm('지금 데이터를 백업 파일 내용으로 덮어쓸까요?')) return;
-    state.custom = d.custom || [];
+    state.custom = (d.custom || []).map(normalizeCustomTagCategory);
     state.favs = d.favs || {};
     state.uses = d.uses || {};
     state.presets = d.presets || [];
@@ -690,3 +694,4 @@ load().then(() => {
   renderPresets();
   if (HOST.autofocus) $('search').focus();
 });
+

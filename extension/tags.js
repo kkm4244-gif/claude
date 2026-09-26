@@ -38,6 +38,7 @@ high-class atmosphere|고급스러운 분위기|럭셔리 상류층
 elegant|우아함|분위기 기품
 sophisticated|세련됨|분위기 도시적
 noir|누아르|분위기 어두운 범죄 영화
+nsfw|19|19
 ` },
   {
     id: 'people', name: '인원', order: 1, tags: `
@@ -93,6 +94,7 @@ elf|엘프
 cyborg|사이보그|기계
 android|안드로이드|로봇
 monster boy|몬스터 소년|인외
+monster|몬스터|상황
 ` },
   {
     id: 'haircolor', name: '머리색', order: 2.0, tags: `
@@ -213,6 +215,7 @@ aviator sunglasses|보잉 선글라스|안경
 monocle|외알 안경|모노클
 eyewear on head|머리에 올린 안경|선글라스
 straight eyebrows|일자 눈썹|눈썹 straight eyebrow
+rolling eyes|눈 뒤집힌|표정
 ` },
   {
     id: 'body', name: '체형·얼굴 특징', order: 2.3, tags: `
@@ -271,6 +274,20 @@ blood on face|얼굴에 피|상처
 v-taper|역삼각형 몸매|V자 체형 어깨 허리
 bright skin|밝은 피부|피부 하얀
 glossy skin|윤기 나는 피부|광택 피부
+large breasts|큰 가슴|신체
+huge breasts|거유|신체
+small breasts|작은 가슴|신체
+perky breasts|탄력 있는 가슴|신체
+hanging breasts|처진 가슴|신체
+large ass|큰 엉덩이|신체
+huge ass|거대 엉덩이|신체
+thick thighs|두꺼운 허벅지|신체
+wide hips|넓은 골반|신체
+large penis|큰 페니스|신체
+huge penis|거대 페니스|신체
+inflation|팽창|신체
+belly bulge|배 부풂|신체
+pregnant|임신|신체
 ` },
   {
     id: 'parts', name: '신체', order: 2.35, tags: `
@@ -321,6 +338,58 @@ nose|코
 chin|턱
 sharp jawline|날렵한 턱선|턱선 브이라인
 high cheekbones|높은 광대|광대뼈
+nude|나체|신체
+completely nude|완전 나체|신체
+bare skin|맨살|신체
+exposed breasts|노출된 가슴|신체
+breasts out|가슴 노출|신체
+nipples|유두|신체
+erect nipples|발기된 유두|신체
+puffy nipples|부푼 유두|신체
+areola|유륜|신체
+cleavage|골|신체
+underboob|언더붑|신체
+sideboob|사이드붑|신체
+ass|엉덩이|신체
+cameltoe|카멜토|신체
+pussy|보지|신체
+vagina|보지|신체
+wet pussy|젖은 보지|신체
+dripping pussy|흘러내리는 보지|신체
+spread pussy|벌린 보지|신체
+clitoris|클리토리스|신체
+labia|음순|신체
+anus|항문|신체
+gaping anus|벌어진 항문|신체
+asshole|항문|신체
+penis|페니스|신체
+erect penis|발기한 페니스|신체
+foreskin|포피|신체
+testicles|고환|신체
+balls|불알|신체
+scrotum|음낭|신체
+cum|정액|체액
+semen|정액|체액
+excessive cum|과도한 정액|체액
+cum on body|몸에 묻은 정액|체액
+cum on breasts|가슴에 묻은 정액|체액
+cum on face|얼굴에 묻은 정액|체액
+facial|페이셜|체액
+cum in mouth|입에 넣은 정액|체액
+cum in pussy|보지에 사정|체액
+cum in ass|항문에 사정|체액
+cum dripping|흘러내리는 정액|체액
+cum string|정액 끈|체액
+pussy juice|보지 애액|체액
+dripping|흘러내리는|체액
+saliva|침|체액
+drool|침 흘림|체액
+saliva trail|침 끈|표정
+tentacles|텐타클|행위
+lactation|모유|체액
+milk|모유|체액
+squirting|스쿼팅|체액
+female ejaculation|여성 사정|체액
 ` },
   {
     id: 'top', name: '상의·겉옷', order: 3.0, tags: `
@@ -425,6 +494,14 @@ bandages|붕대
 navy necktie|남색 넥타이|넥타이
 grey vest|회색 조끼|조끼 베스트
 arm garter|팔 가터|암밴드 소매
+lingerie|란제리|의상
+micro bikini|마이크로 비키니|의상
+sling bikini|슬링 비키니|의상
+string bikini|스트링 비키니|의상
+torn clothes|찢어진 옷|의상
+no bra|브라 없음|의상
+pasties|패스티스|의상
+nipple pasties|유두 패스티스|의상
 ` },
   {
     id: 'bottom', name: '하의·신발', order: 3.1, tags: `
@@ -457,6 +534,9 @@ barefoot|맨발
 grey pants|회색 바지
 black socks|검은 양말|양말
 black shoes|검은 구두|신발
+no panties|팬티 없음|의상
+crotchless|밑트임|의상
+open crotch|가랑이 트임|의상
 ` },
   {
     id: 'acc', name: '소품·액세서리', order: 3.2, tags: `
@@ -528,6 +608,9 @@ microphone|마이크
 flower|꽃
 rose|장미|꽃
 bouquet|꽃다발|꽃
+ball gag|볼 개그|의상
+collar|목걸이|의상
+leash|목줄|의상
 ` },
   {
     id: 'allure', name: '섹시·분위기', order: 3.3, tags: `
@@ -564,6 +647,8 @@ sitting on lap|무릎 위에 앉음|2인
 hand on another's waist|허리에 손|2인 섹시
 whispering|귓속말|2인
 collar grab|깃·멱살 잡기|2인 넥타이
+see-through|시스루|의상
+transparent|투명한|의상
 ` },
   {
     id: 'face', name: '표정', order: 4.0, tags: `
@@ -619,6 +704,13 @@ fang|송곳니|덧니
 teeth|이 보임
 sigh|한숨
 dominant|지배적인 분위기|오만 강압 위압감
+ahegao|아헤가오|표정
+fucked silly|맛이 간 표정|표정
+pleasure face|쾌락 표정|표정
+orgasm face|오르가즘 표정|표정
+shy|수줍은|표정
+aroused|흥분한|표정
+lustful|음란한|표정
 ` },
   {
     id: 'gaze', name: '시선', order: 4.1, tags: `
@@ -711,6 +803,59 @@ holding flower|꽃을 듦|손에 든
 carrying over shoulder|어깨에 메고 감|들쳐메기
 slouching|구부정한 자세|늘어진 기대앉은
 sitting on couch|소파에 앉음|앉음
+sex|섹스|행위
+vaginal|질 삽입|행위
+anal|항문 섹스|행위
+oral|오럴|행위
+blowjob|블로우잡|행위
+deepthroat|딥스로트|행위
+handjob|핸드잡|행위
+footjob|풋잡|행위
+titjob|타이잡|행위
+paizuri|파이즈리|행위
+cunnilingus|커닐링구스|행위
+rimming|리밍|행위
+fingering|핑거링|행위
+masturbation|자위|행위
+female masturbation|여성 자위|행위
+male masturbation|남성 자위|행위
+doggy style|도기 스타일|행위
+missionary|미셔너리|행위
+cowgirl|카우걸|행위
+reverse cowgirl|리버스 카우걸|행위
+standing sex|서서 하는 섹스|행위
+piledriver|파일드라이버|행위
+full nelson|풀 넬슨|행위
+mating press|메이팅 프레스|행위
+spooning|스푸닝|행위
+on all fours|네 발로|행위
+legs up|다리 들어올린|행위
+legs spread|다리 벌린|행위
+straddling|걸터앉은|행위
+clothes pull|옷 당김|의상
+pants down|바지 내림|의상
+bondage|본디지|의상
+rope bondage|로프 본디지|의상
+shibari|시바리|의상
+after sex|섹스 후|상태
+after vaginal|질 삽입 후|상태
+after anal|항문 섹스 후|상태
+creampie|크림파이|상태
+internal cumshot|내부 사정|상태
+external cumshot|외부 사정|상태
+public sex|공공장소 섹스|상황
+outdoor sex|야외 섹스|상황
+exhibitionism|노출증|상황
+voyeurism|관음|상황
+group sex|그룹 섹스|상황
+threesome|쓰리섬|상황
+gangbang|갱뱅|상황
+orgy|난교|상황
+double penetration|더블 페네트레이션|행위
+triple penetration|트리플 페네트레이션|행위
+tentacle sex|텐타클 섹스|행위
+monster sex|몬스터 섹스|행위
+bestiality|수간|행위
 ` },
   {
     id: 'duo', name: '2인 상호작용', order: 4.3, tags: `
@@ -1125,4 +1270,118 @@ function parseDefaultTags() {
     }
   }
   return out;
+}
+
+
+// 초기 개인 백업에서 모두 신체로 지정됐던 항목만 새 분류로 옮긴다.
+const LEGACY_TAG_CATEGORIES = {
+  "[\"nsfw\",\"19\",\"19\"]": "quality",
+  "[\"large breasts\",\"큰 가슴\",\"신체\"]": "body",
+  "[\"huge breasts\",\"거유\",\"신체\"]": "body",
+  "[\"small breasts\",\"작은 가슴\",\"신체\"]": "body",
+  "[\"perky breasts\",\"탄력 있는 가슴\",\"신체\"]": "body",
+  "[\"hanging breasts\",\"처진 가슴\",\"신체\"]": "body",
+  "[\"large ass\",\"큰 엉덩이\",\"신체\"]": "body",
+  "[\"huge ass\",\"거대 엉덩이\",\"신체\"]": "body",
+  "[\"thick thighs\",\"두꺼운 허벅지\",\"신체\"]": "body",
+  "[\"wide hips\",\"넓은 골반\",\"신체\"]": "body",
+  "[\"large penis\",\"큰 페니스\",\"신체\"]": "body",
+  "[\"huge penis\",\"거대 페니스\",\"신체\"]": "body",
+  "[\"wet\",\"젖은\",\"체액\"]": "allure",
+  "[\"ahegao\",\"아헤가오\",\"표정\"]": "face",
+  "[\"sex\",\"섹스\",\"행위\"]": "pose",
+  "[\"vaginal\",\"질 삽입\",\"행위\"]": "pose",
+  "[\"anal\",\"항문 섹스\",\"행위\"]": "pose",
+  "[\"oral\",\"오럴\",\"행위\"]": "pose",
+  "[\"blowjob\",\"블로우잡\",\"행위\"]": "pose",
+  "[\"deepthroat\",\"딥스로트\",\"행위\"]": "pose",
+  "[\"handjob\",\"핸드잡\",\"행위\"]": "pose",
+  "[\"footjob\",\"풋잡\",\"행위\"]": "pose",
+  "[\"titjob\",\"타이잡\",\"행위\"]": "pose",
+  "[\"paizuri\",\"파이즈리\",\"행위\"]": "pose",
+  "[\"cunnilingus\",\"커닐링구스\",\"행위\"]": "pose",
+  "[\"rimming\",\"리밍\",\"행위\"]": "pose",
+  "[\"fingering\",\"핑거링\",\"행위\"]": "pose",
+  "[\"masturbation\",\"자위\",\"행위\"]": "pose",
+  "[\"female masturbation\",\"여성 자위\",\"행위\"]": "pose",
+  "[\"male masturbation\",\"남성 자위\",\"행위\"]": "pose",
+  "[\"doggy style\",\"도기 스타일\",\"행위\"]": "pose",
+  "[\"missionary\",\"미셔너리\",\"행위\"]": "pose",
+  "[\"cowgirl\",\"카우걸\",\"행위\"]": "pose",
+  "[\"reverse cowgirl\",\"리버스 카우걸\",\"행위\"]": "pose",
+  "[\"standing sex\",\"서서 하는 섹스\",\"행위\"]": "pose",
+  "[\"from behind\",\"뒤에서\",\"행위\"]": "view",
+  "[\"piledriver\",\"파일드라이버\",\"행위\"]": "pose",
+  "[\"full nelson\",\"풀 넬슨\",\"행위\"]": "pose",
+  "[\"mating press\",\"메이팅 프레스\",\"행위\"]": "pose",
+  "[\"spooning\",\"스푸닝\",\"행위\"]": "pose",
+  "[\"against wall\",\"벽에 기대어\",\"행위\"]": "pose",
+  "[\"on back\",\"누워서\",\"행위\"]": "pose",
+  "[\"on all fours\",\"네 발로\",\"행위\"]": "pose",
+  "[\"legs up\",\"다리 들어올린\",\"행위\"]": "pose",
+  "[\"legs spread\",\"다리 벌린\",\"행위\"]": "pose",
+  "[\"straddling\",\"걸터앉은\",\"행위\"]": "pose",
+  "[\"lingerie\",\"란제리\",\"의상\"]": "top",
+  "[\"micro bikini\",\"마이크로 비키니\",\"의상\"]": "top",
+  "[\"sling bikini\",\"슬링 비키니\",\"의상\"]": "top",
+  "[\"string bikini\",\"스트링 비키니\",\"의상\"]": "top",
+  "[\"see-through\",\"시스루\",\"의상\"]": "allure",
+  "[\"transparent\",\"투명한\",\"의상\"]": "allure",
+  "[\"wet clothes\",\"젖은 옷\",\"의상\"]": "allure",
+  "[\"torn clothes\",\"찢어진 옷\",\"의상\"]": "top",
+  "[\"open clothes\",\"열린 옷\",\"의상\"]": "top",
+  "[\"clothes pull\",\"옷 당김\",\"의상\"]": "pose",
+  "[\"shirt lift\",\"셔츠 올림\",\"의상\"]": "allure",
+  "[\"pants down\",\"바지 내림\",\"의상\"]": "pose",
+  "[\"no panties\",\"팬티 없음\",\"의상\"]": "bottom",
+  "[\"no bra\",\"브라 없음\",\"의상\"]": "top",
+  "[\"pasties\",\"패스티스\",\"의상\"]": "top",
+  "[\"nipple pasties\",\"유두 패스티스\",\"의상\"]": "top",
+  "[\"crotchless\",\"밑트임\",\"의상\"]": "bottom",
+  "[\"open crotch\",\"가랑이 트임\",\"의상\"]": "bottom",
+  "[\"bondage\",\"본디지\",\"의상\"]": "pose",
+  "[\"rope bondage\",\"로프 본디지\",\"의상\"]": "pose",
+  "[\"shibari\",\"시바리\",\"의상\"]": "pose",
+  "[\"ball gag\",\"볼 개그\",\"의상\"]": "acc",
+  "[\"collar\",\"목걸이\",\"의상\"]": "acc",
+  "[\"leash\",\"목줄\",\"의상\"]": "acc",
+  "[\"fucked silly\",\"맛이 간 표정\",\"표정\"]": "face",
+  "[\"rolling eyes\",\"눈 뒤집힌\",\"표정\"]": "eyes",
+  "[\"tongue out\",\"혀 내민\",\"표정\"]": "face",
+  "[\"pleasure face\",\"쾌락 표정\",\"표정\"]": "face",
+  "[\"orgasm face\",\"오르가즘 표정\",\"표정\"]": "face",
+  "[\"embarrassed\",\"부끄러운\",\"표정\"]": "face",
+  "[\"shy\",\"수줍은\",\"표정\"]": "face",
+  "[\"aroused\",\"흥분한\",\"표정\"]": "face",
+  "[\"lustful\",\"음란한\",\"표정\"]": "face",
+  "[\"after sex\",\"섹스 후\",\"상태\"]": "pose",
+  "[\"after vaginal\",\"질 삽입 후\",\"상태\"]": "pose",
+  "[\"after anal\",\"항문 섹스 후\",\"상태\"]": "pose",
+  "[\"creampie\",\"크림파이\",\"상태\"]": "pose",
+  "[\"internal cumshot\",\"내부 사정\",\"상태\"]": "pose",
+  "[\"external cumshot\",\"외부 사정\",\"상태\"]": "pose",
+  "[\"public sex\",\"공공장소 섹스\",\"상황\"]": "pose",
+  "[\"outdoor sex\",\"야외 섹스\",\"상황\"]": "pose",
+  "[\"exhibitionism\",\"노출증\",\"상황\"]": "pose",
+  "[\"voyeurism\",\"관음\",\"상황\"]": "pose",
+  "[\"group sex\",\"그룹 섹스\",\"상황\"]": "pose",
+  "[\"threesome\",\"쓰리섬\",\"상황\"]": "pose",
+  "[\"gangbang\",\"갱뱅\",\"상황\"]": "pose",
+  "[\"orgy\",\"난교\",\"상황\"]": "pose",
+  "[\"double penetration\",\"더블 페네트레이션\",\"행위\"]": "pose",
+  "[\"triple penetration\",\"트리플 페네트레이션\",\"행위\"]": "pose",
+  "[\"tentacle sex\",\"텐타클 섹스\",\"행위\"]": "pose",
+  "[\"monster\",\"몬스터\",\"상황\"]": "role",
+  "[\"monster sex\",\"몬스터 섹스\",\"행위\"]": "pose",
+  "[\"bestiality\",\"수간\",\"행위\"]": "pose",
+  "[\"inflation\",\"팽창\",\"신체\"]": "body",
+  "[\"belly bulge\",\"배 부풂\",\"신체\"]": "body",
+  "[\"pregnant\",\"임신\",\"신체\"]": "body"
+};
+
+function normalizeCustomTagCategory(tag) {
+  if (tag.cat !== 'parts') return tag;
+  const key = JSON.stringify([tag.en, tag.ko, tag.alias]);
+  const cat = LEGACY_TAG_CATEGORIES[key];
+  return cat ? { ...tag, cat } : tag;
 }
