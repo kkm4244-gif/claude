@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PixAI 태그 서랍
 // @namespace    https://github.com/kkm4244-gif/claude
-// @version      0.8.3
+// @version      0.8.4
 // @description  PixAI 프롬프트 태그를 한글로 찾고, 저장하고, 클릭 한 번으로 넣는 패널
 // @match        https://pixai.art/*
 // @grant        GM_getValue
@@ -79,7 +79,12 @@ mature male|성숙한 남성|어른 아저씨 성인
 old man|노인 남성|할아버지
 bishounen|미소년|꽃미남
 bara|바라 (근육질 남성 화풍)|근육 마초
-aged up|나이 올림|성인화 어른
+aged up|원래 설정보다 나이 올림|성인화 어른 성숙하게 소년 느낌 줄이기 단부루
+aged down|원래 설정보다 나이 낮춤|젊게 어려 보이게 단부루
+adult man in his late twenties|20대 후반의 성인 남성 (자연어)|성숙한 남캐 어른 나이 소년 방지
+mature man in his thirties|30대의 성숙한 남성 (자연어)|성숙한 남캐 어른 나이 소년 방지
+middle-aged man with mature facial features|성숙한 이목구비의 중년 남성 (자연어)|중년 아저씨 남캐 어른 나이
+rugged mature man|거칠고 성숙한 남성 (자연어)|터프한 남캐 어른 나이 누아르
 ` },
   {
     id: 'role', name: '직업·컨셉', order: 1.5, tags: `
@@ -166,12 +171,19 @@ braid|땋은 머리
 single braid|한 갈래 땋은 머리
 twin braids|양갈래 땋은 머리
 bangs|앞머리
-blunt bangs|일자 앞머리|뱅
+arched bangs|위로 둥글게 휘어진 앞머리|아치형 둥근 앞머리 단부루
+asymmetrical bangs|한쪽은 넘기고 한쪽은 내린 비대칭 앞머리|절반 깐 머리 비대칭 단부루
+blunt bangs|전체를 일직선으로 자른 앞머리|일자 앞머리 뱅 단부루
+choppy bangs|중간중간 큰 틈이 난 앞머리|성기게 갈라진 일정한 자연스러운 앞머리 단부루
+crossed bangs|눈 사이에서 교차하는 앞머리|엑스자 교차 앞머리 단부루
+diagonal bangs|대각선으로 잘린 앞머리|사선 비대칭 앞머리 단부루
+double-parted bangs|두 군데로 갈라진 앞머리|이중 가르마 앞머리 단부루
 swept bangs|옆으로 넘긴 앞머리
 parted bangs|가르마 앞머리|5대5 가르마
-hair between eyes|눈 사이로 내려온 앞머리
-hair over one eye|한쪽 눈 가린 머리|앞머리
-hair over eyes|두 눈 가린 앞머리|앞머리
+hair between eyes|눈 사이로 내려오는 앞머리|이마 중앙 머리카락 단부루
+hair over one eye|한쪽 눈 위를 덮는 앞머리|한쪽 눈 가린 머리 앞머리 단부루
+hair over eyes|양쪽 눈 위를 덮는 앞머리|두 눈 가린 머리 앞머리 단부루
+long bangs|눈 아래까지 내려오는 긴 앞머리|길이 긴 앞머리 단부루
 hair behind ear|귀 뒤로 넘긴 머리
 sidelocks|옆머리
 ahoge|바보털|더듬이
@@ -212,15 +224,34 @@ half-closed eyes|반쯤 감은 눈|나른 졸린
 narrowed eyes|가늘게 뜬 눈|째려봄 실눈
 closed eyes|눈 감음
 one eye closed|윙크|한쪽 눈 감음
+eyes visible through hair|머리카락 사이로 눈이 보임|앞머리 눈 비침 가렸지만 보임 단부루
+covered eyes|양쪽 눈이 머리카락에 완전히 가려짐|앞머리 두 눈 안보임 완전 가림 단부루
+one eye covered|한쪽 눈이 머리카락에 완전히 가려짐|앞머리 한 눈 안보임 완전 가림 단부루
 wide-eyed|눈 크게 뜸|놀람
 slit pupils|세로 동공|뱀눈 고양이눈
 glowing eyes|빛나는 눈
 empty eyes|공허한 눈|하이라이트 없음 동태눈
 constricted pupils|수축된 동공|광기 놀람
 bags under eyes|다크서클|눈밑 피곤
-eyelashes|속눈썹
-thick eyebrows|두꺼운 눈썹|눈썹
-eyeliner|아이라인|화장
+eyelashes|속눈썹|눈 외형
+long eyelashes|긴 속눈썹|눈 외형 단부루
+thick eyelashes|짙고 두꺼운 속눈썹|눈 외형 단부루
+thick eyebrows|두꺼운 눈썹|짙은 눈썹 남캐 얼굴 단부루
+short eyebrows|짧은 눈썹|눈썹 길이 단부루
+forked eyebrows|바깥쪽 끝이 갈라진 눈썹|두 갈래 눈썹 단부루
+huge eyebrows|눈만큼 매우 큰 눈썹|굵고 큰 눈썹 남캐 바라 단부루
+mismatched eyebrows|좌우 모양이 다른 눈썹|비대칭 눈썹 단부루
+eyebrows visible through hair|앞머리 사이로 눈썹이 보임|머리카락 눈썹 비침 단부루
+eyebrows hidden by hair|앞머리에 눈썹이 가려짐|머리카락 눈썹 안보임 단부루
+thin eyebrows|얇은 눈썹 (자연어)|가는 눈썹 남캐 얼굴 자연어
+arched eyebrows|활처럼 휘어진 눈썹 (자연어)|아치형 둥근 눈썹 얼굴 자연어
+softly defined eyebrows|부드럽고 또렷하게 정돈된 눈썹 (자연어)|자연스러운 눈썹 남캐 얼굴 자연어
+eyeliner|아이라인|눈 화장 단부루
+eyeshadow|아이섀도|눈꺼풀 화장 단부루
+mascara|마스카라|속눈썹 화장 단부루
+makeup|화장|메이크업 얼굴 단부루
+rouge (makeup)|볼에 바른 루주|볼터치 블러셔 화장 단부루
+subtle natural makeup|옅고 자연스러운 화장 (자연어)|남캐 메이크업 약한 화장 자연어
 eyepatch|안대
 glasses|안경
 black-framed eyewear|검은 뿔테 안경|안경
@@ -369,7 +400,16 @@ ankles|발목
 feet|발
 lips|입술
 thick lips|도톰한 입술|입술
-pink lips|분홍 입술|입술
+pink lips|분홍색 입술|핑크 립 립스틱 화장 단부루
+red lips|붉은 입술|빨간 립 레드 립스틱 화장 단부루
+brown lips|갈색 입술|브라운 립 립스틱 화장 단부루
+black lips|검은 입술|블랙 립 립스틱 화장 단부루
+purple lips|보라색 입술|퍼플 립 립스틱 화장 단부루
+lipstick|색을 바른 입술|립스틱 화장 단부루
+lipgloss|윤기 나는 입술|립글로스 투명 광택 화장 단부루
+thin lips|얇은 입술 (자연어)|가는 입술 남캐 얼굴 자연어
+defined cupid's bow|윗입술 산이 또렷한 입술 (자연어)|큐피드 보우 입술선 얼굴 자연어
+pale lips|옅고 창백한 입술 (자연어)|연한 입술 혈색 없는 얼굴 자연어
 tongue|혀
 ears|귀
 nose|코
@@ -3058,3 +3098,4 @@ load().then(() => {
 mountPanel();
 
 })();
+

@@ -1,0 +1,331 @@
+{
+  "version": "0.8.4",
+  "checkedOn": "2026-09-26",
+  "note": "단부루 항목은 링크된 위키에서 표기와 의미를 확인했습니다. 자연어 항목은 성인 남성의 연령감을 직접 지정하기 위해 작성한 묘사이며 단부루 정식 태그로 주장하지 않습니다. 모델별 생성 효과는 시험하지 않았습니다.",
+  "entries": [
+    {
+      "en": "aged down",
+      "ko": "원래 설정보다 나이 낮춤",
+      "alias": "젊게 어려 보이게 단부루",
+      "cat": "people",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/aged_down"
+    },
+    {
+      "en": "adult man in his late twenties",
+      "ko": "20대 후반의 성인 남성 (자연어)",
+      "alias": "성숙한 남캐 어른 나이 소년 방지",
+      "cat": "people",
+      "kind": "natural"
+    },
+    {
+      "en": "mature man in his thirties",
+      "ko": "30대의 성숙한 남성 (자연어)",
+      "alias": "성숙한 남캐 어른 나이 소년 방지",
+      "cat": "people",
+      "kind": "natural"
+    },
+    {
+      "en": "middle-aged man with mature facial features",
+      "ko": "성숙한 이목구비의 중년 남성 (자연어)",
+      "alias": "중년 아저씨 남캐 어른 나이",
+      "cat": "people",
+      "kind": "natural"
+    },
+    {
+      "en": "rugged mature man",
+      "ko": "거칠고 성숙한 남성 (자연어)",
+      "alias": "터프한 남캐 어른 나이 누아르",
+      "cat": "people",
+      "kind": "natural"
+    },
+    {
+      "en": "arched bangs",
+      "ko": "위로 둥글게 휘어진 앞머리",
+      "alias": "아치형 둥근 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "asymmetrical bangs",
+      "ko": "한쪽은 넘기고 한쪽은 내린 비대칭 앞머리",
+      "alias": "절반 깐 머리 비대칭 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/asymmetrical_bangs"
+    },
+    {
+      "en": "choppy bangs",
+      "ko": "중간중간 큰 틈이 난 앞머리",
+      "alias": "성기게 갈라진 일정한 자연스러운 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "crossed bangs",
+      "ko": "눈 사이에서 교차하는 앞머리",
+      "alias": "엑스자 교차 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/crossed_bangs"
+    },
+    {
+      "en": "diagonal bangs",
+      "ko": "대각선으로 잘린 앞머리",
+      "alias": "사선 비대칭 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "double-parted bangs",
+      "ko": "두 군데로 갈라진 앞머리",
+      "alias": "이중 가르마 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/double-parted_bangs"
+    },
+    {
+      "en": "long bangs",
+      "ko": "눈 아래까지 내려오는 긴 앞머리",
+      "alias": "길이 긴 앞머리 단부루",
+      "cat": "hairstyle",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "eyes visible through hair",
+      "ko": "머리카락 사이로 눈이 보임",
+      "alias": "앞머리 눈 비침 가렸지만 보임 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "covered eyes",
+      "ko": "양쪽 눈이 머리카락에 완전히 가려짐",
+      "alias": "앞머리 두 눈 안보임 완전 가림 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "one eye covered",
+      "ko": "한쪽 눈이 머리카락에 완전히 가려짐",
+      "alias": "앞머리 한 눈 안보임 완전 가림 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/bangs"
+    },
+    {
+      "en": "long eyelashes",
+      "ko": "긴 속눈썹",
+      "alias": "눈 외형 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=long_eyelashes"
+    },
+    {
+      "en": "thick eyelashes",
+      "ko": "짙고 두꺼운 속눈썹",
+      "alias": "눈 외형 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=thick_eyelashes"
+    },
+    {
+      "en": "short eyebrows",
+      "ko": "짧은 눈썹",
+      "alias": "눈썹 길이 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=short_eyebrows"
+    },
+    {
+      "en": "forked eyebrows",
+      "ko": "바깥쪽 끝이 갈라진 눈썹",
+      "alias": "두 갈래 눈썹 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=forked_eyebrows"
+    },
+    {
+      "en": "huge eyebrows",
+      "ko": "눈만큼 매우 큰 눈썹",
+      "alias": "굵고 큰 눈썹 남캐 바라 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/huge_eyebrows"
+    },
+    {
+      "en": "mismatched eyebrows",
+      "ko": "좌우 모양이 다른 눈썹",
+      "alias": "비대칭 눈썹 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:face_tags"
+    },
+    {
+      "en": "eyebrows visible through hair",
+      "ko": "앞머리 사이로 눈썹이 보임",
+      "alias": "머리카락 눈썹 비침 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=eyebrows_visible_through_hair"
+    },
+    {
+      "en": "eyebrows hidden by hair",
+      "ko": "앞머리에 눈썹이 가려짐",
+      "alias": "머리카락 눈썹 안보임 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/tag_group:face_tags"
+    },
+    {
+      "en": "thin eyebrows",
+      "ko": "얇은 눈썹 (자연어)",
+      "alias": "가는 눈썹 남캐 얼굴 자연어",
+      "cat": "eyes",
+      "kind": "natural"
+    },
+    {
+      "en": "arched eyebrows",
+      "ko": "활처럼 휘어진 눈썹 (자연어)",
+      "alias": "아치형 둥근 눈썹 얼굴 자연어",
+      "cat": "eyes",
+      "kind": "natural"
+    },
+    {
+      "en": "softly defined eyebrows",
+      "ko": "부드럽고 또렷하게 정돈된 눈썹 (자연어)",
+      "alias": "자연스러운 눈썹 남캐 얼굴 자연어",
+      "cat": "eyes",
+      "kind": "natural"
+    },
+    {
+      "en": "eyeshadow",
+      "ko": "아이섀도",
+      "alias": "눈꺼풀 화장 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=eyeshadow"
+    },
+    {
+      "en": "mascara",
+      "ko": "마스카라",
+      "alias": "속눈썹 화장 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=mascara"
+    },
+    {
+      "en": "makeup",
+      "ko": "화장",
+      "alias": "메이크업 얼굴 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=makeup"
+    },
+    {
+      "en": "rouge (makeup)",
+      "ko": "볼에 바른 루주",
+      "alias": "볼터치 블러셔 화장 단부루",
+      "cat": "eyes",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=rouge_%28makeup%29"
+    },
+    {
+      "en": "subtle natural makeup",
+      "ko": "옅고 자연스러운 화장 (자연어)",
+      "alias": "남캐 메이크업 약한 화장 자연어",
+      "cat": "eyes",
+      "kind": "natural"
+    },
+    {
+      "en": "red lips",
+      "ko": "붉은 입술",
+      "alias": "빨간 립 레드 립스틱 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/red_lips"
+    },
+    {
+      "en": "brown lips",
+      "ko": "갈색 입술",
+      "alias": "브라운 립 립스틱 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/lipstick"
+    },
+    {
+      "en": "black lips",
+      "ko": "검은 입술",
+      "alias": "블랙 립 립스틱 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/lipstick"
+    },
+    {
+      "en": "purple lips",
+      "ko": "보라색 입술",
+      "alias": "퍼플 립 립스틱 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/lipstick"
+    },
+    {
+      "en": "lipstick",
+      "ko": "색을 바른 입술",
+      "alias": "립스틱 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/wiki_pages/lipstick"
+    },
+    {
+      "en": "lipgloss",
+      "ko": "윤기 나는 입술",
+      "alias": "립글로스 투명 광택 화장 단부루",
+      "cat": "parts",
+      "kind": "danbooru",
+      "source": "https://safebooru.donmai.us/posts?tags=lipgloss"
+    },
+    {
+      "en": "thin lips",
+      "ko": "얇은 입술 (자연어)",
+      "alias": "가는 입술 남캐 얼굴 자연어",
+      "cat": "parts",
+      "kind": "natural"
+    },
+    {
+      "en": "defined cupid's bow",
+      "ko": "윗입술 산이 또렷한 입술 (자연어)",
+      "alias": "큐피드 보우 입술선 얼굴 자연어",
+      "cat": "parts",
+      "kind": "natural"
+    },
+    {
+      "en": "pale lips",
+      "ko": "옅고 창백한 입술 (자연어)",
+      "alias": "연한 입술 혈색 없는 얼굴 자연어",
+      "cat": "parts",
+      "kind": "natural"
+    }
+  ],
+  "updatedExisting": [
+    {
+      "en": "aged up",
+      "source": "https://safebooru.donmai.us/wiki_pages/aged_up"
+    },
+    { "en": "blunt bangs", "source": "https://safebooru.donmai.us/wiki_pages/bangs" },
+    { "en": "hair between eyes", "source": "https://safebooru.donmai.us/wiki_pages/bangs" },
+    { "en": "hair over one eye", "source": "https://safebooru.donmai.us/wiki_pages/bangs" },
+    { "en": "hair over eyes", "source": "https://safebooru.donmai.us/wiki_pages/bangs" },
+    { "en": "eyelashes", "source": "https://safebooru.donmai.us/wiki_pages/tag_group:body_parts" },
+    { "en": "thick eyebrows", "source": "https://safebooru.donmai.us/wiki_pages/huge_eyebrows" },
+    { "en": "eyeliner", "source": "https://safebooru.donmai.us/posts?tags=eyeliner" },
+    { "en": "pink lips", "source": "https://safebooru.donmai.us/wiki_pages/pink_lips" }
+  ]
+}
+
