@@ -1561,13 +1561,22 @@ function PH_StatusBar(p) {
 
 /* ══════════════ 공통 헬퍼 ══════════════ */
 
-/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경 */
+/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경.
+   폰 본체 위에서만 기울고, 여백으로 나가거나 1.5초간 움직임이 없으면 정면으로 복귀 */
 function PH_tiltMove(root, x, y, max) {
   var el = root.querySelector("[data-ph-tilt]");
   if (!el) return;
+  clearTimeout(root.__phIdle);
   var r = root.getBoundingClientRect();
-  var px = Math.max(0, Math.min(1, (x - r.left) / r.width));
-  var py = Math.max(0, Math.min(1, (y - r.top) / r.height));
+  var cs = window.getComputedStyle(root);
+  var l = r.left + parseFloat(cs.paddingLeft);
+  var t = r.top + parseFloat(cs.paddingTop);
+  var w = r.width - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  var h = r.height - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  if (x < l || x > l + w || y < t || y > t + h) { PH_tiltReset(root); return; }
+  root.__phIdle = setTimeout(function() { PH_tiltReset(root); }, 1500);
+  var px = (x - l) / w;
+  var py = (y - t) / h;
   var ry = (px - 0.5) * 2 * max;
   var rx = -(py - 0.5) * 2 * max;
   el.style.transition = "transform 0.12s ease-out";
@@ -1588,6 +1597,7 @@ function PH_tiltMove(root, x, y, max) {
 function PH_tiltReset(root) {
   var el = root.querySelector("[data-ph-tilt]");
   if (!el) return;
+  clearTimeout(root.__phIdle);
   el.style.transition = "transform 0.6s cubic-bezier(.2,.8,.2,1)";
   el.style.transform = "rotateX(0deg) rotateY(0deg)";
   var g = root.querySelector("[data-ph-glare]");
