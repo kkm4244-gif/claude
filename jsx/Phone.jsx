@@ -137,7 +137,7 @@ function Phone(props) {
   function offTilt(e) { if (tiltOn) PH_tiltReset(e.currentTarget); }
 
   return (
-    <div style={{ fontFamily: font, perspective: 1800 }} className="w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[60px]"
+    <div style={{ fontFamily: font, perspective: 1800 }} className="ph-root w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[60px]"
       onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
       <style>{PH_css()}</style>
       <div data-ph-tilt="1" className="relative" style={{ willChange: "transform", transition: "transform 0.6s cubic-bezier(.2,.8,.2,1)" }}>
@@ -1561,7 +1561,9 @@ function PH_StatusBar(p) {
 
 /* ══════════════ 공통 헬퍼 ══════════════ */
 
-/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경 */
+/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경.
+   포인터가 나갔다는 이벤트가 오지 않는 플랫폼도 있어서, 정면 복귀는 PH_css 의
+   .ph-root:not(:hover) 규칙이 CSS 로 보장함 */
 function PH_tiltMove(root, x, y, max) {
   var el = root.querySelector("[data-ph-tilt]");
   if (!el) return;
@@ -1632,7 +1634,10 @@ function PH_css() {
     ".ph-eq{transform-origin:bottom;animation:phEq .9s ease-in-out infinite}" +
     ".ph-scroll{scrollbar-width:none}.ph-scroll::-webkit-scrollbar{display:none}" +
     ".ph-glass{background:rgba(255,255,255,0.13);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);" +
-    "box-shadow:inset 0 1px 0 rgba(255,255,255,0.18),0 4px 14px rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08)}";
+    "box-shadow:inset 0 1px 0 rgba(255,255,255,0.18),0 4px 14px rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08)}" +
+    ".ph-root:not(:hover) [data-ph-tilt]{transform:rotateX(0deg) rotateY(0deg)!important;transition:transform .6s cubic-bezier(.2,.8,.2,1)!important}" +
+    ".ph-root:not(:hover) [data-ph-glare]{opacity:0!important}" +
+    ".ph-root:not(:hover) [data-ph-frame]{box-shadow:" + PH_frameShadow(0, 14) + "!important;transition:box-shadow .6s cubic-bezier(.2,.8,.2,1)!important}";
 }
 
 function PH_theme(app, sub) {
