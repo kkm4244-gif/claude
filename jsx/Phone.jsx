@@ -137,7 +137,7 @@ function Phone(props) {
   function offTilt(e) { if (tiltOn) PH_tiltReset(e.currentTarget); }
 
   return (
-    <div style={{ fontFamily: font, perspective: 1800 }} className="w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[50px]"
+    <div style={{ fontFamily: font, perspective: 1800 }} className="w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[60px]"
       onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
       <style>{PH_css()}</style>
       <div data-ph-tilt="1" className="relative" style={{ willChange: "transform", transition: "transform 0.6s cubic-bezier(.2,.8,.2,1)" }}>
@@ -150,7 +150,7 @@ function Phone(props) {
         className="rounded-[46px] p-[9px]"
         style={{
           background: "linear-gradient(145deg,#3a3a3e 0%,#141416 35%,#0a0a0b 65%,#2e2e32 100%)",
-          boxShadow: PH_frameShadow(0, 24),
+          boxShadow: PH_frameShadow(0, 14),
           transition: "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)"
         }}
       >
@@ -1581,7 +1581,7 @@ function PH_tiltMove(root, x, y, max) {
   var f = root.querySelector("[data-ph-frame]");
   if (f) {
     f.style.transition = "box-shadow 0.12s ease-out";
-    f.style.boxShadow = PH_frameShadow(-ry * 1.6, 24 + rx * 1.6);
+    f.style.boxShadow = PH_frameShadow(-ry * 1.2, 14 + rx * 1.2);
   }
 }
 
@@ -1595,12 +1595,12 @@ function PH_tiltReset(root) {
   var f = root.querySelector("[data-ph-frame]");
   if (f) {
     f.style.transition = "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)";
-    f.style.boxShadow = PH_frameShadow(0, 24);
+    f.style.boxShadow = PH_frameShadow(0, 14);
   }
 }
 
 function PH_frameShadow(x, y) {
-  return x.toFixed(1) + "px " + y.toFixed(1) + "px 40px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.4), " +
+  return x.toFixed(1) + "px " + y.toFixed(1) + "px 24px rgba(0,0,0,0.42), 0 2px 6px rgba(0,0,0,0.4), " +
     "inset 0 0 0 1.5px #56565c, inset 0 0 0 3px #0c0c0d";
 }
 
