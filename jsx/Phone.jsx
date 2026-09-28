@@ -1,50 +1,68 @@
 /* ── Phone.jsx ──
    갤럭시 폰 화면 (테두리 포함). 홈 화면에서 앱 아이콘/위젯을 눌러 들어갈 수 있음.
    홈: 달력 위젯 · 음악 위젯 · 구글 검색바 · 앱 그리드 · 독
-   앱: 카카오톡(목록/채팅방) · 메시지(목록/대화, 다크) · 뮤직 플레이어 · 캘린더 · 커뮤니티(목록/글)
+   앱: 카카오톡 · 메시지 · 전화(최근기록) · 갤러리 · 메모 · 뮤직 · 캘린더 · 커뮤니티
    하단 홈 인디케이터를 누르면 홈으로, 각 앱 헤더의 < 로 뒤로.
    제약: no import, no export default, no backtick, no arrow function, no inline // comments.
    내부 헬퍼 접두사: PH_
    ★ 메인 컴포넌트를 파일 최상단에 배치
+   ★ 본체에는 스토리 데이터가 하드코딩되어 있지 않음. 넘기지 않은 앱은 빈 화면으로 표시됨.
+     (예시 데이터는 맨 아래 PH_Demo 에만 있음)
 
-   ── props ──
-   owner        폰 주인 이름 ("건우")
-   statusTime   상태바 시간 ("오후 2:11")
-   battery      배터리 % (90)
-   dateTime     오늘 날짜 ("2026년 9월 28일")  ※ Calendar.jsx와 동일 포맷
-   promise      일정 문자열 ("9/30 약속 · 10/3~10/5 출장 · D-2")  ※ Calendar.jsx와 동일 포맷
-   events       일정 배열 (promise 대신) [{ date: "9/30" | "10/3~10/5", label, color }]
+   ── props (전부 생략 가능) ──
+   statusTime   상태바 시간 "오후 2:11"
+   battery      배터리 % 90
+   dateTime     오늘 날짜 "2026년 9월 28일"                     ※ Calendar.jsx와 동일 포맷
+   promise      일정 문자열 "9/30 약속 · 10/3~10/5 출장 · D-2"   ※ Calendar.jsx와 동일 포맷
+   events       일정 배열 (promise 대신) [{ date: "9/30" 또는 "10/3~10/5", label, color }]
    wallpaper    배경 (CSS background 값 또는 이미지 URL)
-   startApp     처음 열릴 화면 "home" | "kakao" | "sms" | "music" | "calendar" | "community"
-   startIndex   startApp 안에서 바로 열 방/대화/글 번호 (없으면 목록)
-   rooms        카톡방 [{ name, members, unread, time, pinned, muted, bg,
-                  messages: [{ author, content, time, isMe, unread } | { date } | { system }] }]
-   sms          문자 [{ name, number, unread, messages: [{ content, time, isMe } | { date }] }]
-   nowPlaying   { title, artist, album, cover, progress(0~1), duration("3:42"), caption,
+   startApp     처음 열릴 화면 "home" "kakao" "sms" "phone" "gallery" "notes" "music" "calendar" "community"
+   startIndex   startApp 안에서 바로 열 항목 번호 (없으면 목록)
+
+   rooms        카톡방
+                [{ name, members, unread, time, pinned, muted, bg,
+                   messages: [{ author, content, time, isMe, unread } 또는 { date } 또는 { system, content }] }]
+   sms          문자
+                [{ name, number, unread, avatar, avatarColor,
+                   messages: [{ content, time, isMe } 또는 { date }] }]
+   calls        통화 기록 (위에서부터 최신순)
+                [{ name, number, time, type, duration, count, unread } 또는 { date }]
+                type: "incoming"(수신) "outgoing"(발신) "missed"(부재중) "rejected"(거절)  ※ 한글도 가능
+                unread: true 인 부재중은 전화 아이콘 배지로 표시
+   gallery      사진 (위에서부터 최신순)
+                [{ caption, src, date, time, video, duration, favorite }]
+                src 없으면 caption 이 적힌 흐린 썸네일로 표시. 같은 date 끼리 묶임.
+   memos        메모
+                [{ title, content, date, locked, color }]
+                locked: true 면 잠금 해제 버튼을 눌러야 내용이 보임
+   nowPlaying   { title, artist, album, cover, progress(0~1), duration "3:42", caption, likes,
                   playing, queue: [{ title, artist, duration }] }
    community    { appName, iconText, gallery,
                   posts: [{ title, author, ip, date, views, recommend, dislike, hot, content,
-                  comments: [{ author, ip, content, date, isReply }] }] }
+                            comments: [{ author, ip, content, date, isReply }] }] }
 */
 
 function Phone(props) {
   props = props || {};
 
-  var owner = props.owner || "건우";
   var statusTime = props.statusTime || "오후 2:11";
   var battery = props.battery == null ? 90 : props.battery;
   var today = PH_parseDate(props.dateTime || "2026년 9월 28일");
   var events = PH_getEvents(props);
-  var rooms = props.rooms || PH_defaultRooms(owner);
-  var sms = props.sms || PH_defaultSms();
-  var np = PH_merge(PH_defaultNowPlaying(owner), props.nowPlaying);
-  var comm = PH_merge(PH_defaultCommunity(), props.community);
+  var rooms = props.rooms || [];
+  var sms = props.sms || [];
+  var calls = props.calls || [];
+  var photos = props.gallery || [];
+  var memos = props.memos || [];
+  var np = props.nowPlaying && props.nowPlaying.title ? props.nowPlaying : null;
+  var comm = PH_merge({ appName: "디시인사이드", iconText: "dc", gallery: "갤러리" }, props.community);
+  comm.posts = comm.posts || [];
 
   var aState = useState(props.startApp || "home");
   var app = aState[0]; var setApp = aState[1];
   var sState = useState(props.startIndex == null ? -1 : props.startIndex);
   var sub = sState[0]; var setSub = sState[1];
-  var pState = useState(np.playing !== false);
+  var pState = useState(!!np && np.playing !== false);
   var playing = pState[0]; var setPlaying = pState[1];
 
   function open(a, i) { setApp(a); setSub(i == null ? -1 : i); }
@@ -55,13 +73,22 @@ function Phone(props) {
   for (var ri = 0; ri < rooms.length; ri++) kakaoUnread += rooms[ri].unread || 0;
   var smsUnread = 0;
   for (var si = 0; si < sms.length; si++) smsUnread += sms[si].unread || 0;
+  var missed = 0;
+  for (var ci = 0; ci < calls.length; ci++) {
+    if (calls[ci].unread && PH_callType(calls[ci].type) === "missed") missed += calls[ci].count || 1;
+  }
 
   var theme = PH_theme(app, sub);
-  if (app === "music") theme.bg = "linear-gradient(180deg," + PH_color(np.title) + "cc 0%,#121212 50%,#030303 100%)";
+  if (app === "music" && !np) theme.nav = "#121212";
+  if (app === "music" && np) theme.bg = "linear-gradient(180deg," + PH_color(np.title) + "cc 0%,#121212 50%,#030303 100%)";
   var wall = PH_wallpaper(props.wallpaper);
   var font = "'Pretendard Variable','Pretendard','SamsungOne','Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
   var body;
+  if (app === "notes" && sub >= 0 && memos[sub]) {
+    theme.bg = memos[sub].color || "#ffffff"; theme.bar = theme.bg; theme.nav = theme.bg;
+  }
+
   if (app === "kakao" && sub >= 0 && rooms[sub]) {
     body = <PH_KakaoRoom room={rooms[sub]} onBack={back} />;
   } else if (app === "kakao") {
@@ -70,6 +97,20 @@ function Phone(props) {
     body = <PH_SmsThread thread={sms[sub]} onBack={back} />;
   } else if (app === "sms") {
     body = <PH_SmsList threads={sms} onOpen={function(i) { setSub(i); }} onBack={back} />;
+  } else if (app === "phone" && sub >= 0 && calls[sub]) {
+    body = <PH_CallDetail call={calls[sub]} calls={calls} onBack={back} />;
+  } else if (app === "phone") {
+    body = <PH_PhoneApp calls={calls} onOpen={function(i) { setSub(i); }} onBack={back} />;
+  } else if (app === "gallery" && sub >= 0 && photos[sub]) {
+    body = <PH_PhotoView photo={photos[sub]} onBack={back} />;
+  } else if (app === "gallery") {
+    body = <PH_Gallery photos={photos} onOpen={function(i) { setSub(i); }} onBack={back} />;
+  } else if (app === "notes" && sub >= 0 && memos[sub]) {
+    body = <PH_NoteView key={sub} note={memos[sub]} onBack={back} />;
+  } else if (app === "notes") {
+    body = <PH_Notes memos={memos} onOpen={function(i) { setSub(i); }} onBack={back} />;
+  } else if (app === "music" && !np) {
+    body = <PH_EmptyScreen title="YT Music" text="재생 중인 곡이 없습니다" dark={true} onBack={back} />;
   } else if (app === "music") {
     body = <PH_Music np={np} playing={playing} setPlaying={setPlaying} onBack={back} />;
   } else if (app === "calendar") {
@@ -82,7 +123,7 @@ function Phone(props) {
     body = (
       <PH_Home
         today={today} events={events} np={np} playing={playing} setPlaying={setPlaying}
-        comm={comm} kakaoUnread={kakaoUnread} smsUnread={smsUnread} open={open}
+        comm={comm} kakaoUnread={kakaoUnread} smsUnread={smsUnread} missed={missed} open={open}
       />
     );
   }
@@ -111,7 +152,7 @@ function Phone(props) {
           <PH_StatusBar
             time={statusTime} battery={battery} light={theme.light}
             bg={app === "home" ? "transparent" : theme.bar}
-            kakao={kakaoUnread > 0} sms={smsUnread > 0} music={playing}
+            kakao={kakaoUnread > 0} sms={smsUnread > 0} missed={missed > 0} music={playing && !!np}
           />
           <div className="flex-1 min-h-0 flex flex-col relative">{body}</div>
           <div className="flex justify-center pt-[6px] pb-[7px] cursor-pointer" onClick={goHome}
@@ -136,16 +177,16 @@ function PH_Home(p) {
     { id: "calendar", label: "캘린더", go: "calendar" },
     { id: "music", label: "YT Music", go: "music" },
     { id: "community", label: p.comm.appName, go: "community" },
+    { id: "gallery", label: "갤러리", go: "gallery" },
+    { id: "notes", label: "Samsung Notes", go: "notes" },
     { id: "naver", label: "NAVER" },
     { id: "youtube", label: "YouTube" },
     { id: "coupang", label: "쿠팡" },
     { id: "carrot", label: "당근마켓" },
-    { id: "bank", label: "토스" },
-    { id: "settings", label: "설정" },
-    { id: "play", label: "Play 스토어" }
+    { id: "bank", label: "토스" }
   ];
   var dock = [
-    { id: "phone", label: "전화" },
+    { id: "phone", label: "전화", go: "phone", badge: p.missed },
     { id: "sms", label: "메시지", go: "sms", badge: p.smsUnread },
     { id: "kakao", label: "카카오톡", go: "kakao", badge: p.kakaoUnread },
     { id: "internet", label: "인터넷" },
@@ -179,27 +220,39 @@ function PH_Home(p) {
       </div>
 
       {/* 음악 위젯 */}
-      <div className="mt-[8px] rounded-[22px] px-[10px] py-[9px] flex items-center gap-[10px] ph-glass">
-        <div onClick={function() { p.open("music"); }} className="cursor-pointer shrink-0">
-          <PH_Cover np={p.np} size={42} radius={10} />
-        </div>
-        <div onClick={function() { p.open("music"); }} className="cursor-pointer min-w-0 flex-1">
-          <div className="flex items-center gap-[5px]">
-            {p.playing && <PH_Eq color="#ff4e45" h={10} />}
-            <div className="text-white text-[12.5px] font-semibold truncate">{p.np.title}</div>
+      {p.np ? (
+        <div className="mt-[8px] rounded-[22px] px-[10px] py-[9px] flex items-center gap-[10px] ph-glass">
+          <div onClick={function() { p.open("music"); }} className="cursor-pointer shrink-0">
+            <PH_Cover np={p.np} size={42} radius={10} />
           </div>
-          <div className="text-white/60 text-[11px] truncate">{p.np.artist}</div>
-        </div>
-        <div className="flex items-center gap-[6px] text-white shrink-0">
-          <PH_Svg className="w-[18px] h-[18px]" fill="currentColor" sw={0}><path d="M6 6h2v12H6zM9.5 12 18 6v12z" /></PH_Svg>
-          <div onClick={function() { p.setPlaying(!p.playing); }} className="cursor-pointer w-[30px] h-[30px] rounded-full bg-white/90 text-black flex items-center justify-center">
-            {p.playing
-              ? <PH_Svg className="w-[14px] h-[14px]" fill="currentColor" sw={0}><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></PH_Svg>
-              : <PH_Svg className="w-[14px] h-[14px] ml-[2px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>}
+          <div onClick={function() { p.open("music"); }} className="cursor-pointer min-w-0 flex-1">
+            <div className="flex items-center gap-[5px]">
+              {p.playing && <PH_Eq color="#ff4e45" h={10} />}
+              <div className="text-white text-[12.5px] font-semibold truncate">{p.np.title}</div>
+            </div>
+            <div className="text-white/60 text-[11px] truncate">{p.np.artist}</div>
           </div>
-          <PH_Svg className="w-[18px] h-[18px]" fill="currentColor" sw={0}><path d="M16 6h2v12h-2zM14.5 12 6 18V6z" /></PH_Svg>
+          <div className="flex items-center gap-[6px] text-white shrink-0">
+            <PH_Svg className="w-[18px] h-[18px]" fill="currentColor" sw={0}><path d="M6 6h2v12H6zM9.5 12 18 6v12z" /></PH_Svg>
+            <div onClick={function() { p.setPlaying(!p.playing); }} className="cursor-pointer w-[30px] h-[30px] rounded-full bg-white/90 text-black flex items-center justify-center">
+              {p.playing
+                ? <PH_Svg className="w-[14px] h-[14px]" fill="currentColor" sw={0}><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></PH_Svg>
+                : <PH_Svg className="w-[14px] h-[14px] ml-[2px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>}
+            </div>
+            <PH_Svg className="w-[18px] h-[18px]" fill="currentColor" sw={0}><path d="M16 6h2v12h-2zM14.5 12 6 18V6z" /></PH_Svg>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-[8px] rounded-[22px] px-[10px] py-[9px] flex items-center gap-[10px] ph-glass">
+          <div className="w-[42px] h-[42px] rounded-[10px] bg-white/10 flex items-center justify-center shrink-0">
+            <PH_Svg className="w-[20px] h-[20px] text-white/40"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></PH_Svg>
+          </div>
+          <div className="flex-1 text-white/50 text-[12px]">재생 중인 곡 없음</div>
+          <div className="w-[30px] h-[30px] rounded-full bg-white/25 text-black/60 flex items-center justify-center shrink-0">
+            <PH_Svg className="w-[14px] h-[14px] ml-[2px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>
+          </div>
+        </div>
+      )}
 
       <div className="flex-1 min-h-[8px]" />
 
@@ -319,6 +372,29 @@ function PH_IconFace(id, t, comm) {
     return (
       <div className={full} style={{ background: "linear-gradient(160deg,#4a5bb5 0%,#29367c 100%)" }}>
         <span className="text-white font-extrabold text-[20px] tracking-[-1px]">{comm.iconText}</span>
+      </div>
+    );
+  }
+  if (id === "gallery") {
+    return (
+      <div className={full} style={{ background: "linear-gradient(160deg,#ff6b8b 0%,#e8365d 100%)" }}>
+        <PH_Svg className="w-[30px] h-[30px]" sw={0}>
+          <path d="M12 3.5c1.8 1.6 2.6 3.8 2.3 6.2-1-1.1-1.9-1.6-2.3-1.8-.4.2-1.3.7-2.3 1.8C9.4 7.3 10.2 5.1 12 3.5z" fill="#fff" opacity="0.95" />
+          <path d="M4 9.5c2.3-.4 4.4.3 6 2-1.5.1-2.4.5-2.8.7-.1.4-.3 1.4.1 2.9-2-1.1-3.2-3.1-3.3-5.6z" fill="#fff" opacity="0.8" />
+          <path d="M20 9.5c-.1 2.5-1.3 4.5-3.3 5.6.4-1.5.2-2.5.1-2.9-.4-.2-1.3-.6-2.8-.7 1.6-1.7 3.7-2.4 6-2z" fill="#fff" opacity="0.8" />
+          <path d="M6.5 17.5c1.2-2 3.2-3.2 5.5-3.3 2.3.1 4.3 1.3 5.5 3.3-1.6.8-3.5 1.2-5.5 1.2s-3.9-.4-5.5-1.2z" fill="#fff" opacity="0.65" />
+        </PH_Svg>
+      </div>
+    );
+  }
+  if (id === "notes") {
+    return (
+      <div className={full} style={{ background: "linear-gradient(160deg,#ff8a5b 0%,#f0532e 100%)" }}>
+        <div className="w-[26px] h-[30px] rounded-[4px] bg-white relative" style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.25)" }}>
+          <div className="absolute left-[5px] right-[5px] top-[8px] h-[2px] rounded bg-[#f0532e]/70" />
+          <div className="absolute left-[5px] right-[5px] top-[14px] h-[2px] rounded bg-[#f0532e]/45" />
+          <div className="absolute left-[5px] right-[9px] top-[20px] h-[2px] rounded bg-[#f0532e]/45" />
+        </div>
       </div>
     );
   }
@@ -457,6 +533,7 @@ function PH_KakaoList(p) {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto ph-scroll">
+        {order.length === 0 && <PH_EmptyNote text="채팅이 없습니다" />}
         {order.map(function(idx) {
           var r = rooms[idx];
           var last = PH_lastMsg(r.messages);
@@ -626,6 +703,7 @@ function PH_SmsList(p) {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto ph-scroll mx-[10px] rounded-[22px] bg-[#171717]">
+        {p.threads.length === 0 && <PH_EmptyNote text="대화가 없습니다" dark={true} />}
         {p.threads.map(function(t, i) {
           var last = PH_lastMsg(t.messages);
           return (
@@ -965,6 +1043,7 @@ function PH_CommList(p) {
         <div className="flex-1 text-center py-[8px] text-[#777]">공지</div>
       </div>
       <div className="flex-1 overflow-y-auto ph-scroll">
+        {idx.length === 0 && <PH_EmptyNote text="게시물이 없습니다" />}
         {idx.map(function(pi) {
           var post = c.posts[pi];
           var cc = (post.comments || []).length;
@@ -1045,6 +1124,383 @@ function PH_CommPost(p) {
   );
 }
 
+/* ══════════════ 전화 (최근기록) ══════════════ */
+
+function PH_PhoneApp(p) {
+  var calls = p.calls;
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-white">
+      <div className="px-[20px] pt-[34px] pb-[22px]">
+        <PH_Svg className="w-[22px] h-[22px] text-[#222] cursor-pointer -ml-[4px] mb-[14px]" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <div className="text-[#111] text-[30px] font-light">전화</div>
+      </div>
+      <div className="flex items-center justify-between px-[20px] pb-[6px] text-[#222]">
+        <span className="text-[13px] text-[#777]">최근기록</span>
+        <div className="flex gap-[18px]">
+          <PH_Svg className="w-[20px] h-[20px]"><circle cx="11" cy="11" r="7.5" /><path d="m20.5 20.5-4-4" /></PH_Svg>
+          <PH_Svg className="w-[20px] h-[20px]"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></PH_Svg>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto ph-scroll">
+        {calls.length === 0 && <PH_EmptyNote text="통화 기록이 없습니다" />}
+        {calls.map(function(c, i) {
+          if (c.date) {
+            return <div key={i} className="px-[20px] pt-[12px] pb-[4px] text-[12px] font-semibold text-[#888]">{c.date}</div>;
+          }
+          var type = PH_callType(c.type);
+          var isMissed = type === "missed" || type === "rejected";
+          return (
+            <div key={i} onClick={function() { p.onOpen(i); }} className="flex items-center gap-[12px] px-[20px] py-[9px] cursor-pointer active:bg-black/5">
+              <PH_Person name={c.name} size={42} />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-[4px]">
+                  <span className={"text-[15px] truncate " + (isMissed ? "text-[#e5484d]" : "text-[#111]") + (c.unread ? " font-bold" : "")}>{c.name || c.number || "알 수 없음"}</span>
+                  {c.count > 1 && <span className={"text-[13px] shrink-0 " + (isMissed ? "text-[#e5484d]" : "text-[#888]")}>{"(" + c.count + ")"}</span>}
+                </div>
+                <div className="flex items-center gap-[4px] mt-[1px]">
+                  <PH_CallIcon type={type} size={13} />
+                  <span className="text-[12px] text-[#888] truncate">{c.name ? (c.number || "휴대전화") : PH_callLabel(type)}</span>
+                </div>
+              </div>
+              <span className="text-[11.5px] text-[#999] shrink-0">{c.time}</span>
+            </div>
+          );
+        })}
+      </div>
+      {/* 하단 탭 */}
+      <div className="flex justify-around items-center py-[10px] border-t border-black/5 text-[12.5px]">
+        <span className="text-[#999]">키패드</span>
+        <span className="text-[#111] font-bold">최근기록</span>
+        <span className="text-[#999]">연락처</span>
+      </div>
+    </div>
+  );
+}
+
+function PH_CallDetail(p) {
+  var c = p.call;
+  var key = c.name || c.number;
+  var hist = p.calls.filter(function(x) { return !x.date && (x.name || x.number) === key; });
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-white">
+      <div className="flex items-center justify-between px-[12px] py-[8px] text-[#222]">
+        <PH_Svg className="w-[22px] h-[22px] cursor-pointer" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <PH_Svg className="w-[20px] h-[20px]"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></PH_Svg>
+      </div>
+      <div className="flex flex-col items-center pt-[18px] pb-[18px]">
+        <PH_Person name={c.name} size={84} />
+        <div className="text-[22px] text-[#111] mt-[12px]">{c.name || c.number || "알 수 없음"}</div>
+        {c.name && c.number && <div className="text-[13px] text-[#888] mt-[2px]">{c.number}</div>}
+      </div>
+      <div className="flex justify-center gap-[28px] pb-[18px] border-b border-black/5">
+        <PH_RoundBtn color="#12a150" label="전화">
+          <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
+        </PH_RoundBtn>
+        <PH_RoundBtn color="#2f7fe0" label="메시지">
+          <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+        </PH_RoundBtn>
+        <PH_RoundBtn color="#5b63e6" label="영상통화">
+          <path d="M3 6h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM17 10l5-3v10l-5-3z" />
+        </PH_RoundBtn>
+      </div>
+      <div className="flex-1 overflow-y-auto ph-scroll px-[20px] pt-[10px]">
+        <div className="text-[12px] font-semibold text-[#888] mb-[6px]">통화 기록</div>
+        {hist.map(function(h, i) {
+          var type = PH_callType(h.type);
+          var red = type === "missed" || type === "rejected";
+          return (
+            <div key={i} className="flex items-center gap-[10px] py-[8px] border-b border-black/5">
+              <PH_CallIcon type={type} size={16} />
+              <div className="flex-1">
+                <div className={"text-[14px] " + (red ? "text-[#e5484d]" : "text-[#222]")}>{PH_callLabel(type) + (h.count > 1 ? " " + h.count + "회" : "")}</div>
+                <div className="text-[11.5px] text-[#999]">{h.time}</div>
+              </div>
+              <span className="text-[12px] text-[#888]">{h.duration || (red ? "" : "")}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PH_RoundBtn(p) {
+  return (
+    <div className="flex flex-col items-center gap-[6px]">
+      <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center" style={{ background: p.color, boxShadow: "0 2px 5px rgba(0,0,0,0.18)" }}>
+        <PH_Svg className="w-[22px] h-[22px] text-white" fill="currentColor" sw={0}>{p.children}</PH_Svg>
+      </div>
+      <span className="text-[11.5px] text-[#555]">{p.label}</span>
+    </div>
+  );
+}
+
+function PH_Person(p) {
+  var s = p.size;
+  if (!p.name) {
+    return (
+      <div className="rounded-full flex items-center justify-center shrink-0 bg-[#c9ccd3]" style={{ width: s, height: s }}>
+        <PH_Svg className="text-white" style={{ width: s * 0.58, height: s * 0.58 }} fill="currentColor" sw={0}><circle cx="12" cy="8" r="4.5" /><path d="M3 21a9 9 0 0 1 18 0z" /></PH_Svg>
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-full flex items-center justify-center shrink-0 text-white font-semibold" style={{ width: s, height: s, fontSize: s * 0.4, background: PH_color(p.name) }}>
+      {p.name.charAt(0)}
+    </div>
+  );
+}
+
+function PH_CallIcon(p) {
+  var t = p.type;
+  var color = t === "missed" || t === "rejected" ? "#e5484d" : t === "outgoing" ? "#12a150" : "#2f7fe0";
+  var arrow = t === "outgoing" ? "M14 10l7-7M15 3h6v6" : t === "rejected" ? "M15 3l6 6M21 3l-6 6" : "M21 3l-7 7M14 4v6h6";
+  return (
+    <svg viewBox="0 0 24 24" style={{ width: p.size, height: p.size, flexShrink: 0 }}>
+      <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill={color} />
+      <path d={arrow} stroke={color} strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PH_callType(t) {
+  t = String(t || "incoming").toLowerCase();
+  if (t === "missed" || t === "부재중") return "missed";
+  if (t === "outgoing" || t === "발신") return "outgoing";
+  if (t === "rejected" || t === "거절") return "rejected";
+  return "incoming";
+}
+
+function PH_callLabel(t) {
+  if (t === "missed") return "부재중 전화";
+  if (t === "outgoing") return "발신 전화";
+  if (t === "rejected") return "거절한 전화";
+  return "수신 전화";
+}
+
+/* ══════════════ 갤러리 ══════════════ */
+
+function PH_Gallery(p) {
+  var photos = p.photos;
+  var groups = [];
+  for (var i = 0; i < photos.length; i++) {
+    var d = photos[i].date || "";
+    if (!groups.length || groups[groups.length - 1].date !== d) groups.push({ date: d, items: [] });
+    groups[groups.length - 1].items.push(i);
+  }
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-white">
+      <div className="flex items-center justify-between px-[14px] pt-[8px] pb-[10px] text-[#222]">
+        <div className="flex items-center gap-[4px]">
+          <PH_Svg className="w-[22px] h-[22px] cursor-pointer -ml-[4px]" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+          <span className="text-[20px] font-semibold text-[#111]">사진</span>
+        </div>
+        <div className="flex gap-[18px]">
+          <PH_Svg className="w-[20px] h-[20px]"><path d="M14.5 4h-5L7.5 6.5H4a2 2 0 0 0-2 2V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2h-3.5z" /><circle cx="12" cy="13" r="3.5" /></PH_Svg>
+          <PH_Svg className="w-[20px] h-[20px]"><circle cx="11" cy="11" r="7.5" /><path d="m20.5 20.5-4-4" /></PH_Svg>
+          <PH_Svg className="w-[20px] h-[20px]"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></PH_Svg>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto ph-scroll">
+        {photos.length === 0 && <PH_EmptyNote text="사진이 없습니다" />}
+        {groups.map(function(g, gi) {
+          return (
+            <div key={gi}>
+              {g.date && <div className="px-[14px] pt-[10px] pb-[6px] text-[13px] font-semibold text-[#333]">{g.date}</div>}
+              <div className="grid grid-cols-4 gap-[2px]">
+                {g.items.map(function(idx) {
+                  var ph = photos[idx];
+                  return (
+                    <div key={idx} onClick={function() { p.onOpen(idx); }} className="aspect-square relative cursor-pointer overflow-hidden">
+                      <PH_PhotoFace photo={ph} thumb={true} />
+                      {ph.video && (
+                        <div className="absolute right-[4px] bottom-[3px] flex items-center gap-[2px] text-white text-[9.5px] font-semibold" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.7)" }}>
+                          {ph.duration || "0:15"}
+                          <PH_Svg className="w-[9px] h-[9px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>
+                        </div>
+                      )}
+                      {ph.favorite && (
+                        <PH_Svg className="absolute left-[4px] bottom-[4px] w-[11px] h-[11px] text-white" fill="currentColor" sw={0}><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.3 4.5 6.8 4.5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.5 0 5.8 3.5 4.3 7.2C19.5 16.4 12 21 12 21z" /></PH_Svg>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex justify-around items-center py-[10px] border-t border-black/5 text-[12.5px]">
+        <span className="text-[#111] font-bold">사진</span>
+        <span className="text-[#999]">앨범</span>
+        <span className="text-[#999]">스토리</span>
+        <span className="text-[#999]">메뉴</span>
+      </div>
+    </div>
+  );
+}
+
+function PH_PhotoFace(p) {
+  var ph = p.photo;
+  if (ph.src) {
+    return <img src={ph.src} alt="" className="absolute inset-0 w-full h-full" style={{ objectFit: p.thumb ? "cover" : "contain" }} />;
+  }
+  var c1 = PH_color(ph.caption);
+  var c2 = PH_color((ph.caption || "") + "~");
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(145deg," + c1 + " 0%," + c2 + " 100%)" }}>
+      <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 30% 25%,rgba(255,255,255,0.35) 0%,rgba(255,255,255,0) 55%), linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,0.35) 100%)" }} />
+      {p.thumb ? (
+        <div className="absolute inset-0 flex items-center justify-center p-[4px] text-center text-white/90 text-[8.5px] leading-[11px]" style={{ filter: "blur(0.6px)" }}>
+          {ph.caption}
+        </div>
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center p-[24px] text-center text-white text-[15px] leading-[23px]" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+          {ph.caption}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PH_PhotoView(p) {
+  var ph = p.photo;
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-black text-white">
+      <div className="flex items-center justify-between px-[12px] py-[8px]">
+        <PH_Svg className="w-[22px] h-[22px] cursor-pointer" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <div className="text-center">
+          <div className="text-[13px]">{ph.date || ""}</div>
+          {ph.time && <div className="text-[10.5px] text-white/60">{ph.time}</div>}
+        </div>
+        <PH_Svg className="w-[20px] h-[20px]"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></PH_Svg>
+      </div>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-full relative" style={{ aspectRatio: ph.src ? "auto" : "3 / 4", height: ph.src ? "100%" : "auto" }}>
+          <PH_PhotoFace photo={ph} thumb={false} />
+          {ph.video && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[56px] h-[56px] rounded-full bg-black/40 flex items-center justify-center">
+                <PH_Svg className="w-[24px] h-[24px] ml-[3px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-around items-center py-[12px] text-white/90">
+        <PH_Svg className={"w-[21px] h-[21px] " + (ph.favorite ? "text-[#ff4e6a]" : "")} fill={ph.favorite ? "currentColor" : "none"}><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.3 4.5 6.8 4.5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.5 0 5.8 3.5 4.3 7.2C19.5 16.4 12 21 12 21z" /></PH_Svg>
+        <PH_Svg className="w-[21px] h-[21px]"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></PH_Svg>
+        <PH_Svg className="w-[21px] h-[21px]"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4" /></PH_Svg>
+        <PH_Svg className="w-[21px] h-[21px]"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" /></PH_Svg>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════ 메모 (Samsung Notes) ══════════════ */
+
+function PH_Notes(p) {
+  var memos = p.memos;
+  return (
+    <div className="flex-1 flex flex-col min-h-0 bg-[#f4f4f6]">
+      <div className="px-[20px] pt-[34px] pb-[20px]">
+        <PH_Svg className="w-[22px] h-[22px] text-[#222] cursor-pointer -ml-[4px] mb-[14px]" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <div className="text-[#111] text-[28px] font-light">모든 노트</div>
+        <div className="text-[#888] text-[12.5px] mt-[2px]">{"노트 " + memos.length + "개"}</div>
+      </div>
+      <div className="flex-1 overflow-y-auto ph-scroll px-[12px] pb-[12px]">
+        {memos.length === 0 && <PH_EmptyNote text="노트가 없습니다" />}
+        <div className="grid grid-cols-2 gap-[10px]">
+          {memos.map(function(m, i) {
+            return (
+              <div key={i} onClick={function() { p.onOpen(i); }} className="cursor-pointer">
+                <div className="h-[150px] rounded-[14px] p-[12px] overflow-hidden relative" style={{ background: m.color || "#ffffff", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+                  {m.locked ? (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <PH_Svg className="w-[34px] h-[34px] text-[#b0b3ba]"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></PH_Svg>
+                    </div>
+                  ) : (
+                    <div className="text-[11px] leading-[16px] text-[#555] whitespace-pre-wrap break-all">{m.content}</div>
+                  )}
+                  {!m.locked && <div className="absolute left-0 right-0 bottom-0 h-[30px]" style={{ background: "linear-gradient(180deg,rgba(255,255,255,0) 0%," + (m.color || "#ffffff") + " 100%)" }} />}
+                </div>
+                <div className="px-[4px] pt-[6px]">
+                  <div className="text-[13px] text-[#111] font-medium truncate flex items-center gap-[4px]">
+                    {m.locked && <PH_Svg className="w-[11px] h-[11px] text-[#888] shrink-0" sw={2.4}><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></PH_Svg>}
+                    <span className="truncate">{m.title || "제목 없음"}</span>
+                  </div>
+                  <div className="text-[11px] text-[#999]">{m.date || ""}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PH_NoteView(p) {
+  var m = p.note;
+  var uState = useState(!m.locked);
+  var open = uState[0]; var setOpen = uState[1];
+  var bg = m.color || "#ffffff";
+  return (
+    <div className="flex-1 flex flex-col min-h-0" style={{ background: bg }}>
+      <div className="flex items-center justify-between px-[12px] py-[8px] text-[#222]">
+        <PH_Svg className="w-[22px] h-[22px] cursor-pointer" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <div className="flex gap-[18px]">
+          <PH_Svg className="w-[20px] h-[20px]"><path d="M4 6h16M4 12h10M4 18h7" /></PH_Svg>
+          <PH_Svg className="w-[20px] h-[20px]"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></PH_Svg>
+        </div>
+      </div>
+      {!open ? (
+        <div className="flex-1 flex flex-col items-center justify-center px-[30px] text-center">
+          <PH_Svg className="w-[44px] h-[44px] text-[#888]" sw={1.6}><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></PH_Svg>
+          <div className="text-[17px] text-[#222] mt-[14px]">{m.title || "잠긴 노트"}</div>
+          <div className="text-[12.5px] text-[#888] mt-[4px]">이 노트는 잠겨 있습니다</div>
+          <div onClick={function() { setOpen(true); }} className="mt-[34px] cursor-pointer flex flex-col items-center gap-[10px]">
+            <div className="w-[64px] h-[64px] rounded-full border-[1.5px] border-[#3a64c8]/40 flex items-center justify-center active:scale-95 transition-transform">
+              <PH_Svg className="w-[34px] h-[34px] text-[#3a64c8]" sw={1.5}>
+                <path d="M12 11v3a8 8 0 0 1-1.5 4.5M8.5 7.5A5 5 0 0 1 17 11v2a13 13 0 0 1-.6 3.8M7 11a5 5 0 0 1 .3-1.7M7 14.5a13 13 0 0 1-1 3M5 5a9 9 0 0 1 14 0M3.5 9.5A9 9 0 0 0 3 12v1M21 12v1a17 17 0 0 1-.8 5" />
+              </PH_Svg>
+            </div>
+            <span className="text-[13px] text-[#3a64c8] font-semibold">잠금 해제</span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-y-auto ph-scroll px-[20px] pb-[20px]">
+          <div className="text-[21px] text-[#111] font-medium leading-[28px] mt-[4px]">{m.title || "제목 없음"}</div>
+          <div className="text-[11.5px] text-[#999] mt-[4px] mb-[14px]">{m.date || ""}</div>
+          <div className="text-[14.5px] text-[#333] leading-[25px] whitespace-pre-wrap break-all">{m.content}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════ 빈 화면 ══════════════ */
+
+function PH_EmptyNote(p) {
+  return (
+    <div className={"py-[60px] text-center text-[13px] " + (p.dark ? "text-white/40" : "text-black/35")}>{p.text}</div>
+  );
+}
+
+function PH_EmptyScreen(p) {
+  return (
+    <div className={"flex-1 flex flex-col min-h-0 " + (p.dark ? "bg-[#121212] text-white" : "bg-white text-[#111]")}>
+      <div className="flex items-center gap-[6px] px-[12px] py-[8px]">
+        <PH_Svg className="w-[22px] h-[22px] cursor-pointer" onClick={p.onBack}><path d="m15 18-6-6 6-6" /></PH_Svg>
+        <span className="text-[16px] font-semibold">{p.title}</span>
+      </div>
+      <div className="flex-1 flex items-center justify-center">
+        <PH_EmptyNote text={p.text} dark={p.dark} />
+      </div>
+    </div>
+  );
+}
+
 /* ══════════════ 상태바 ══════════════ */
 
 function PH_StatusBar(p) {
@@ -1056,6 +1512,12 @@ function PH_StatusBar(p) {
           <div className="w-[13px] h-[13px] rounded-[3px] flex items-center justify-center" style={{ background: c }}>
             <span style={{ fontSize: 5, fontWeight: 900, color: p.light ? "#000" : "#fff", letterSpacing: -0.2 }}>TALK</span>
           </div>
+        )}
+        {p.missed && (
+          <PH_Svg className="w-[13px] h-[13px]" fill="currentColor" sw={0}>
+            <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
+            <path d="M15 3l6 6M21 3l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </PH_Svg>
         )}
         {p.sms && <PH_Svg className="w-[13px] h-[13px]" fill="currentColor" sw={0}><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /></PH_Svg>}
         {p.music && <PH_Svg className="w-[12px] h-[12px]" fill="currentColor" sw={0}><path d="M7 4v16l13-8z" /></PH_Svg>}
@@ -1119,6 +1581,10 @@ function PH_theme(app, sub) {
   if (app === "kakao") return { bg: "#ffffff", bar: "#ffffff", nav: "#ffffff", light: false };
   if (app === "sms") return { bg: "#000000", bar: "#000000", nav: "#000000", light: true };
   if (app === "music") return { bg: "#121212", bar: "transparent", nav: "#030303", light: true };
+  if (app === "phone") return { bg: "#ffffff", bar: "#ffffff", nav: "#ffffff", light: false };
+  if (app === "gallery" && sub >= 0) return { bg: "#000000", bar: "#000000", nav: "#000000", light: true };
+  if (app === "gallery") return { bg: "#ffffff", bar: "#ffffff", nav: "#ffffff", light: false };
+  if (app === "notes") return { bg: "#f4f4f6", bar: "#f4f4f6", nav: "#f4f4f6", light: false };
   if (app === "calendar") return { bg: "#ffffff", bar: "#ffffff", nav: "#f5f6f8", light: false };
   if (app === "community") return { bg: "#ffffff", bar: "#3b4890", nav: "#ffffff", light: true };
   return { bg: "#000", bar: "transparent", nav: "transparent", light: true };
@@ -1241,9 +1707,9 @@ function PH_shortDate(d) {
   return m ? m[1] + ":" + m[2] : String(d || "");
 }
 
-/* ══════════════ 기본 데이터 (props 없을 때) ══════════════ */
+/* ══════════════ 예시 데이터 (PH_Demo 전용, 본체에서는 사용하지 않음) ══════════════ */
 
-function PH_defaultRooms(owner) {
+function PH_demoRooms(owner) {
   return [
     {
       name: "가족 단톡방", members: 4, unread: 3, pinned: true,
@@ -1282,7 +1748,7 @@ function PH_defaultRooms(owner) {
   ];
 }
 
-function PH_defaultSms() {
+function PH_demoSms() {
   return [
     {
       name: "흑야회", number: "비공개 번호", unread: 2, avatar: "黑", avatarColor: "#1a1a1a",
@@ -1304,7 +1770,7 @@ function PH_defaultSms() {
   ];
 }
 
-function PH_defaultNowPlaying(owner) {
+function PH_demoNowPlaying(owner) {
   return {
     title: "밤편지",
     artist: "아이유",
@@ -1321,7 +1787,7 @@ function PH_defaultNowPlaying(owner) {
   };
 }
 
-function PH_defaultCommunity() {
+function PH_demoCommunity() {
   return {
     appName: "디시인사이드",
     iconText: "dc",
@@ -1342,15 +1808,53 @@ function PH_defaultCommunity() {
   };
 }
 
+function PH_demoCalls() {
+  return [
+    { date: "오늘" },
+    { name: "", number: "비공개 번호", time: "오후 2:04", type: "missed", count: 3, unread: true },
+    { name: "누나", number: "010-4821-3390", time: "오후 12:47", type: "missed", unread: true },
+    { name: "박 팀장", number: "010-2275-8841", time: "오전 9:12", type: "incoming", duration: "4분 12초" },
+    { date: "어제" },
+    { name: "민규", number: "010-9912-0073", time: "오후 11:58", type: "outgoing", duration: "38초" },
+    { name: "", number: "비공개 번호", time: "오후 11:40", type: "rejected" },
+    { name: "엄마", number: "010-5530-1172", time: "오후 7:21", type: "incoming", duration: "12분 3초" }
+  ];
+}
+
+function PH_demoGallery() {
+  return [
+    { date: "9월 28일 월요일", time: "오후 1:32", caption: "모니터 속 반도체 섹터 차트 캡처" },
+    { date: "9월 28일 월요일", time: "오전 8:10", caption: "출근길 한강 다리 위 흐린 하늘" },
+    { date: "9월 27일 일요일", time: "오후 11:55", caption: "어둠 속 부두 창고 번호판 7", favorite: true },
+    { date: "9월 27일 일요일", time: "오후 9:02", caption: "개노답 넷이 찍은 흔들린 단체 셀카", video: true, duration: "0:12" },
+    { date: "9월 27일 일요일", time: "오후 8:40", caption: "포장마차 소주 네 병과 닭발" },
+    { date: "9월 21일 월요일", time: "오후 6:15", caption: "엄마가 보낸 반찬통 택배 사진" }
+  ];
+}
+
+function PH_demoMemos() {
+  return [
+    { title: "반도체 섹터 보고 초안", date: "9월 28일 오후 1:20", content: "1. 메모리 업황 반등 시점\n2. HBM 수요 추정\n3. 리스크: 환율, 재고\n\n→ 팀장님 4시 회의 전까지" },
+    { title: "7", date: "9월 27일 오후 11:57", locked: true, color: "#fdf3d8", content: "자정.\n혼자.\n\n돌아오지 못하면 서랍 두 번째 칸." },
+    { title: "추석 선물", date: "9월 20일 오후 3:02", color: "#e3f1ff", content: "엄마 - 안마기\n아빠 - 등산화 270\n누나 - 상품권" }
+  ];
+}
+
 function PH_Demo() {
   return (
     <div className="py-6 bg-gray-100 min-h-screen">
       <Phone
-        owner="건우"
         statusTime="오후 2:11"
         battery={90}
         dateTime="2026년 9월 28일"
         promise="9/28 반도체 섹터 보고 · 9/30 녹티스 정기 집결 · 10/3~10/5 추석 본가 · 10/9 개노답 모임"
+        rooms={PH_demoRooms("건우")}
+        sms={PH_demoSms()}
+        calls={PH_demoCalls()}
+        gallery={PH_demoGallery()}
+        memos={PH_demoMemos()}
+        nowPlaying={PH_demoNowPlaying("건우")}
+        community={PH_demoCommunity()}
       />
     </div>
   );
