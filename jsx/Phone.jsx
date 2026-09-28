@@ -1774,18 +1774,20 @@ function PH_demoRooms(owner) {
       name: "가족 단톡방", members: 4, unread: 3, pinned: true,
       messages: [
         { date: "2026년 9월 28일 월요일" },
-        { author: "엄마", content: "아들 밥은 먹었니", time: "오전 11:52", isMe: false },
-        { author: "엄마", content: "추석 때 올 수 있지?", time: "오전 11:52", isMe: false },
-        { author: "아빠", content: "바쁘면 무리하지 말고", time: "오후 12:30", isMe: false },
-        { author: "누나", content: "엄마 " + owner + " 또 읽씹 각", time: "오후 1:58", isMe: false }
+        { author: "이하연", content: "밥은 먹었니", time: "오전 11:52", isMe: false },
+        { author: "이하연", content: "추석 때 올 수 있지?", time: "오전 11:52", isMe: false },
+        { author: "차준혁", content: "바쁘면 무리하지 말고", time: "오후 12:30", isMe: false },
+        { author: "차연우", content: owner + " 또 읽씹 각이네", time: "오후 1:58", isMe: false }
       ]
     },
     {
-      name: "녹티스 아스트라", members: 6, unread: 27, muted: true,
+      name: "녹티스 아스트라", members: 5, unread: 12,
       messages: [
-        { author: "리안", content: "오늘 22시 정기 집결", time: "오후 1:40", isMe: false },
-        { author: "세르", content: "좌표는 기존과 동일", time: "오후 1:41", isMe: false },
-        { author: "리안", content: owner + " 확인 바람", time: "오후 2:03", isMe: false }
+        { author: "오영진", content: "대표님 점심 드셨습니까", time: "오후 1:40", isMe: false },
+        { author: "가영은", content: "도련님 어제도 세 시간 주무셨죠. 다 압니다.", time: "오후 1:41", isMe: false },
+        { author: "루카스", content: "오늘도 그분 만나러 가십니까? ㅎㅎ", time: "오후 1:52", isMe: false },
+        { author: "나", content: "일들 해라", time: "오후 1:55", isMe: true, unread: 0 },
+        { author: "이신우", content: "22시 정기 보고는 예정대로 진행하겠습니다.", time: "오후 2:03", isMe: false }
       ]
     },
     {
@@ -1798,10 +1800,10 @@ function PH_demoRooms(owner) {
       ]
     },
     {
-      name: "청암증권 리서치팀", members: 12, unread: 1,
+      name: "청암증권", members: 3, unread: 1,
       messages: [
-        { author: "박 팀장", content: "오후 4시 회의 자료 공유드립니다.", time: "오후 1:15", isMe: false },
-        { author: "박 팀장", content: owner + " 대리, 반도체 섹터 정리본 부탁해요.", time: "오후 1:16", isMe: false }
+        { author: "최준영", content: "오후 4시 이사회 일정 변동 없습니다.", time: "오후 1:15", isMe: false },
+        { author: "이은태", content: "지난주 계약 건 법무 검토 완료했습니다. 확인 부탁드립니다.", time: "오후 1:16", isMe: false }
       ]
     }
   ];
@@ -1871,12 +1873,12 @@ function PH_demoCalls() {
   return [
     { date: "오늘" },
     { name: "", number: "비공개 번호", time: "오후 2:04", type: "missed", count: 3, unread: true },
-    { name: "누나", number: "010-4821-3390", time: "오후 12:47", type: "missed", unread: true },
-    { name: "박 팀장", number: "010-2275-8841", time: "오전 9:12", type: "incoming", duration: "4분 12초" },
+    { name: "차연우", number: "010-4821-3390", time: "오후 12:47", type: "missed", unread: true },
+    { name: "최준영", number: "010-2275-8841", time: "오전 9:12", type: "incoming", duration: "4분 12초" },
     { date: "어제" },
     { name: "민규", number: "010-9912-0073", time: "오후 11:58", type: "outgoing", duration: "38초" },
     { name: "", number: "비공개 번호", time: "오후 11:40", type: "rejected" },
-    { name: "엄마", number: "010-5530-1172", time: "오후 7:21", type: "incoming", duration: "12분 3초" }
+    { name: "이하연", number: "010-5530-1172", time: "오후 7:21", type: "incoming", duration: "12분 3초" }
   ];
 }
 
@@ -1893,7 +1895,7 @@ function PH_demoGallery() {
 
 function PH_demoMemos() {
   return [
-    { title: "반도체 섹터 보고 초안", date: "9월 28일 오후 1:20", content: "1. 메모리 업황 반등 시점\n2. HBM 수요 추정\n3. 리스크: 환율, 재고\n\n→ 팀장님 4시 회의 전까지" },
+    { title: "이사회 체크", date: "9월 28일 오후 1:20", content: "1. 계약 건 법무 검토 (이은태)\n2. 분기 실적 보고\n3. 일정 조율 (최준영)\n\n→ 4시 전까지" },
     { title: "7", date: "9월 27일 오후 11:57", locked: true, color: "#fdf3d8", content: "자정.\n혼자.\n\n돌아오지 못하면 서랍 두 번째 칸." },
     { title: "추석 선물", date: "9월 20일 오후 3:02", color: "#e3f1ff", content: "엄마 - 안마기\n아빠 - 등산화 270\n누나 - 상품권" }
   ];
@@ -1906,7 +1908,7 @@ function PH_Demo() {
         statusTime="오후 2:11"
         battery={90}
         dateTime="2026년 9월 28일"
-        promise="9/28 반도체 섹터 보고 · 9/30 녹티스 정기 집결 · 10/3~10/5 추석 본가 · 10/9 개노답 모임"
+        promise="9/28 청암 이사회 · 9/30 녹티스 정기 집결 · 10/3~10/5 추석 본가 · 10/9 개노답 모임"
         rooms={PH_demoRooms("건우")}
         sms={PH_demoSms()}
         calls={PH_demoCalls()}
