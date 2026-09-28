@@ -138,9 +138,8 @@ function Phone(props) {
 
   return (
     <div style={{ fontFamily: font, perspective: 1800 }} className="w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[60px]"
-      onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onMouseLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
+      onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
       <style>{PH_css()}</style>
-      <div data-ph-area="1">
       <div data-ph-tilt="1" className="relative" style={{ willChange: "transform", transition: "transform 0.6s cubic-bezier(.2,.8,.2,1)" }}>
       {/* 사이드 버튼 */}
       <div className="absolute right-[-3px] top-[150px] w-[4px] h-[64px] rounded-r-[3px]" style={{ background: "linear-gradient(90deg,#1b1b1d,#4a4a4e)" }} />
@@ -179,7 +178,6 @@ function Phone(props) {
           <div data-ph-glare="1" className="absolute inset-0 pointer-events-none z-40 rounded-[38px]"
             style={{ opacity: 0, transition: "opacity 0.4s ease", mixBlendMode: "screen" }} />
         </div>
-      </div>
       </div>
       </div>
     </div>
@@ -1563,67 +1561,42 @@ function PH_StatusBar(p) {
 
 /* ══════════════ 공통 헬퍼 ══════════════ */
 
-/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경.
-   폰 본체 위에서만 기울고, 여백으로 나가거나 1.5초간 움직임이 없으면 정면으로 복귀 */
+/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경 */
 function PH_tiltMove(root, x, y, max) {
-  try {
-    var area = root.querySelector("[data-ph-area]");
-    var el = root.querySelector("[data-ph-tilt]");
-    if (!area || !el) return;
-    PH_tiltStopIdle(root);
-    var r = area.getBoundingClientRect();
-    if (x < r.left || x > r.right || y < r.top || y > r.bottom) { PH_tiltReset(root); return; }
-    PH_tiltStartIdle(root);
-    var px = (x - r.left) / r.width;
-    var py = (y - r.top) / r.height;
-    var ry = (px - 0.5) * 2 * max;
-    var rx = -(py - 0.5) * 2 * max;
-    el.style.transition = "transform 0.12s ease-out";
-    el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
-    var g = root.querySelector("[data-ph-glare]");
-    if (g) {
-      g.style.opacity = "1";
-      g.style.background = "radial-gradient(circle at " + (px * 100).toFixed(1) + "% " + (py * 100).toFixed(1) + "%," +
-        "rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.07) 28%,rgba(255,255,255,0) 60%)";
-    }
-    var f = root.querySelector("[data-ph-frame]");
-    if (f) {
-      f.style.transition = "box-shadow 0.12s ease-out";
-      f.style.boxShadow = PH_frameShadow(-ry * 1.2, 14 + rx * 1.2);
-    }
-  } catch (err) {}
+  var el = root.querySelector("[data-ph-tilt]");
+  if (!el) return;
+  var r = root.getBoundingClientRect();
+  var px = Math.max(0, Math.min(1, (x - r.left) / r.width));
+  var py = Math.max(0, Math.min(1, (y - r.top) / r.height));
+  var ry = (px - 0.5) * 2 * max;
+  var rx = -(py - 0.5) * 2 * max;
+  el.style.transition = "transform 0.12s ease-out";
+  el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+  var g = root.querySelector("[data-ph-glare]");
+  if (g) {
+    g.style.opacity = "1";
+    g.style.background = "radial-gradient(circle at " + (px * 100).toFixed(1) + "% " + (py * 100).toFixed(1) + "%," +
+      "rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.07) 28%,rgba(255,255,255,0) 60%)";
+  }
+  var f = root.querySelector("[data-ph-frame]");
+  if (f) {
+    f.style.transition = "box-shadow 0.12s ease-out";
+    f.style.boxShadow = PH_frameShadow(-ry * 1.2, 14 + rx * 1.2);
+  }
 }
 
 function PH_tiltReset(root) {
-  try {
-    PH_tiltStopIdle(root);
-    var el = root.querySelector("[data-ph-tilt]");
-    if (!el) return;
-    el.style.transition = "transform 0.6s cubic-bezier(.2,.8,.2,1)";
-    el.style.transform = "rotateX(0deg) rotateY(0deg)";
-    var g = root.querySelector("[data-ph-glare]");
-    if (g) g.style.opacity = "0";
-    var f = root.querySelector("[data-ph-frame]");
-    if (f) {
-      f.style.transition = "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)";
-      f.style.boxShadow = PH_frameShadow(0, 14);
-    }
-  } catch (err) {}
-}
-
-/* 1.5초간 움직임이 없으면 정면 복귀. 타이머가 막힌 환경이면 조용히 건너뜀 */
-function PH_tiltStartIdle(root) {
-  try {
-    if (typeof setTimeout !== "function") return;
-    root.__phIdle = setTimeout(function() { PH_tiltReset(root); }, 1500);
-  } catch (err) {}
-}
-
-function PH_tiltStopIdle(root) {
-  try {
-    if (root.__phIdle && typeof clearTimeout === "function") clearTimeout(root.__phIdle);
-    root.__phIdle = null;
-  } catch (err) {}
+  var el = root.querySelector("[data-ph-tilt]");
+  if (!el) return;
+  el.style.transition = "transform 0.6s cubic-bezier(.2,.8,.2,1)";
+  el.style.transform = "rotateX(0deg) rotateY(0deg)";
+  var g = root.querySelector("[data-ph-glare]");
+  if (g) g.style.opacity = "0";
+  var f = root.querySelector("[data-ph-frame]");
+  if (f) {
+    f.style.transition = "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)";
+    f.style.boxShadow = PH_frameShadow(0, 14);
+  }
 }
 
 function PH_frameShadow(x, y) {
