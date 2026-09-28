@@ -16,6 +16,8 @@
    promise      일정 문자열 "9/30 약속 · 10/3~10/5 출장 · D-2"   ※ Calendar.jsx와 동일 포맷
    events       일정 배열 (promise 대신) [{ date: "9/30" 또는 "10/3~10/5", label, color }]
    wallpaper    배경 (CSS background 값 또는 이미지 URL)
+   tilt         마우스/터치를 따라 3D로 기울기 (기본 true, false 면 끔)
+   tiltMax      최대 기울기 각도 (기본 10)
    startApp     처음 열릴 화면 "home" "kakao" "sms" "phone" "gallery" "notes" "music" "calendar" "community"
    startIndex   startApp 안에서 바로 열 항목 번호 (없으면 목록)
 
@@ -128,18 +130,27 @@ function Phone(props) {
     );
   }
 
+  var tiltOn = props.tilt !== false;
+  var tiltMax = props.tiltMax == null ? 10 : props.tiltMax;
+  function onTilt(e) { if (tiltOn) PH_tiltMove(e.currentTarget, e.clientX, e.clientY, tiltMax); }
+  function offTilt(e) { if (tiltOn) PH_tiltReset(e.currentTarget); }
+
   return (
-    <div style={{ fontFamily: font }} className="w-full max-w-[375px] mx-auto relative select-none">
+    <div style={{ fontFamily: font, perspective: 1200 }} className="w-full max-w-[375px] mx-auto select-none"
+      onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
       <style>{PH_css()}</style>
+      <div data-ph-tilt="1" className="relative" style={{ willChange: "transform", transition: "transform 0.6s cubic-bezier(.2,.8,.2,1)" }}>
       {/* 사이드 버튼 */}
       <div className="absolute right-[-3px] top-[150px] w-[4px] h-[64px] rounded-r-[3px]" style={{ background: "linear-gradient(90deg,#1b1b1d,#4a4a4e)" }} />
       <div className="absolute right-[-3px] top-[235px] w-[4px] h-[40px] rounded-r-[3px]" style={{ background: "linear-gradient(90deg,#1b1b1d,#4a4a4e)" }} />
       {/* 프레임 */}
       <div
+        data-ph-frame="1"
         className="rounded-[46px] p-[9px]"
         style={{
           background: "linear-gradient(145deg,#3a3a3e 0%,#141416 35%,#0a0a0b 65%,#2e2e32 100%)",
-          boxShadow: "0 24px 40px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.4), inset 0 0 0 1.5px #56565c, inset 0 0 0 3px #0c0c0d"
+          boxShadow: PH_frameShadow(0, 24),
+          transition: "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)"
         }}
       >
         <div
@@ -162,7 +173,11 @@ function Phone(props) {
           {/* 유리 반사 */}
           <div className="absolute inset-0 pointer-events-none z-40 rounded-[38px]"
             style={{ background: "linear-gradient(125deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 100%)" }} />
+          {/* 틸팅 광택 (포인터 위치를 따라 움직임) */}
+          <div data-ph-glare="1" className="absolute inset-0 pointer-events-none z-40 rounded-[38px]"
+            style={{ opacity: 0, transition: "opacity 0.4s ease", mixBlendMode: "screen" }} />
         </div>
+      </div>
       </div>
     </div>
   );
@@ -1544,6 +1559,49 @@ function PH_StatusBar(p) {
 }
 
 /* ══════════════ 공통 헬퍼 ══════════════ */
+
+/* 3D 틸팅: 매 움직임마다 재렌더링하지 않도록 DOM 스타일을 직접 변경 */
+function PH_tiltMove(root, x, y, max) {
+  var el = root.querySelector("[data-ph-tilt]");
+  if (!el) return;
+  var r = root.getBoundingClientRect();
+  var px = Math.max(0, Math.min(1, (x - r.left) / r.width));
+  var py = Math.max(0, Math.min(1, (y - r.top) / r.height));
+  var ry = (px - 0.5) * 2 * max;
+  var rx = -(py - 0.5) * 2 * max;
+  el.style.transition = "transform 0.12s ease-out";
+  el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) scale(1.015)";
+  var g = root.querySelector("[data-ph-glare]");
+  if (g) {
+    g.style.opacity = "1";
+    g.style.background = "radial-gradient(circle at " + (px * 100).toFixed(1) + "% " + (py * 100).toFixed(1) + "%," +
+      "rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.07) 28%,rgba(255,255,255,0) 60%)";
+  }
+  var f = root.querySelector("[data-ph-frame]");
+  if (f) {
+    f.style.transition = "box-shadow 0.12s ease-out";
+    f.style.boxShadow = PH_frameShadow(-ry * 1.6, 24 + rx * 1.6);
+  }
+}
+
+function PH_tiltReset(root) {
+  var el = root.querySelector("[data-ph-tilt]");
+  if (!el) return;
+  el.style.transition = "transform 0.6s cubic-bezier(.2,.8,.2,1)";
+  el.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+  var g = root.querySelector("[data-ph-glare]");
+  if (g) g.style.opacity = "0";
+  var f = root.querySelector("[data-ph-frame]");
+  if (f) {
+    f.style.transition = "box-shadow 0.6s cubic-bezier(.2,.8,.2,1)";
+    f.style.boxShadow = PH_frameShadow(0, 24);
+  }
+}
+
+function PH_frameShadow(x, y) {
+  return x.toFixed(1) + "px " + y.toFixed(1) + "px 40px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.4), " +
+    "inset 0 0 0 1.5px #56565c, inset 0 0 0 3px #0c0c0d";
+}
 
 function PH_DOW() { return ["일", "월", "화", "수", "목", "금", "토"]; }
 
