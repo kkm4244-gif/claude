@@ -17,7 +17,7 @@
    events       일정 배열 (promise 대신) [{ date: "9/30" 또는 "10/3~10/5", label, color }]
    wallpaper    배경 (CSS background 값 또는 이미지 URL)
    tilt         마우스/터치를 따라 3D로 기울기 (기본 true, false 면 끔)
-   tiltMax      최대 기울기 각도 (기본 10)
+   tiltMax      최대 기울기 각도 (기본 8)
    startApp     처음 열릴 화면 "home" "kakao" "sms" "phone" "gallery" "notes" "music" "calendar" "community"
    startIndex   startApp 안에서 바로 열 항목 번호 (없으면 목록)
 
@@ -132,12 +132,12 @@ function Phone(props) {
   }
 
   var tiltOn = props.tilt !== false;
-  var tiltMax = props.tiltMax == null ? 10 : props.tiltMax;
+  var tiltMax = props.tiltMax == null ? 8 : props.tiltMax;
   function onTilt(e) { if (tiltOn) PH_tiltMove(e.currentTarget, e.clientX, e.clientY, tiltMax); }
   function offTilt(e) { if (tiltOn) PH_tiltReset(e.currentTarget); }
 
   return (
-    <div style={{ fontFamily: font, perspective: 1200 }} className="w-full max-w-[375px] mx-auto select-none"
+    <div style={{ fontFamily: font, perspective: 1800 }} className="w-full max-w-[395px] mx-auto select-none px-[10px] pt-[30px] pb-[50px]"
       onPointerMove={onTilt} onPointerDown={onTilt} onPointerLeave={offTilt} onPointerUp={offTilt} onPointerCancel={offTilt}>
       <style>{PH_css()}</style>
       <div data-ph-tilt="1" className="relative" style={{ willChange: "transform", transition: "transform 0.6s cubic-bezier(.2,.8,.2,1)" }}>
@@ -1571,7 +1571,7 @@ function PH_tiltMove(root, x, y, max) {
   var ry = (px - 0.5) * 2 * max;
   var rx = -(py - 0.5) * 2 * max;
   el.style.transition = "transform 0.12s ease-out";
-  el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) scale(1.015)";
+  el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
   var g = root.querySelector("[data-ph-glare]");
   if (g) {
     g.style.opacity = "1";
@@ -1589,7 +1589,7 @@ function PH_tiltReset(root) {
   var el = root.querySelector("[data-ph-tilt]");
   if (!el) return;
   el.style.transition = "transform 0.6s cubic-bezier(.2,.8,.2,1)";
-  el.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+  el.style.transform = "rotateX(0deg) rotateY(0deg)";
   var g = root.querySelector("[data-ph-glare]");
   if (g) g.style.opacity = "0";
   var f = root.querySelector("[data-ph-frame]");
