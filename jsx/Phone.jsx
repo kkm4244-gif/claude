@@ -34,6 +34,7 @@
    gallery      사진 (위에서부터 최신순)
                 [{ caption, src, date, time, video, duration, favorite }]
                 src 없으면 caption 이 적힌 흐린 썸네일로 표시. 같은 date 끼리 묶임.
+                넘기지 않으면 홈의 갤러리 아이콘은 장식용(눌러도 반응 없음)이 됨.
    memos        메모
                 [{ title, content, date, locked, color }]
                 locked: true 면 잠금 해제 버튼을 눌러야 내용이 보임
@@ -125,7 +126,7 @@ function Phone(props) {
     body = (
       <PH_Home
         today={today} events={events} np={np} playing={playing} setPlaying={setPlaying}
-        comm={comm} kakaoUnread={kakaoUnread} smsUnread={smsUnread} missed={missed} open={open}
+        comm={comm} kakaoUnread={kakaoUnread} smsUnread={smsUnread} missed={missed} hasGallery={photos.length > 0} open={open}
       />
     );
   }
@@ -192,7 +193,7 @@ function PH_Home(p) {
     { id: "calendar", label: "캘린더", go: "calendar" },
     { id: "music", label: "YT Music", go: "music" },
     { id: "community", label: p.comm.appName, go: "community" },
-    { id: "gallery", label: "갤러리", go: "gallery" },
+    { id: "gallery", label: "갤러리", go: p.hasGallery ? "gallery" : null },
     { id: "notes", label: "Samsung Notes", go: "notes" },
     { id: "naver", label: "NAVER" },
     { id: "youtube", label: "YouTube" },
